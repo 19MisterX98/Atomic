@@ -5,7 +5,9 @@
   "mixins": [
     "chat.ScreenMixin",
     "game.ClientPlayerEntityMixin",
-    "game.GameRendererMixin"
+    "game.GameRendererMixin",
+    "game.InGameHudMixin",
+    "network.ClientConnectionMixin"
   ],
   "client": [],
   "server": [],

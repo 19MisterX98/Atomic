@@ -7,7 +7,6 @@ import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.feature.module.ModuleType;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.passive.FoxEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -57,7 +56,7 @@ public class ClickGUI extends Screen {
     public void showModuleConfig(Module m) {
         if (currentConfig == null) {
             ConfigWidget currentConfig1 = new ConfigWidget(m);
-            currentConfig1.posX = width/2d-(210/2d);
+            currentConfig1.posX = width / 2d - (210 / 2d);
             currentConfig1.posY = 10;
             currentConfig1.lastRenderX = currentConfig1.posX;
             currentConfig1.lastRenderY = -height;
@@ -80,22 +79,22 @@ public class ClickGUI extends Screen {
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 
         fill(matrices, 0, 0, width, height, 0x50000000);
-        animProgress+=0.006;
-        animProgress = MathHelper.clamp(animProgress,0,1);
+        animProgress += 0.006;
+        animProgress = MathHelper.clamp(animProgress, 0, 1);
         double animProgressInter = animProgress < 0.5 ? 16 * animProgress * animProgress * animProgress * animProgress * animProgress : 1 - Math.pow(-2 * animProgress + 2, 5) / 2;
         /*RenderSystem.setShaderColor(1,1,1,1);
         RenderSystem.setShaderTexture(0,LOGO);*/
-        RenderSystem.setShaderColor(1,1,1,1);
-        RenderSystem.setShaderTexture(0,LOGO);
+        RenderSystem.setShaderColor(1, 1, 1, 1);
+        RenderSystem.setShaderTexture(0, LOGO);
         double i = easeOutBack(animProgress);
-        Screen.drawTexture(matrices, (int) (width/2-(128*i/2)), (int) (height/2-(128*i/2)),0,0,0, (int) (128*i),(int) (128*i),(int) (128*i), (int) (128*i));
+        Screen.drawTexture(matrices, (int) (width / 2 - (128 * i / 2)), (int) (height / 2 - (128 * i / 2)), 0, 0, 0, (int) (128 * i), (int) (128 * i), (int) (128 * i), (int) (128 * i));
 
-            MatrixStack ms = new MatrixStack();
-            ms.translate(0,(Math.abs(animProgressInter-1)*height),0);
-            if (currentConfig != null) currentConfig.render(mouseX, mouseY, delta);
-            for (Draggable container : containers) {
-                container.render(ms);
-            }
+        MatrixStack ms = new MatrixStack();
+        ms.translate(0, (Math.abs(animProgressInter - 1) * height), 0);
+        if (currentConfig != null) currentConfig.render(mouseX, mouseY, delta);
+        for (Draggable container : containers) {
+            container.render(ms);
+        }
 
 
         super.render(matrices, mouseX, mouseY, delta);
@@ -107,8 +106,8 @@ public class ClickGUI extends Screen {
     }
 
     double easeOutBack(double x) {
-double c1 = 1.70158;
-double c3 = c1 + 1;
+        double c1 = 1.70158;
+        double c3 = c1 + 1;
 
         return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
 

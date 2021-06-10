@@ -1,5 +1,6 @@
 package me.zeroX150.atomic;
 
+import me.zeroX150.atomic.helper.keybind.KeybindManager;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
 import org.apache.logging.log4j.Level;
@@ -21,6 +22,7 @@ public class Atomic implements ModInitializer {
     @Override
     public void onInitialize() {
         log(Level.INFO, "Initializing");
+        KeybindManager.init();
         //TODO: Initializer
     }
 

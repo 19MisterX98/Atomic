@@ -53,8 +53,8 @@ public class Draggable {
     }
 
     double easeOutBounce(double x) {
-double n1 = 7.5625;
-double d1 = 2.75;
+        double n1 = 7.5625;
+        double d1 = 2.75;
 
         if (x < 1 / d1) {
             return n1 * x * x;
@@ -75,7 +75,7 @@ double d1 = 2.75;
     public void render(MatrixStack stack) {
         if (this.expanded) animProg += 0.006;
         else animProg -= 0.006;
-        animProg = MathHelper.clamp(animProg,0,1);
+        animProg = MathHelper.clamp(animProg, 0, 1);
         double animProgInter = easeOutBounce(animProg);
         if (lastRenderX == -1) lastRenderX = posX;
         if (lastRenderY == -1) lastRenderY = posY;
@@ -87,7 +87,7 @@ double d1 = 2.75;
         if (this.animProg != 0) {
             double yOffset = 9 + margin * 2;
             for (Clickable child : children) {
-                child.render(lastRenderX, lastRenderY + (yOffset*animProgInter), stack);
+                child.render(lastRenderX, lastRenderY + (yOffset * animProgInter), stack, animProgInter);
                 yOffset += 9 + margin * 2;
             }
         }

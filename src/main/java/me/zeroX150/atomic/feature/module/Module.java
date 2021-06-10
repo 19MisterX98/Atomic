@@ -15,6 +15,7 @@ public abstract class Module {
         this.description = d;
         this.moduleType = type;
         this.config = new ModuleConfig();
+        this.config.create("Keybind", -1);
     }
 
     public ModuleType getModuleType() {

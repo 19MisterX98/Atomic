@@ -204,4 +204,30 @@ public class Renderer {
         RenderSystem.disableBlend();
     }
 
+    public static void lineScreen(Color c, Point... coords) {
+        float g = c.getRed() / 255f;
+        float h = c.getGreen() / 255f;
+        float k = c.getBlue() / 255f;
+        float f = c.getAlpha() / 255f;
+        MatrixStack stack = new MatrixStack();
+        Matrix4f matrix = stack.peek().getModel();
+
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        RenderSystem.enableBlend();
+        RenderSystem.disableTexture();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
+        boolean shouldDefineTwice = false;
+        for (Point coord : coords) {
+            for (int i = 0; i < (shouldDefineTwice ? 2 : 1); i++)
+                bufferBuilder.vertex(matrix, (float) coord.x, (float) coord.y, 0.0F).color(g, h, k, f).next();
+            shouldDefineTwice = true;
+        }
+        bufferBuilder.end();
+        BufferRenderer.draw(bufferBuilder);
+        RenderSystem.enableTexture();
+        RenderSystem.disableBlend();
+    }
+
 }
