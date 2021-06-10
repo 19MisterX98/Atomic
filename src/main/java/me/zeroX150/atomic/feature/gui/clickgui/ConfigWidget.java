@@ -8,7 +8,9 @@ import me.zeroX150.atomic.feature.module.config.SliderValue;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.Entity;
 import net.minecraft.text.Text;
+import net.minecraft.util.registry.Registry;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +55,7 @@ public class ConfigWidget {
         lastRenderX += (xDiff / ClickGUI.SMOOTH_DIV);
         lastRenderY += (yDiff / ClickGUI.SMOOTH_DIV);
 
-        DrawableHelper.fill(new MatrixStack(), (int) lastRenderX, (int) (lastRenderY - margin), (int) (lastRenderX + width), (int) (lastRenderY + 9 + margin), ClickGUI.HEADER_EXP.getRGB());
+        DrawableHelper.fill(new MatrixStack(), (int) lastRenderX-4, (int) (lastRenderY - margin), (int) (lastRenderX + width+4), (int) (lastRenderY + 9 + margin), ClickGUI.HEADER_EXP.getRGB());
         int maxOffset = (int) Math.ceil(9 + (margin * 2)) + (12 * children.size());
         DrawableHelper.fill(new MatrixStack(), (int) lastRenderX, (int) (lastRenderY + 9 + margin), (int) (lastRenderX + width), (int) (lastRenderY + maxOffset + 1), ClickGUI.HEADER_RET.getRGB());
         DrawableHelper.drawCenteredText(new MatrixStack(), Atomic.client.textRenderer, parent.getName() + " config", (int) (lastRenderX + (width / 2)), (int) (lastRenderY + 1), 0xFFFFFF);

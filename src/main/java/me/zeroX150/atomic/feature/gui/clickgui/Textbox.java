@@ -30,7 +30,7 @@ public class Textbox extends TextFieldWidget {
 
     @Override
     public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        fill(matrices, x - 1, y - 2, x + width + 1, y + 11, this.isFocused() ? ClickGUI.ACTIVE.getRGB() : ClickGUI.INACTIVE.getRGB());
+        fill(matrices, x - 1, y - 1, x + width + 1, y + 11, this.isFocused() ? ClickGUI.ACTIVE.getRGB() : ClickGUI.INACTIVE.getRGB());
         super.renderButton(matrices, mouseX, mouseY, delta);
     }
 }
