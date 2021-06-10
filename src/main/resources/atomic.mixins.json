@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "me.zeroX150.atomic.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "chat.ScreenMixin",
+    "game.ClientPlayerEntityMixin",
+    "game.GameRendererMixin"
+  ],
+  "client": [],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
