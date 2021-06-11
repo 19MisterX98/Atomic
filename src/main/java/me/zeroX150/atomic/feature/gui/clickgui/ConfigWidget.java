@@ -12,7 +12,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ConfigWidget {
     double margin = 4;
@@ -34,15 +33,15 @@ public class ConfigWidget {
         this.parent = p;
         int yOffset = (int) Math.ceil(9 + (margin * 2));
         List<DynamicValue<?>> v = parent.config.getAll();
-        v.sort(Comparator.comparingInt(value -> value.getKey().equalsIgnoreCase("keybind")?-1:Atomic.client.textRenderer.getWidth(value.getKey())));
+        v.sort(Comparator.comparingInt(value -> value.getKey().equalsIgnoreCase("keybind") ? -1 : Atomic.client.textRenderer.getWidth(value.getKey())));
 
         for (DynamicValue<?> dynamicValue : v) {
             if (dynamicValue.getKey().equalsIgnoreCase("Keybind")) {
                 KeyListenerBtn t = new KeyListenerBtn(1, yOffset, 100, parent);
                 children.put(dynamicValue, t);
             } else if (dynamicValue instanceof BooleanValue) {
-                Toggleable t = new Toggleable(1,yOffset,100,(BooleanValue) dynamicValue);
-                children.put(dynamicValue,t);
+                Toggleable t = new Toggleable(1, yOffset, 100, (BooleanValue) dynamicValue);
+                children.put(dynamicValue, t);
             } else if (dynamicValue instanceof SliderValue) {
                 Slider t = new Slider(1, yOffset, 99, (SliderValue) dynamicValue);
                 children.put(dynamicValue, t);
@@ -69,7 +68,7 @@ public class ConfigWidget {
         DrawableHelper.drawCenteredText(new MatrixStack(), Atomic.client.textRenderer, parent.getName() + " config", (int) (lastRenderX + (width / 2)), (int) (lastRenderY + 1), 0xFFFFFF);
         int yOffset = (int) Math.ceil(9 + (margin * 2)) - 1;
         List<DynamicValue<?>> dvL = new ArrayList<>(children.keySet());
-        dvL.sort(Comparator.comparingInt(value -> value.getKey().equalsIgnoreCase("keybind")?0:Atomic.client.textRenderer.getWidth(value.getKey())));
+        dvL.sort(Comparator.comparingInt(value -> value.getKey().equalsIgnoreCase("keybind") ? 0 : Atomic.client.textRenderer.getWidth(value.getKey())));
         for (DynamicValue<?> child1 : dvL) {
             ClickableWidget child = children.get(child1);
             if (!(child instanceof Textbox)) {

@@ -8,10 +8,7 @@ import me.zeroX150.atomic.helper.keybind.Keybind;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.PigEntity;
 import net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.glfw.GLFW;
@@ -73,7 +70,9 @@ public class EntityFly extends Module {
 
     @Override
     public void disable() {
-        if (lastRide != null) {lastRide.setNoGravity(false);}
+        if (lastRide != null) {
+            lastRide.setNoGravity(false);
+        }
     }
 
     @Override

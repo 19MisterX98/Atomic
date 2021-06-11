@@ -18,10 +18,10 @@ import java.util.List;
 
 public class ClickGUI extends Screen {
     public static ClickGUI INSTANCE;
-    public static double SMOOTH_DIV = 20;
+    public static double SMOOTH_DIV = 6;
 
-    public static Color INACTIVE = new Color(17, 17, 17, 186);
-    public static Color ACTIVE = new Color(49, 49, 49, 186);
+    public static Color INACTIVE = new Color(17, 17, 17, 220);
+    public static Color ACTIVE = new Color(40, 40, 40, 220);
     public static Color HEADER_RET = new Color(38, 38, 38, 255);
     public static Color HEADER_EXP = new Color(49, 49, 49, 255);
 
@@ -29,6 +29,8 @@ public class ClickGUI extends Screen {
     Identifier LOGO = new Identifier("atomic", "icon.png");
 
     ConfigWidget currentConfig = null;
+
+    long lastRender = System.currentTimeMillis();
 
     List<Draggable> containers = new ArrayList<>();
 
@@ -89,14 +91,15 @@ public class ClickGUI extends Screen {
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 
         fill(matrices, 0, 0, width, height, 0x50000000);
-        animProgress += 0.006;
+        animProgress += (System.currentTimeMillis() - lastRender) / 600d;
+        if (System.currentTimeMillis() - lastRender > 1) lastRender = System.currentTimeMillis();
         animProgress = MathHelper.clamp(animProgress, 0, 1);
         double animProgressInter = animProgress < 0.5 ? 4 * animProgress * animProgress * animProgress : 1 - Math.pow(-2 * animProgress + 2, 3) / 2;
         /*RenderSystem.setShaderColor(1,1,1,1);
         RenderSystem.setShaderTexture(0,LOGO);*/
         RenderSystem.setShaderColor(1, 1, 1, (float) animProgressInter);
         RenderSystem.setShaderTexture(0, LOGO);
-        Screen.drawTexture(matrices, (int) (width / 2 - (128 * animProgressInter / 2)), (int) (height / 2 - (128 * animProgressInter / 2)), 0, 0, 0, (int) (128 * animProgressInter), (int) (128 * animProgressInter), (int) (128 * animProgressInter), (int) (128 * animProgressInter));
+        Screen.drawTexture(matrices, 1, 1, 0, 0, 0, 32, 32, 32, 32);
         RenderSystem.setShaderColor(1, 1, 1, 1);
 
         MatrixStack ms = new MatrixStack();

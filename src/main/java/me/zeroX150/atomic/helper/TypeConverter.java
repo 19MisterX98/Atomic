@@ -136,4 +136,8 @@ public class TypeConverter {
     public static Boolean stringToBoolean(String value) {
         return Boolean.valueOf(value);
     }
+
+    public static Double stringToDouble(String value) {
+        return Double.valueOf(value);
+    }
 }

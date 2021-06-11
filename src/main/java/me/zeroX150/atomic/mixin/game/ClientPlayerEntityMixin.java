@@ -2,6 +2,7 @@ package me.zeroX150.atomic.mixin.game;
 
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
+import me.zeroX150.atomic.helper.ConfigManager;
 import me.zeroX150.atomic.helper.keybind.KeybindManager;
 import net.minecraft.client.network.ClientPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ClientPlayerEntityMixin {
     @Inject(method = "tick", at = @At("HEAD"))
     public void tick(CallbackInfo ci) {
+        if (!ConfigManager.loaded) ConfigManager.loadState();
         for (Module module : ModuleRegistry.getModules()) {
             if (module.isEnabled()) module.tick();
         }

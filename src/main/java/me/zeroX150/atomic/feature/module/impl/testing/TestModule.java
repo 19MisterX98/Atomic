@@ -24,7 +24,7 @@ public class TestModule extends Module {
 
     @Override
     public String getContext() {
-        return "";
+        return null;
     }
 
     @Override

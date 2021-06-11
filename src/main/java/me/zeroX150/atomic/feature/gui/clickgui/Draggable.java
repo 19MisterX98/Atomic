@@ -19,6 +19,7 @@ public class Draggable {
     double lastRenderY = -1;
     boolean expanded;
     boolean dragged = false;
+    long lastRender = System.currentTimeMillis();
     String title;
     List<Clickable> children = new ArrayList<>();
 
@@ -61,8 +62,9 @@ public class Draggable {
     }
 
     public void render(MatrixStack stack) {
-        if (this.expanded) animProg += 0.006;
-        else animProg -= 0.006;
+        if (this.expanded) animProg += (System.currentTimeMillis() - lastRender) / 300d;
+        else animProg -= (System.currentTimeMillis() - lastRender) / 300d;
+        if (System.currentTimeMillis() - lastRender > 1) lastRender = System.currentTimeMillis();
         animProg = MathHelper.clamp(animProg, 0, 1);
         double animProgInter = easeOutBounce(animProg);
         if (lastRenderX == -1) lastRenderX = posX;

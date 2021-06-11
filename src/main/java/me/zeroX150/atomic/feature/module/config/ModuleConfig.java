@@ -1,10 +1,8 @@
 package me.zeroX150.atomic.feature.module.config;
 
-import me.zeroX150.atomic.Atomic;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class ModuleConfig {
@@ -28,7 +26,7 @@ public class ModuleConfig {
     }
 
     public BooleanValue create(String key, boolean initial) {
-        BooleanValue bv = new BooleanValue(key,initial);
+        BooleanValue bv = new BooleanValue(key, initial);
         addProxy(bv);
         return bv;
     }

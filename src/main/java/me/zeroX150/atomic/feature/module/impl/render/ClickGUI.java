@@ -30,7 +30,7 @@ public class ClickGUI extends Module {
 
     @Override
     public String getContext() {
-        return "";
+        return null;
     }
 
     @Override
