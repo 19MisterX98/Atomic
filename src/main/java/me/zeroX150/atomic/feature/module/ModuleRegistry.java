@@ -1,10 +1,8 @@
 package me.zeroX150.atomic.feature.module;
 
-import me.zeroX150.atomic.feature.module.impl.movement.AirJump;
-import me.zeroX150.atomic.feature.module.impl.movement.ArrowJuke;
-import me.zeroX150.atomic.feature.module.impl.movement.AutoSneak;
-import me.zeroX150.atomic.feature.module.impl.movement.Blink;
+import me.zeroX150.atomic.feature.module.impl.movement.*;
 import me.zeroX150.atomic.feature.module.impl.render.ClickGUI;
+import me.zeroX150.atomic.feature.module.impl.render.Hud;
 import me.zeroX150.atomic.feature.module.impl.testing.TestModule;
 
 import java.util.ArrayList;
@@ -20,6 +18,8 @@ public class ModuleRegistry {
         modules.add(new ArrowJuke());
         modules.add(new AutoSneak());
         modules.add(new Blink());
+        modules.add(new EntityFly());
+        modules.add(new Hud());
     }
 
     public static List<Module> getModules() {

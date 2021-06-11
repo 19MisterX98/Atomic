@@ -12,7 +12,7 @@ public class KeybindManager {
     public static void init() {
         for (Module module : ModuleRegistry.getModules()) {
             if (!module.config.get("Keybind").getValue().equals(-1.0)) {
-                keybindMap.put(module,new Keybind(Integer.parseInt(module.config.get("Keybind").getValue()+"")));
+                keybindMap.put(module, new Keybind(Integer.parseInt(module.config.get("Keybind").getValue() + "")));
             }
         }
     }

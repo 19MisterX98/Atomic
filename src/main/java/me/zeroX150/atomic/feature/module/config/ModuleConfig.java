@@ -10,21 +10,32 @@ import java.util.List;
 public class ModuleConfig {
     List<DynamicValue<?>> config = new ArrayList<>();
 
+    private void addProxy(DynamicValue<?> v) {
+        config.add(v);
+        //if (Atomic.client.textRenderer != null) config.sort(Comparator.comparingInt(value -> Atomic.client.textRenderer.getWidth(value.getKey())));
+    }
+
     public <T> DynamicValue<T> create(String key, T value) {
         DynamicValue<T> nv = new DynamicValue<>(key, value);
-        config.add(nv);
+        addProxy(nv);
         return nv;
     }
 
     public SliderValue create(String key, double value, double min, double max, int prc) {
         SliderValue sv = new SliderValue(key, MathHelper.clamp(value, min, max), min, max, prc);
-        config.add(sv);
+        addProxy(sv);
         return sv;
+    }
+
+    public BooleanValue create(String key, boolean initial) {
+        BooleanValue bv = new BooleanValue(key,initial);
+        addProxy(bv);
+        return bv;
     }
 
     public MultiValue create(String key, String value, String... possible) {
         MultiValue ev = new MultiValue(key, value, possible);
-        config.add(ev);
+        addProxy(ev);
         return ev;
     }
 
@@ -36,7 +47,6 @@ public class ModuleConfig {
     }
 
     public List<DynamicValue<?>> getAll() {
-        config.sort(Comparator.comparingInt(value -> Atomic.client.textRenderer.getWidth(value.getKey())));
         return config;
     }
 }

@@ -2,7 +2,6 @@ package me.zeroX150.atomic.feature.gui.clickgui;
 
 import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
-import me.zeroX150.atomic.feature.module.config.MultiValue;
 import me.zeroX150.atomic.helper.keybind.KeybindManager;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -15,7 +14,8 @@ public class KeyListenerBtn extends ButtonWidget {
     int kc;
 
     public KeyListenerBtn(int x, int y, int width, Module parent) {
-        super(x, y, width, 12, Text.of(String.valueOf((char) Integer.parseInt(parent.config.get("Keybind").getValue()+"")).toUpperCase()), button -> {});
+        super(x, y, width, 12, Text.of(String.valueOf((char) Integer.parseInt(parent.config.get("Keybind").getValue() + "")).toUpperCase()), button -> {
+        });
         kc = (int) parent.config.get("Keybind").getValue();
         this.parent = parent;
     }
@@ -29,7 +29,7 @@ public class KeyListenerBtn extends ButtonWidget {
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (!this.listening) return false;
         System.out.println(keyCode);
-        String v = ((char) (keyCode))+"";
+        String v = ((char) (keyCode)) + "";
         if (keyCode == 47) {
             listening = false;
             kc = -1;
@@ -48,8 +48,8 @@ public class KeyListenerBtn extends ButtonWidget {
 
     @Override
     public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        if(listening) this.setMessage(Text.of("... (- to cancel)"));
-        else this.setMessage(Text.of(kc!=-1?String.valueOf((char)kc):"None"));
+        if (listening) this.setMessage(Text.of("... (- to cancel)"));
+        else this.setMessage(Text.of(kc != -1 ? String.valueOf((char) kc) : "None"));
         fill(matrices, x, y, x + width, y + height, this.isHovered() ? ClickGUI.ACTIVE.getRGB() : ClickGUI.INACTIVE.getRGB());
         DrawableHelper.drawCenteredText(matrices, Atomic.client.textRenderer, this.getMessage(), x + (width / 2), y + (height / 2 - 9 / 2), 0xFFFFFF);
     }

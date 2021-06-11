@@ -12,7 +12,7 @@ public class Client {
     }
 
     public static Color getCurrentRGB() {
-        return new Color(Color.HSBtoRGB((System.currentTimeMillis() % 4750) / 4750f, 0.6f, 1));
+        return new Color(Color.HSBtoRGB((System.currentTimeMillis() % 4750) / 4750f, 0.7f, 1));
     }
 
     public static double roundToN(double x, int n) {
