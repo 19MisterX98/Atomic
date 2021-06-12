@@ -9,7 +9,8 @@
     "game.InGameHudMixin",
     "game.LivingEntityMixin",
     "game.MinecraftClientMixin",
-    "network.ClientConnectionMixin"
+    "network.ClientConnectionMixin",
+    "network.PlayerMoveC2SPacketMixin"
   ],
   "client": [],
   "server": [],
