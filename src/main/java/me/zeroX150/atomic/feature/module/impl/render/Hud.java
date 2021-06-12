@@ -11,6 +11,7 @@ import me.zeroX150.atomic.helper.Renderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.awt.*;
 import java.text.DateFormat;
@@ -63,13 +64,14 @@ public class Hud extends Module {
 
     @Override
     public void onHudRender() {
+        if (Atomic.client.player == null) return;
         MatrixStack ms = new MatrixStack();
         List<HudEntry> entries = new ArrayList<>();
         if (coords.getValue()) {
             BlockPos bp = Atomic.client.player.getBlockPos();
             entries.add(new HudEntry("XYZ", bp.getX() + " " + bp.getY() + " " + bp.getZ(), false, false));
         }
-        if (fps.getValue()) entries.add(new HudEntry("FPS", "lmao", false, false));
+        if (fps.getValue()) entries.add(new HudEntry("FPS", Atomic.client.fpsDebugString.split(" ")[0], false, false));
         if (ping.getValue())
             entries.add(new HudEntry("Ping", Atomic.client.getNetworkHandler().getPlayerListEntry(Atomic.client.player.getUuid()).getLatency() + " ms", false, false));
         if (bps.getValue()) {
@@ -112,7 +114,13 @@ public class Hud extends Module {
             int moduleOffset = 0;
             float rgbIncrementer = 0.03f;
             float currentRgbSeed = (System.currentTimeMillis() % 4500) / 4500f;
-            for (Module module : ModuleRegistry.getModules().stream().filter(Module::isEnabled).sorted(Comparator.comparingInt(value -> Atomic.client.textRenderer.getWidth(value.getName()))).toArray(Module[]::new)) {
+            // jesus fuck
+            Module[] v = ModuleRegistry.getModules().stream()
+                    .filter(Module::isEnabled)
+                    .sorted(Comparator.comparingInt(value -> Atomic.client.textRenderer.getWidth(value.getName() + (value.getContext() != null ? " " + value.getContext() : "")))) // i mean it works?
+                    .toArray(Module[]::new);
+            ArrayUtils.reverse(v);
+            for (Module module : v) {
                 currentRgbSeed %= 1f;
                 int r = Color.HSBtoRGB(currentRgbSeed, 0.7f, 1f);
                 currentRgbSeed += rgbIncrementer;

@@ -20,6 +20,11 @@ public class ModuleRegistry {
         modules.add(new Blink());
         modules.add(new EntityFly());
         modules.add(new Hud());
+        modules.add(new Boost());
+        modules.add(new Flight());
+        modules.add(new Jesus());
+        modules.add(new MoonGravity());
+        modules.add(new NoFall());
     }
 
     public static List<Module> getModules() {

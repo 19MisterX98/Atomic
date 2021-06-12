@@ -63,13 +63,14 @@ public class ConfigWidget {
         lastRenderY += (yDiff / ClickGUI.SMOOTH_DIV);
 
         DrawableHelper.fill(new MatrixStack(), (int) lastRenderX - 4, (int) (lastRenderY - margin), (int) (lastRenderX + width + 4), (int) (lastRenderY + 9 + margin), ClickGUI.HEADER_EXP.getRGB());
-        int maxOffset = (int) Math.ceil(9 + (margin * 2)) + (12 * children.size());
+        int maxOffset = (int) Math.ceil(9 + (margin * 2)) + (12 * (int) children.keySet().stream().filter(DynamicValue::shouldShow).count());
         DrawableHelper.fill(new MatrixStack(), (int) lastRenderX, (int) (lastRenderY + 9 + margin), (int) (lastRenderX + width), (int) (lastRenderY + maxOffset + 1), ClickGUI.HEADER_RET.getRGB());
         DrawableHelper.drawCenteredText(new MatrixStack(), Atomic.client.textRenderer, parent.getName() + " config", (int) (lastRenderX + (width / 2)), (int) (lastRenderY + 1), 0xFFFFFF);
         int yOffset = (int) Math.ceil(9 + (margin * 2)) - 1;
         List<DynamicValue<?>> dvL = new ArrayList<>(children.keySet());
         dvL.sort(Comparator.comparingInt(value -> value.getKey().equalsIgnoreCase("keybind") ? 0 : Atomic.client.textRenderer.getWidth(value.getKey())));
         for (DynamicValue<?> child1 : dvL) {
+            if (!child1.shouldShow()) continue;
             ClickableWidget child = children.get(child1);
             if (!(child instanceof Textbox)) {
                 child.x = (int) (lastRenderX + width - child.getWidth() - 2);
