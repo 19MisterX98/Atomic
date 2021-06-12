@@ -1,5 +1,5 @@
 # Atomic client
-![image](https://user-images.githubusercontent.com/70416702/121785668-1b112a80-cb89-11eb-9275-f947ba03bf59.png)
+![image](https://user-images.githubusercontent.com/80022388/121610880-4bf14280-ca57-11eb-97ff-1c94461533ae.png)
 ## WARNING
 This is under heavy development, and not yet ready to use.
 
