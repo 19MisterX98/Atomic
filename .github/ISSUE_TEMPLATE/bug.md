@@ -12,7 +12,7 @@ A description of what the bug is
 
 **To Reproduce**
 Steps to reproduce the bug:
-1. Active x
+1. Activate x
 2. Click y
 3. Move to z
 4. Observe
