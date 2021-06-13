@@ -31,10 +31,10 @@ Add any other info about the bug here
 
 <!---
 You can mark checkmarks with putting an "x" in the brackets)
-[] Unmarked checkmark
-[x] Marked checkmark
+- [ ] Unmarked checkmark
+- [x] Marked checkmark
 -->
 **Final checklist**
-[] This is an issue with an older version of the client
-[] I have tried to reproduce this with every other mod removed
-[] I am on java 16 and minecraft 1.17
+- [ ] This is an issue with an older version of the client
+- [ ] I have tried to reproduce this with every other mod removed
+- [ ] I am on java 16 and minecraft 1.17
