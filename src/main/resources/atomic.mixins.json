@@ -7,8 +7,9 @@
     "game.ClientPlayerEntityMixin",
     "game.GameRendererMixin",
     "game.InGameHudMixin",
-    "game.LivingEntityMixin",
     "game.MinecraftClientMixin",
+    "game.entity.LivingEntityAccessor",
+    "game.entity.LivingEntityMixin",
     "network.ClientConnectionMixin",
     "network.PlayerMoveC2SPacketMixin"
   ],

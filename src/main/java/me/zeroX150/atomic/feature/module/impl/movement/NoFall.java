@@ -47,7 +47,7 @@ public class NoFall extends Module {
 
     @Override
     public String getContext() {
-        return this.mode.getValue();
+        return mode.getValue();
     }
 
     @Override

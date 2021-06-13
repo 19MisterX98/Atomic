@@ -1,4 +1,4 @@
-package me.zeroX150.atomic.mixin.game;
+package me.zeroX150.atomic.mixin.game.entity;
 
 import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class LivingEntityMixin {
     @Inject(method = "canWalkOnFluid", at = @At("HEAD"), cancellable = true)
     public void canWalkOnFluid(Fluid fluid, CallbackInfoReturnable<Boolean> cir) {
+        if (Atomic.client.player == null) return;
         if (((Object) this) instanceof PlayerEntity pe) {
             if (!pe.getUuid().equals(Atomic.client.player.getUuid())) return;
             if (ModuleRegistry.getByClass(Jesus.class).isEnabled() && Jesus.mode.getValue().equalsIgnoreCase("solid"))

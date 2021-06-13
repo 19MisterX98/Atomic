@@ -5,10 +5,11 @@ import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.feature.module.config.MultiValue;
 import me.zeroX150.atomic.feature.module.config.SliderValue;
+import me.zeroX150.atomic.mixin.game.entity.LivingEntityMixin;
 import net.minecraft.client.util.math.MatrixStack;
 
 /**
- * @see me.zeroX150.atomic.mixin.game.LivingEntityMixin
+ * @see LivingEntityMixin
  */
 public class Jesus extends Module {
     public static MultiValue mode;

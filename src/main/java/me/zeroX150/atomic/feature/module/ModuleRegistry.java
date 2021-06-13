@@ -25,6 +25,8 @@ public class ModuleRegistry {
         modules.add(new Jesus());
         modules.add(new MoonGravity());
         modules.add(new NoFall());
+        modules.add(new NoJumpCooldown());
+        modules.add(new ClickTP());
     }
 
     public static List<Module> getModules() {
