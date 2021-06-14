@@ -1,5 +1,6 @@
 package me.zeroX150.atomic.feature.module;
 
+import me.zeroX150.atomic.feature.gui.notifications.Notification;
 import me.zeroX150.atomic.feature.module.config.ModuleConfig;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -52,6 +53,7 @@ public abstract class Module {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+        Notification.create(1000, "Module toggle", (this.enabled ? "§aEn" : "§cDis") + "abled §r" + this.getName());
         if (this.enabled) this.enable();
         else this.disable();
     }

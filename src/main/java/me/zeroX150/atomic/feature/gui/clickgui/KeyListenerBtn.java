@@ -28,7 +28,6 @@ public class KeyListenerBtn extends ButtonWidget {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (!this.listening) return false;
-        System.out.println(keyCode);
         String v = ((char) (keyCode)) + "";
         if (keyCode == 47) {
             listening = false;

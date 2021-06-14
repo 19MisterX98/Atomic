@@ -15,11 +15,10 @@ import net.minecraft.util.math.Vec3d;
 
 public class ClickTP extends Module {
     BooleanValue autoDisable = this.config.create("Auto disable", false);
-    BooleanValue tpUp = this.config.create("2 stage tp", false);
     BooleanValue smartTarget = this.config.create("Smart target", true);
 
     BlockPos goingToTeleportTo = null;
-    boolean tpInProgress = false;
+    boolean flag = false;
 
     public ClickTP() {
         super("ClickTP", "Teleports you to whereever you look at", ModuleType.MOVEMENT);
@@ -27,9 +26,9 @@ public class ClickTP extends Module {
 
     @Override
     public void tick() {
-        HitResult hr = Atomic.client.player.raycast(100, 0, false);
+        HitResult hr = Atomic.client.player.raycast(1000, 0, false);
         if (!(hr instanceof BlockHitResult bhr)) goingToTeleportTo = null;
-        else if (!tpInProgress) {
+        else {
             BlockState br = Atomic.client.world.getBlockState(bhr.getBlockPos());
             if (!br.isAir()) {
                 boolean set = true;
@@ -41,23 +40,33 @@ public class ClickTP extends Module {
                 else goingToTeleportTo = null;
             } else goingToTeleportTo = null;
         }
-        if (tpInProgress) {
-            if (autoDisable.getValue()) toggle();
-            Atomic.client.player.updatePosition(goingToTeleportTo.getX() + .5, goingToTeleportTo.getY() + 1, goingToTeleportTo.getZ() + .5);
-            tpInProgress = false;
-        }
-        if (Atomic.client.options.keySneak.wasPressed()) {
-            if (goingToTeleportTo != null && !tpInProgress) {
-                if (tpUp.getValue()) {
-                    tpInProgress = true;
-                    Vec3d ppos = Atomic.client.player.getPos();
-                    Atomic.client.player.updatePosition(ppos.x, ppos.y + 3, ppos.z);
-                } else {
-                    if (autoDisable.getValue()) toggle();
-                    Atomic.client.player.updatePosition(goingToTeleportTo.getX() + .5, goingToTeleportTo.getY() + 1, goingToTeleportTo.getZ() + .5);
-                }
+        if (Atomic.client.options.keyUse.isPressed() && !flag) {
+            if (goingToTeleportTo != null) {
+                flag = true;
+                if (autoDisable.getValue()) toggle();
+                new Thread(() -> {
+                    Vec3d base = Atomic.client.player.getPos();
+                    Vec3d goal = new Vec3d(goingToTeleportTo.getX() + .5, goingToTeleportTo.getY() + 2, goingToTeleportTo.getZ() + .5);
+                    double dist = base.distanceTo(goal);
+                    Atomic.client.player.jump();
+                    Atomic.client.player.setNoGravity(true);
+                    for (double i = 0; i < dist; i += 0.2) {
+                        System.out.println(i / dist);
+                        Vec3d c = new Vec3d(Renderer.lerp(base.x, goal.x, i / dist), Renderer.lerp(base.y, goal.y, i / dist), Renderer.lerp(base.z, goal.z, i / dist));
+                        BlockState bs = Atomic.client.world.getBlockState(new BlockPos(c));
+                        if (bs.getMaterial().blocksMovement()) continue;
+
+                        Atomic.client.player.updatePosition(c.x, c.y, c.z);
+                        try {
+                            Thread.sleep(2);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    Atomic.client.player.setNoGravity(false);
+                }).start();
             }
-        }
+        } else if (!Atomic.client.options.keyUse.isPressed()) flag = false;
     }
 
     @Override

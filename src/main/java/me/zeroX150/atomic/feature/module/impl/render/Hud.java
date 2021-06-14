@@ -1,6 +1,7 @@
 package me.zeroX150.atomic.feature.module.impl.render;
 
 import me.zeroX150.atomic.Atomic;
+import me.zeroX150.atomic.feature.gui.notifications.NotificationRenderer;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.feature.module.ModuleType;
@@ -134,8 +135,8 @@ public class Hud extends Module {
                     Atomic.client.textRenderer.draw(ms, module.getContext(), wr + Atomic.client.textRenderer.getWidth(module.getName() + " "), moduleOffset + 1, inv.getRGB());
                 moduleOffset += 10;
             }
-
         }
+        NotificationRenderer.render();
     }
 
     static class HudEntry {

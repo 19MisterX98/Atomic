@@ -234,6 +234,10 @@ public class Renderer {
         return (int) Math.floor(i + (o - i) * MathHelper.clamp(p, 0, 1));
     }
 
+    public static double lerp(double i, double o, double p) {
+        return (i + (o - i) * MathHelper.clamp(p, 0, 1));
+    }
+
     public static Color lerp(Color a, Color b, double c) {
         return new Color(lerp(a.getRed(), b.getRed(), c),
                 lerp(a.getGreen(), b.getGreen(), c),
