@@ -16,7 +16,7 @@ public class Clickable {
 
     public void render(double x, double y, MatrixStack stack, double animProgress) {
         //Atomic.client.textRenderer.draw(new MatrixStack(),parent.getName(),(float)x,(float)y,0xFFFFFF);
-        DrawableHelper.fill(stack, (int) (x - margin), (int) (y - margin), (int) (x + width + margin), (int) (y + (margin + 9) * animProgress), parent.isEnabled() ? ClickGUI.ACTIVE.getRGB() : ClickGUI.INACTIVE.getRGB());
+        DrawableHelper.fill(stack, (int) (x - margin), (int) Math.floor(y - margin), (int) (x + width + margin), (int) Math.floor(y + (margin + 9) * animProgress), parent.isEnabled() ? ClickGUI.ACTIVE.getRGB() : ClickGUI.INACTIVE.getRGB());
         DrawableHelper.drawCenteredText(stack, Atomic.client.textRenderer, parent.getName(), (int) (x + (width / 2)), (int) y, 0xFFFFFF);
     }
 

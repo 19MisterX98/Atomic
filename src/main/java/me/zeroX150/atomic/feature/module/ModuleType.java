@@ -1,7 +1,7 @@
 package me.zeroX150.atomic.feature.module;
 
 public enum ModuleType {
-    TEST("Test"), MOVEMENT("Movement"), RENDER("Render"), MISC("Miscellaneous");
+    TEST("Test"), TEST1("Test"), TES2T("Test"), TES3T("Test"), TE4ST("Test"), MOVEMENT("Movement"), RENDER("Render"), MISC("Miscellaneous"), COMBAT("Combat");
 
 
     String name;

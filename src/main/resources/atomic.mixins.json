@@ -5,11 +5,12 @@
   "mixins": [
     "chat.ScreenMixin",
     "game.ClientPlayerEntityMixin",
-    "game.GameRendererMixin",
-    "game.InGameHudMixin",
     "game.MinecraftClientMixin",
     "game.entity.LivingEntityAccessor",
     "game.entity.LivingEntityMixin",
+    "game.render.ButtonWidgetMixin",
+    "game.render.GameRendererMixin",
+    "game.render.InGameHudMixin",
     "network.ClientConnectionMixin",
     "network.PlayerMoveC2SPacketMixin"
   ],

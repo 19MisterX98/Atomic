@@ -1,4 +1,4 @@
-package me.zeroX150.atomic.mixin.game;
+package me.zeroX150.atomic.mixin.game.render;
 
 import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;

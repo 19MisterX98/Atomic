@@ -1,5 +1,6 @@
 package me.zeroX150.atomic.feature.module;
 
+import me.zeroX150.atomic.feature.module.impl.combat.AutoLog;
 import me.zeroX150.atomic.feature.module.impl.movement.*;
 import me.zeroX150.atomic.feature.module.impl.render.ClickGUI;
 import me.zeroX150.atomic.feature.module.impl.render.Hud;
@@ -27,6 +28,10 @@ public class ModuleRegistry {
         modules.add(new NoFall());
         modules.add(new NoJumpCooldown());
         modules.add(new ClickTP());
+        modules.add(new Speed());
+        modules.add(new Sprint());
+        modules.add(new Step());
+        modules.add(new AutoLog());
     }
 
     public static List<Module> getModules() {

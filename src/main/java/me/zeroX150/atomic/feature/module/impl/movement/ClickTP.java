@@ -16,6 +16,7 @@ import net.minecraft.util.math.Vec3d;
 public class ClickTP extends Module {
     BooleanValue autoDisable = this.config.create("Auto disable", false);
     BooleanValue tpUp = this.config.create("2 stage tp", false);
+    BooleanValue smartTarget = this.config.create("Smart target", true);
 
     BlockPos goingToTeleportTo = null;
     boolean tpInProgress = false;
@@ -30,10 +31,15 @@ public class ClickTP extends Module {
         if (!(hr instanceof BlockHitResult bhr)) goingToTeleportTo = null;
         else if (!tpInProgress) {
             BlockState br = Atomic.client.world.getBlockState(bhr.getBlockPos());
-            if (!br.isAir() && !Atomic.client.world.getBlockState(bhr.getBlockPos().up()).getMaterial().blocksMovement()
-                    && !Atomic.client.world.getBlockState(bhr.getBlockPos().up().up()).getMaterial().blocksMovement())
-                goingToTeleportTo = bhr.getBlockPos();
-            else goingToTeleportTo = null;
+            if (!br.isAir()) {
+                boolean set = true;
+                if (smartTarget.getValue()) {
+                    set = !Atomic.client.world.getBlockState(bhr.getBlockPos().up()).getMaterial().blocksMovement()
+                            && !Atomic.client.world.getBlockState(bhr.getBlockPos().up().up()).getMaterial().blocksMovement();
+                }
+                if (set) goingToTeleportTo = bhr.getBlockPos();
+                else goingToTeleportTo = null;
+            } else goingToTeleportTo = null;
         }
         if (tpInProgress) {
             if (autoDisable.getValue()) toggle();

@@ -71,8 +71,12 @@ public class Draggable {
         if (lastRenderY == -1) lastRenderY = posY;
         float xDiff = (float) (lastRenderX - posX);
         float yDiff = (float) (lastRenderY - posY);
-        lastRenderX -= (xDiff / ClickGUI.SMOOTH_DIV);
-        lastRenderY -= (yDiff / ClickGUI.SMOOTH_DIV);
+        double nxDiff = (xDiff / me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
+        double nyDiff = (yDiff / me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
+        if (Math.abs(nxDiff) < 0.02) nxDiff = xDiff;
+        if (Math.abs(nyDiff) < 0.02) nyDiff = yDiff;
+        lastRenderX -= nxDiff;
+        lastRenderY -= nyDiff;
         if (this.animProg != 0) {
             double yOffset = 9 + margin * 2;
             for (Clickable child : children) {

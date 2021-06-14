@@ -230,4 +230,15 @@ public class Renderer {
         RenderSystem.disableBlend();
     }
 
+    public static int lerp(int o, int i, double p) {
+        return (int) Math.floor(i + (o - i) * MathHelper.clamp(p, 0, 1));
+    }
+
+    public static Color lerp(Color a, Color b, double c) {
+        return new Color(lerp(a.getRed(), b.getRed(), c),
+                lerp(a.getGreen(), b.getGreen(), c),
+                lerp(a.getBlue(), b.getBlue(), c),
+                lerp(a.getAlpha(), b.getAlpha(), c));
+    }
+
 }

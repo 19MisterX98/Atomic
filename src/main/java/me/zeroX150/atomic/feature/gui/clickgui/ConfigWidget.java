@@ -11,6 +11,8 @@ import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
+import java.awt.*;
+import java.util.List;
 import java.util.*;
 
 public class ConfigWidget {
@@ -59,10 +61,11 @@ public class ConfigWidget {
     public void render(int mx, int my, float delta) {
         double xDiff = posX - lastRenderX;
         double yDiff = posY - lastRenderY;
-        lastRenderX += (xDiff / ClickGUI.SMOOTH_DIV);
-        lastRenderY += (yDiff / ClickGUI.SMOOTH_DIV);
+        lastRenderX += (xDiff / me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
+        lastRenderY += (yDiff / me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
 
-        DrawableHelper.fill(new MatrixStack(), (int) lastRenderX - 4, (int) (lastRenderY - margin), (int) (lastRenderX + width + 4), (int) (lastRenderY + 9 + margin), ClickGUI.HEADER_EXP.getRGB());
+        DrawableHelper.fill(new MatrixStack(), (int) (lastRenderX - margin), (int) (lastRenderY - margin), (int) (lastRenderX + width + margin), (int) (lastRenderY + 9 + margin), ClickGUI.HEADER_EXP.getRGB());
+        DrawableHelper.fill(new MatrixStack(), (int) (lastRenderX + width + 1), (int) (lastRenderY - margin + 1), (int) (lastRenderX + width + margin - 1), (int) (lastRenderY + 9 + margin - 1), new Color(238, 37, 37, 255).getRGB());
         int maxOffset = (int) Math.ceil(9 + (margin * 2)) + (12 * (int) children.keySet().stream().filter(DynamicValue::shouldShow).count());
         DrawableHelper.fill(new MatrixStack(), (int) lastRenderX, (int) (lastRenderY + 9 + margin), (int) (lastRenderX + width), (int) (lastRenderY + maxOffset + 1), ClickGUI.HEADER_RET.getRGB());
         DrawableHelper.drawCenteredText(new MatrixStack(), Atomic.client.textRenderer, parent.getName() + " config", (int) (lastRenderX + (width / 2)), (int) (lastRenderY + 1), 0xFFFFFF);
@@ -86,8 +89,11 @@ public class ConfigWidget {
     }
 
     public void mouseClicked(double mouseX, double mouseY, int button) {
-        if (lastRenderX + width > mouseX && lastRenderX < mouseX && lastRenderY + 9 + margin > mouseY && lastRenderY - margin < mouseY) {
+        if (lastRenderX + width > mouseX && lastRenderX - margin < mouseX && lastRenderY + 9 + margin > mouseY && lastRenderY - margin < mouseY) {
             this.dragged = true;
+            return;
+        } else if (lastRenderX + width + margin > mouseX && lastRenderX + width < mouseX && lastRenderY + 9 + margin > mouseY && lastRenderY - margin < mouseY) {
+            ClickGUI.INSTANCE.showModuleConfig(null);
             return;
         }
         for (ClickableWidget child : children.values()) {
