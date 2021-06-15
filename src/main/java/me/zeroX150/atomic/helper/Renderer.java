@@ -13,11 +13,8 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 
 public class Renderer {
-    public static void renderOutline(Vec3d start, Vec3d dimensions, Color color, MatrixStack stack) {
-        float red = color.getRed() / 255f;
-        float green = color.getGreen() / 255f;
-        float blue = color.getBlue() / 255f;
-        float alpha = color.getAlpha() / 255f;
+
+    public static void renderOutlineIntern(Vec3d start, Vec3d dimensions, MatrixStack stack, BufferBuilder buffer) {
         Camera c = Atomic.client.gameRenderer.getCamera();
         Vec3d camPos = c.getPos();
         start = start.subtract(camPos);
@@ -29,47 +26,62 @@ public class Renderer {
         float x2 = (float) end.x;
         float y2 = (float) end.y;
         float z2 = (float) end.z;
-        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+
+        buffer.vertex(matrix, x1, y1, z1).next();
+        buffer.vertex(matrix, x1, y1, z2).next();
+        buffer.vertex(matrix, x1, y1, z2).next();
+        buffer.vertex(matrix, x2, y1, z2).next();
+        buffer.vertex(matrix, x2, y1, z2).next();
+        buffer.vertex(matrix, x2, y1, z1).next();
+        buffer.vertex(matrix, x2, y1, z1).next();
+        buffer.vertex(matrix, x1, y1, z1).next();
+
+        buffer.vertex(matrix, x1, y2, z1).next();
+        buffer.vertex(matrix, x1, y2, z2).next();
+        buffer.vertex(matrix, x1, y2, z2).next();
+        buffer.vertex(matrix, x2, y2, z2).next();
+        buffer.vertex(matrix, x2, y2, z2).next();
+        buffer.vertex(matrix, x2, y2, z1).next();
+        buffer.vertex(matrix, x2, y2, z1).next();
+        buffer.vertex(matrix, x1, y2, z1).next();
+
+        buffer.vertex(matrix, x1, y1, z1).next();
+        buffer.vertex(matrix, x1, y2, z1).next();
+
+        buffer.vertex(matrix, x2, y1, z1).next();
+        buffer.vertex(matrix, x2, y2, z1).next();
+
+        buffer.vertex(matrix, x2, y1, z2).next();
+        buffer.vertex(matrix, x2, y2, z2).next();
+
+        buffer.vertex(matrix, x1, y1, z2).next();
+        buffer.vertex(matrix, x1, y2, z2).next();
+    }
+
+    //you can call renderOutlineIntern multiple times to save performance
+    public static void renderOutline(Vec3d start, Vec3d dimensions, Color color, MatrixStack stack) {
+        BufferBuilder buffer = renderPrepare(color);
+
+        renderOutlineIntern(start, dimensions, stack, buffer);
+
+        buffer.end();
+        BufferRenderer.draw(buffer);
+        GL11.glDepthFunc(GL11.GL_LEQUAL);
+    }
+
+    public static BufferBuilder renderPrepare(Color color) {
+        float red = color.getRed() / 255f;
+        float green = color.getGreen() / 255f;
+        float blue = color.getBlue() / 255f;
+        float alpha = color.getAlpha() / 255f;
         RenderSystem.setShader(GameRenderer::getPositionShader);
         GL11.glDepthFunc(GL11.GL_ALWAYS);
         RenderSystem.setShaderColor(red, green, blue, alpha);
         RenderSystem.lineWidth(2f);
+        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
         buffer.begin(VertexFormat.DrawMode.DEBUG_LINES,
                 VertexFormats.POSITION);
-        buffer.vertex(matrix, x1, y1, z1).next();
-        buffer.vertex(matrix, x1, y1, z2).next();
-        buffer.vertex(matrix, x1, y1, z2).next();
-        buffer.vertex(matrix, x2, y1, z2).next();
-        buffer.vertex(matrix, x2, y1, z2).next();
-        buffer.vertex(matrix, x2, y1, z1).next();
-        buffer.vertex(matrix, x2, y1, z1).next();
-        buffer.vertex(matrix, x1, y1, z1).next();
-
-        buffer.vertex(matrix, x1, y2, z1).next();
-        buffer.vertex(matrix, x1, y2, z2).next();
-        buffer.vertex(matrix, x1, y2, z2).next();
-        buffer.vertex(matrix, x2, y2, z2).next();
-        buffer.vertex(matrix, x2, y2, z2).next();
-        buffer.vertex(matrix, x2, y2, z1).next();
-        buffer.vertex(matrix, x2, y2, z1).next();
-        buffer.vertex(matrix, x1, y2, z1).next();
-
-        buffer.vertex(matrix, x1, y1, z1).next();
-        buffer.vertex(matrix, x1, y2, z1).next();
-
-        buffer.vertex(matrix, x2, y1, z1).next();
-        buffer.vertex(matrix, x2, y2, z1).next();
-
-        buffer.vertex(matrix, x2, y1, z2).next();
-        buffer.vertex(matrix, x2, y2, z2).next();
-
-        buffer.vertex(matrix, x1, y1, z2).next();
-        buffer.vertex(matrix, x1, y2, z2).next();
-
-        buffer.end();
-
-        BufferRenderer.draw(buffer);
-        GL11.glDepthFunc(GL11.GL_LEQUAL);
+        return buffer;
     }
 
     public static void renderFilled(Vec3d start, Vec3d dimensions, Color color, MatrixStack stack) {

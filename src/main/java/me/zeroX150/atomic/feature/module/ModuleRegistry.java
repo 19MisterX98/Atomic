@@ -4,6 +4,7 @@ import me.zeroX150.atomic.feature.module.impl.combat.AutoLog;
 import me.zeroX150.atomic.feature.module.impl.movement.*;
 import me.zeroX150.atomic.feature.module.impl.render.ClickGUI;
 import me.zeroX150.atomic.feature.module.impl.render.Hud;
+import me.zeroX150.atomic.feature.module.impl.render.OreSim;
 import me.zeroX150.atomic.feature.module.impl.testing.TestModule;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class ModuleRegistry {
         modules.add(new Sprint());
         modules.add(new Step());
         modules.add(new AutoLog());
+        modules.add(new OreSim());
     }
 
     public static List<Module> getModules() {

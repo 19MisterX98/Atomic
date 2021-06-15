@@ -24,7 +24,7 @@ public class ConfigWidget {
     double width = 200;
     boolean dragged = false;
     Module parent;
-    Map<DynamicValue<?>, ClickableWidget> children = new HashMap<>();
+    Map<DynamicValue<?>, ClickableWidget> children = new LinkedHashMap<>();
     //List<ClickableWidget> children = new ArrayList<>();
 
     public ConfigWidget(Module p) {
@@ -35,7 +35,9 @@ public class ConfigWidget {
         this.parent = p;
         int yOffset = (int) Math.ceil(9 + (margin * 2));
         List<DynamicValue<?>> v = parent.config.getAll();
-        v.sort(Comparator.comparingInt(value -> value.getKey().equalsIgnoreCase("keybind") ? -1 : Atomic.client.textRenderer.getWidth(value.getKey())));
+        if(parent.config.organizeClickGUIList) {
+            v.sort(Comparator.comparingInt(value -> value.getKey().equalsIgnoreCase("keybind") ? -1 : Atomic.client.textRenderer.getWidth(value.getKey())));
+        }
 
         for (DynamicValue<?> dynamicValue : v) {
             if (dynamicValue.getKey().equalsIgnoreCase("Keybind")) {
@@ -71,7 +73,6 @@ public class ConfigWidget {
         DrawableHelper.drawCenteredText(new MatrixStack(), Atomic.client.textRenderer, parent.getName() + " config", (int) (lastRenderX + (width / 2)), (int) (lastRenderY + 1), 0xFFFFFF);
         int yOffset = (int) Math.ceil(9 + (margin * 2)) - 1;
         List<DynamicValue<?>> dvL = new ArrayList<>(children.keySet());
-        dvL.sort(Comparator.comparingInt(value -> value.getKey().equalsIgnoreCase("keybind") ? 0 : Atomic.client.textRenderer.getWidth(value.getKey())));
         for (DynamicValue<?> child1 : dvL) {
             if (!child1.shouldShow()) continue;
             ClickableWidget child = children.get(child1);

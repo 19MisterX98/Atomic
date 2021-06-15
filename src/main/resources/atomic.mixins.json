@@ -12,6 +12,7 @@
     "game.render.GameRendererMixin",
     "game.render.InGameHudMixin",
     "network.ClientConnectionMixin",
+    "network.ClientPlayNetworkHandlerMixin",
     "network.PlayerMoveC2SPacketMixin"
   ],
   "client": [],
