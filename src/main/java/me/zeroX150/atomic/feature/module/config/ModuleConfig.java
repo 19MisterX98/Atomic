@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModuleConfig {
+    public boolean organizeClickGUIList = true;
     List<DynamicValue<?>> config = new ArrayList<>();
 
     private void addProxy(DynamicValue<?> v) {
