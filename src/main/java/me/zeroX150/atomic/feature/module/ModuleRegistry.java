@@ -6,6 +6,7 @@ import me.zeroX150.atomic.feature.module.impl.render.ClickGUI;
 import me.zeroX150.atomic.feature.module.impl.render.Hud;
 import me.zeroX150.atomic.feature.module.impl.render.OreSim;
 import me.zeroX150.atomic.feature.module.impl.testing.TestModule;
+import me.zeroX150.atomic.feature.module.impl.world.Nuker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class ModuleRegistry {
         modules.add(new Step());
         modules.add(new AutoLog());
         modules.add(new OreSim());
+        modules.add(new Nuker());
     }
 
     public static List<Module> getModules() {
