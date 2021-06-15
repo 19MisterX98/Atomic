@@ -6,12 +6,12 @@ import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.feature.module.ModuleType;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -26,7 +26,6 @@ public class ClickGUI extends Screen {
     public static Color HEADER_RET = new Color(38, 38, 38, 255);
     public static Color HEADER_EXP = new Color(49, 49, 49, 255);
 
-    double animProgress = 0;
     Identifier LOGO = new Identifier("atomic", "logo.png");
 
     ConfigWidget currentConfig = null;
@@ -35,6 +34,7 @@ public class ClickGUI extends Screen {
 
     List<Draggable> containers = new ArrayList<>();
     int currentSortMode = 0;
+    String desc = "";
 
     public ClickGUI() {
         super(Text.of(""));
@@ -63,7 +63,6 @@ public class ClickGUI extends Screen {
 
     @Override
     protected void init() {
-        animProgress = 0;
         ButtonWidget sort = new ButtonWidget(width - 21, height - 21, 20, 20, Text.of("S"), button -> {
             currentSortMode++;
             currentSortMode %= 3;
@@ -131,20 +130,20 @@ public class ClickGUI extends Screen {
         currentConfig = w;
     }
 
+    public void renderDescription(String desc) {
+        this.desc = desc;
+    }
+
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 
         fill(matrices, 0, 0, width, height, 0x10000000);
-        animProgress += (System.currentTimeMillis() - lastRender) / 600d;
         if (System.currentTimeMillis() - lastRender > 1) lastRender = System.currentTimeMillis();
-        animProgress = MathHelper.clamp(animProgress, 0, 1);
-        double animProgressInter = animProgress < 0.5 ? 4 * animProgress * animProgress * animProgress : 1 - Math.pow(-2 * animProgress + 2, 3) / 2;
         double logoSize = me.zeroX150.atomic.feature.module.impl.render.ClickGUI.logoSize.getValue();
         if (logoSize != 0) {
-            RenderSystem.setShaderColor(1, 1, 1, (float) animProgressInter);
+            RenderSystem.setShaderColor(1, 1, 1, 1);
             RenderSystem.setShaderTexture(0, LOGO);
             Screen.drawTexture(matrices, 1, 1, 0, 0, 0, (int) (504 * logoSize), (int) (130 * logoSize), (int) (130 * logoSize), (int) (504 * logoSize));
-            RenderSystem.setShaderColor(1, 1, 1, 1);
         }
 
         MatrixStack ms = new MatrixStack();
@@ -154,7 +153,8 @@ public class ClickGUI extends Screen {
             container.render(ms);
         }
 
-
+        DrawableHelper.drawCenteredText(new MatrixStack(), Atomic.client.textRenderer, desc, width / 2, height - 70, 0xFFFFFF);
+        desc = "";
         super.render(matrices, mouseX, mouseY, delta);
     }
 

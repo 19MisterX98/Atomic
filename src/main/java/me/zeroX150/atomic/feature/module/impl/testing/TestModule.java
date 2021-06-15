@@ -6,7 +6,7 @@ import net.minecraft.client.util.math.MatrixStack;
 
 public class TestModule extends Module {
     public TestModule() {
-        super("Test", "among", ModuleType.TEST);
+        super("Test", "among", ModuleType.MISC);
     }
 
     @Override

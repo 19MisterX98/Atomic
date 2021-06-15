@@ -12,8 +12,13 @@ import java.util.List;
 public class NotificationRenderer {
     public static List<Notification> notifications = new ArrayList<>();
 
+    static long lastRender = System.currentTimeMillis();
+
     public static void render() {
         MatrixStack ms = new MatrixStack();
+        double m = System.currentTimeMillis() - lastRender;
+        if (m > 1) lastRender = System.currentTimeMillis();
+        m /= 12;
         int currentYOffset = 0;
         int baseX = Atomic.client.getWindow().getScaledWidth() - 150;
         int baseY = Atomic.client.getWindow().getScaledHeight() - 50;
@@ -34,12 +39,12 @@ public class NotificationRenderer {
                     continue;
                 }
             }
-            if (notification.renderPosY == -1) notification.renderPosY = notification.posY;
-            if (notification.renderPosX == -1) notification.renderPosX = baseX + 151;
+            if (notification.renderPosY == 0) notification.renderPosY = notification.posY;
+            if (notification.renderPosX == 0) notification.renderPosX = baseX + 151;
             float xDiff = (float) (notification.renderPosX - notification.posX);
             float yDiff = (float) (notification.renderPosY - notification.posY);
-            double nxDiff = (xDiff / me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
-            double nyDiff = (yDiff / me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
+            double nxDiff = (xDiff / me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue()) * m;
+            double nyDiff = (yDiff / me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue()) * m;
             if (Math.abs(nxDiff) < 0.02) nxDiff = xDiff;
             if (Math.abs(nyDiff) < 0.02) nyDiff = yDiff;
             notification.renderPosX -= nxDiff;

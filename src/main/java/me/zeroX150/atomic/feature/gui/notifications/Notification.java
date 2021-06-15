@@ -1,6 +1,8 @@
 package me.zeroX150.atomic.feature.gui.notifications;
 
 import me.zeroX150.atomic.Atomic;
+import me.zeroX150.atomic.feature.module.ModuleRegistry;
+import me.zeroX150.atomic.feature.module.impl.render.Hud;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +10,8 @@ import java.util.List;
 public class Notification {
     public double posX;
     public double posY;
-    public double renderPosX = -1;
-    public double renderPosY = -1;
+    public double renderPosX = 0;
+    public double renderPosY = 0;
     public String title;
     public String[] contents;
     public long creationDate;
@@ -24,7 +26,7 @@ public class Notification {
 
     public static Notification create(long duration, String title, String... contents) {
         Notification n = new Notification(duration, title, contents);
-        NotificationRenderer.notifications.add(0, n);
+        if (ModuleRegistry.getByClass(Hud.class).isEnabled()) NotificationRenderer.notifications.add(0, n);
         return n;
     }
 
