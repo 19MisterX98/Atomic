@@ -19,9 +19,9 @@ import java.util.List;
 
 public class Nuker extends Module {
     List<BlockPos> renders = new ArrayList<>();
-    SliderValue range = this.config.create("Range",3,0,4,1);
-    SliderValue blocksPerTick = this.config.create("Blocks per tick",1,1,20,0);
-    SliderValue delay = this.config.create("Delay",5,0,20,0);
+    SliderValue range = this.config.create("Range", 3, 0, 4, 1);
+    SliderValue blocksPerTick = this.config.create("Blocks per tick", 1, 1, 20, 0);
+    SliderValue delay = this.config.create("Delay", 5, 0, 20, 0);
     int delayPassed = 0;
 
     public Nuker() {
@@ -38,19 +38,20 @@ public class Nuker extends Module {
         BlockPos ppos1 = Atomic.client.player.getBlockPos();
         int blocksBroken = 0;
         renders.clear();
-        for(double y = range.getValue();y>-range.getValue()-1;y--) {
-            for(double x = -range.getValue();x<range.getValue()+1;x++) {
-                for(double z = -range.getValue();z<range.getValue()+1;z++) {
+        for (double y = range.getValue(); y > -range.getValue() - 1; y--) {
+            for (double x = -range.getValue(); x < range.getValue() + 1; x++) {
+                for (double z = -range.getValue(); z < range.getValue() + 1; z++) {
                     if (blocksBroken >= blocksPerTick.getValue()) break;
-                    BlockPos vp = new BlockPos(x,y,z);
+                    BlockPos vp = new BlockPos(x, y, z);
                     BlockPos np = ppos1.add(vp);
-                    Vec3d vp1 = new Vec3d(np.getX(),np.getY(),np.getZ());
-                    if (vp1.distanceTo(Atomic.client.player.getPos()) >= Atomic.client.interactionManager.getReachDistance()-0.2) continue;
+                    Vec3d vp1 = new Vec3d(np.getX(), np.getY(), np.getZ());
+                    if (vp1.distanceTo(Atomic.client.player.getPos()) >= Atomic.client.interactionManager.getReachDistance() - 0.2)
+                        continue;
                     BlockState bs = Atomic.client.world.getBlockState(np);
                     if (!bs.isAir() && bs.getBlock() != Blocks.WATER && bs.getBlock() != Blocks.LAVA && bs.getBlock() != Blocks.BEDROCK) {
                         renders.add(np);
-                        Atomic.client.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK,np,Direction.DOWN));
-                        Atomic.client.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK,np,Direction.DOWN));
+                        Atomic.client.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, np, Direction.DOWN));
+                        Atomic.client.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, np, Direction.DOWN));
                         blocksBroken++;
                     }
                 }
@@ -75,8 +76,8 @@ public class Nuker extends Module {
     @Override
     public void onWorldRender(MatrixStack matrices) {
         for (BlockPos render : renders) {
-            Vec3d vp = new Vec3d(render.getX(),render.getY(),render.getZ());
-            Renderer.renderFilled(vp,new Vec3d(1,1,1),Client.getCurrentRGB(),matrices);
+            Vec3d vp = new Vec3d(render.getX(), render.getY(), render.getZ());
+            Renderer.renderFilled(vp, new Vec3d(1, 1, 1), Client.getCurrentRGB(), matrices);
         }
     }
 

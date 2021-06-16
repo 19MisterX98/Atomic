@@ -1,6 +1,8 @@
 package me.zeroX150.atomic.feature.module;
 
 import me.zeroX150.atomic.feature.module.impl.combat.AutoLog;
+import me.zeroX150.atomic.feature.module.impl.combat.Criticals;
+import me.zeroX150.atomic.feature.module.impl.combat.Killaura;
 import me.zeroX150.atomic.feature.module.impl.movement.*;
 import me.zeroX150.atomic.feature.module.impl.render.ClickGUI;
 import me.zeroX150.atomic.feature.module.impl.render.Hud;
@@ -36,6 +38,8 @@ public class ModuleRegistry {
         modules.add(new AutoLog());
         modules.add(new OreSim());
         modules.add(new Nuker());
+        modules.add(new Criticals());
+        modules.add(new Killaura());
     }
 
     public static List<Module> getModules() {

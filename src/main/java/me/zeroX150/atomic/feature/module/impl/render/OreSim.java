@@ -2,7 +2,6 @@ package me.zeroX150.atomic.feature.module.impl.render;
 
 import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
-import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.feature.module.config.BooleanValue;
 import me.zeroX150.atomic.feature.module.config.DynamicValue;
@@ -28,7 +27,6 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.*;
-import java.util.List;
 
 public class OreSim extends Module {
 
@@ -133,7 +131,7 @@ public class OreSim extends Module {
 
     @Override
     public void tick() {
-        if(hasSeedChanged()) {
+        if (hasSeedChanged()) {
             reload();
         }
     }
@@ -163,11 +161,11 @@ public class OreSim extends Module {
         try {
             tempSeed = Long.parseLong(seedInput.getValue());
         } catch (Exception e) {
-            if(!seedInput.getValue().equals("Your Worldseed")) {
+            if (!seedInput.getValue().equals("Your Worldseed")) {
                 tempSeed = (long) seedInput.getValue().hashCode();
             }
         }
-        if(tempSeed != null && !tempSeed.equals(this.worldSeed)) {
+        if (tempSeed != null && !tempSeed.equals(this.worldSeed)) {
             this.worldSeed = tempSeed;
             chunkRenderers.clear();
             return true;
@@ -191,7 +189,7 @@ public class OreSim extends Module {
     }
 
     public void doMathOnChunk(int chunkX, int chunkZ) {
-        if(worldSeed == null) {
+        if (worldSeed == null) {
             this.disable();
             return;
         }
@@ -218,7 +216,7 @@ public class OreSim extends Module {
             if (ore.name == OreType.LDEBRIS || ore.name == OreType.SDEBRIS) {
                 assert worldAccess != null;
                 Identifier id = worldAccess.getRegistryManager().get(Registry.BIOME_KEY)
-                        .getId(worldAccess.getBiomeAccess().getBiomeForNoiseGen(chunkX+8, 0, chunkZ+8));
+                        .getId(worldAccess.getBiomeAccess().getBiomeForNoiseGen(chunkX + 8, 0, chunkZ + 8));
                 if (id == null) {
                     Client.notifyUser("Something went wrong, you may have some mods that mess with world generation");
                     this.setEnabled(false);
