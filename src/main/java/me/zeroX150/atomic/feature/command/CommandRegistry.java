@@ -1,8 +1,6 @@
 package me.zeroX150.atomic.feature.command;
 
-import me.zeroX150.atomic.feature.command.impl.Config;
-import me.zeroX150.atomic.feature.command.impl.Test;
-import me.zeroX150.atomic.feature.command.impl.Toggle;
+import me.zeroX150.atomic.feature.command.impl.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +12,8 @@ public class CommandRegistry {
         commands.add(new Test());
         commands.add(new Toggle());
         commands.add(new Config());
+        commands.add(new Gamemode());
+        commands.add(new Effect());
     }
 
     public static List<Command> getCommands() {

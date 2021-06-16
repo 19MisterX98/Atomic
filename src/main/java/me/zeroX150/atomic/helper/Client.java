@@ -20,4 +20,12 @@ public class Client {
         double factor = Math.pow(10, n);
         return Math.round(x * factor) / factor;
     }
+
+    public static int tryParseInt(String input, int defaultValue) {
+        try {
+            return Integer.parseInt(input);
+        } catch (Exception ignored) {
+            return defaultValue;
+        }
+    }
 }
