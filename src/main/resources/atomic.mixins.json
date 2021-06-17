@@ -8,9 +8,12 @@
     "game.MinecraftClientMixin",
     "game.entity.LivingEntityAccessor",
     "game.entity.LivingEntityMixin",
+    "game.render.AbstractBlockStateMixin",
+    "game.render.BlockMixin",
     "game.render.ButtonWidgetMixin",
     "game.render.GameRendererMixin",
     "game.render.InGameHudMixin",
+    "game.render.ISliderWidgetAccessor",
     "network.ClientConnectionMixin",
     "network.ClientPlayNetworkHandlerMixin",
     "network.PlayerMoveC2SPacketMixin"

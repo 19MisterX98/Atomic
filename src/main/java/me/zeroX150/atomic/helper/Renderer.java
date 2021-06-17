@@ -257,4 +257,8 @@ public class Renderer {
                 lerp(a.getAlpha(), b.getAlpha(), c));
     }
 
+    public static void renderLineScreen(Vec3d start, Vec3d end, Color color, int width) {
+        lineScreen(color, new Point((int) Math.floor(start.x), (int) Math.floor(start.y)), new Point((int) Math.floor(end.x), (int) Math.floor(end.y)));
+    }
+
 }

@@ -17,7 +17,7 @@ import java.io.IOException;
 
 public class ConfigManager {
     public static boolean loaded = false;
-    static boolean alreadySaved = false;
+
     static File CONFIG_FILE;
 
     static {
@@ -25,11 +25,10 @@ public class ConfigManager {
     }
 
     public static void saveState() {
-        if (alreadySaved) {
-            System.out.println("Tried to re-save config, but was already saved");
+        if (!loaded) {
+            System.out.println("Not saving config because we didnt load it yet");
             return;
         }
-        alreadySaved = true;
         System.out.println("Saving config");
         JsonObject base = new JsonObject();
         JsonArray enabled = new JsonArray();

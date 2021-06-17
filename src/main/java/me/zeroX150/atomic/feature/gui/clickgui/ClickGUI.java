@@ -41,15 +41,21 @@ public class ClickGUI extends Screen {
         double width = Atomic.client.getWindow().getScaledWidth();
         double height = Atomic.client.getWindow().getScaledHeight();
         INSTANCE = this;
-        double cR = 0;
-        double rotCircle = 360d / ModuleType.values().length;
+
+        double offsetX = 20;
+        double offsetY = me.zeroX150.atomic.feature.module.impl.render.ClickGUI.logoSize.getValue() * 130 + 20;
+
         for (ModuleType value : ModuleType.values()) {
-            double rot = Math.toRadians(cR);
             Draggable d = new Draggable(value.getName(), false);
             d.lastRenderX = width / 2d - (100 / 2d);
             d.lastRenderY = height / 2d - (9) / 2d;
-            d.posX = d.lastRenderX + (Math.sin(rot) * 120);
-            d.posY = d.lastRenderY + (Math.cos(rot) * 120);
+            d.posX = offsetX;
+            d.posY = offsetY;
+            offsetX += 120;
+            if (offsetX + 120 > width) {
+                offsetX = 20;
+                offsetY += 27;
+            }
             for (Module module : ModuleRegistry.getModules()) {
                 if (module.getModuleType() == value) {
                     Clickable w = new Clickable(module);
@@ -57,7 +63,6 @@ public class ClickGUI extends Screen {
                 }
             }
             containers.add(d);
-            cR += rotCircle;
         }
     }
 

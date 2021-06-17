@@ -3,12 +3,14 @@ package me.zeroX150.atomic.feature.module;
 import me.zeroX150.atomic.feature.module.impl.combat.AutoLog;
 import me.zeroX150.atomic.feature.module.impl.combat.Criticals;
 import me.zeroX150.atomic.feature.module.impl.combat.Killaura;
+import me.zeroX150.atomic.feature.module.impl.exploit.AntiAntiXray;
 import me.zeroX150.atomic.feature.module.impl.movement.*;
 import me.zeroX150.atomic.feature.module.impl.render.ClickGUI;
 import me.zeroX150.atomic.feature.module.impl.render.Hud;
 import me.zeroX150.atomic.feature.module.impl.render.OreSim;
 import me.zeroX150.atomic.feature.module.impl.testing.TestModule;
 import me.zeroX150.atomic.feature.module.impl.world.Nuker;
+import me.zeroX150.atomic.feature.module.impl.world.XRAY;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,8 @@ public class ModuleRegistry {
         modules.add(new Nuker());
         modules.add(new Criticals());
         modules.add(new Killaura());
+        modules.add(new AntiAntiXray());
+        modules.add(new XRAY());
     }
 
     public static List<Module> getModules() {
