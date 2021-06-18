@@ -3,6 +3,7 @@ package me.zeroX150.atomic.feature.module.impl.world;
 import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleType;
+import me.zeroX150.atomic.feature.module.config.BooleanValue;
 import me.zeroX150.atomic.feature.module.config.SliderValue;
 import me.zeroX150.atomic.helper.Client;
 import me.zeroX150.atomic.helper.Renderer;
@@ -22,6 +23,7 @@ public class Nuker extends Module {
     SliderValue range = this.config.create("Range", 3, 0, 4, 1);
     SliderValue blocksPerTick = this.config.create("Blocks per tick", 1, 1, 20, 0);
     SliderValue delay = this.config.create("Delay", 5, 0, 20, 0);
+    BooleanValue ignoreXray = this.config.create("Ignore xray",true);
     int delayPassed = 0;
 
     public Nuker() {
@@ -48,10 +50,15 @@ public class Nuker extends Module {
                     if (vp1.distanceTo(Atomic.client.player.getPos()) >= Atomic.client.interactionManager.getReachDistance() - 0.2)
                         continue;
                     BlockState bs = Atomic.client.world.getBlockState(np);
-                    if (!bs.isAir() && bs.getBlock() != Blocks.WATER && bs.getBlock() != Blocks.LAVA && bs.getBlock() != Blocks.BEDROCK) {
+                    boolean b = !ignoreXray.getValue() || !XRAY.blocks.contains(bs.getBlock());
+                    if (!bs.isAir() && bs.getBlock() != Blocks.WATER && bs.getBlock() != Blocks.LAVA && bs.getBlock() != Blocks.BEDROCK && b && Atomic.client.world.getWorldBorder().contains(np)) {
                         renders.add(np);
-                        Atomic.client.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, np, Direction.DOWN));
-                        Atomic.client.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, np, Direction.DOWN));
+                        if (Atomic.client.player.getAbilities().creativeMode) {
+                            Atomic.client.interactionManager.attackBlock(np,Direction.DOWN);
+                        } else {
+                            Atomic.client.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, np, Direction.DOWN));
+                            Atomic.client.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, np, Direction.DOWN));
+                        }
                         blocksBroken++;
                     }
                 }
