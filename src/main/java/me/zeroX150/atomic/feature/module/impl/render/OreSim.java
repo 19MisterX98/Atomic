@@ -17,6 +17,7 @@ import net.minecraft.structure.rule.BlockMatchRuleTest;
 import net.minecraft.structure.rule.RuleTest;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
@@ -216,7 +217,7 @@ public class OreSim extends Module {
             if (ore.name == OreType.LDEBRIS || ore.name == OreType.SDEBRIS) {
                 assert worldAccess != null;
                 Identifier id = worldAccess.getRegistryManager().get(Registry.BIOME_KEY)
-                        .getId(worldAccess.getBiomeAccess().getBiomeForNoiseGen(chunkX + 8, 0, chunkZ + 8));
+                        .getId(worldAccess.getBiomeAccess().getBiomeForNoiseGen(new ChunkPos(chunkX >> 4,chunkZ >> 4)));
                 if (id == null) {
                     Client.notifyUser("Something went wrong, you may have some mods that mess with world generation");
                     this.setEnabled(false);
@@ -236,7 +237,7 @@ public class OreSim extends Module {
             random.setDecoratorSeed(populationSeed, index, ore.step);
 
             if (ore.generatorType == Generator.EMERALD) {
-                repeat = random.nextInt(3) + 6;
+                repeat = random.nextInt(19) + 6;
             }
 
             for (int i = 0; i < repeat; i++) {
@@ -437,7 +438,7 @@ public class OreSim extends Module {
                         Generator.EMERALD),
                 new Ore(OreType.SDEBRIS, 15, 7, 8, 120, 2, OreFeatureConfig.Rules.BASE_STONE_NETHER, 1, false,
                         Generator.NO_SURFACE),
-                new Ore(OreType.LDEBRIS, 15, 7, 16, 8, 3, OreFeatureConfig.Rules.BASE_STONE_NETHER, 1, true,
+                new Ore(OreType.LDEBRIS, 15, 7, 17, 9, 3, OreFeatureConfig.Rules.BASE_STONE_NETHER, 1, true,
                         Generator.NO_SURFACE),
                 new Ore(OreType.LAPIS, 12, 6, 16, 16, 7, OreFeatureConfig.Rules.BASE_STONE_OVERWORLD, 1, true,
                         Generator.DEFAULT),
