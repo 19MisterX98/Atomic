@@ -23,7 +23,7 @@ public class Nuker extends Module {
     SliderValue range = this.config.create("Range", 3, 0, 4, 1);
     SliderValue blocksPerTick = this.config.create("Blocks per tick", 1, 1, 20, 0);
     SliderValue delay = this.config.create("Delay", 5, 0, 20, 0);
-    BooleanValue ignoreXray = this.config.create("Ignore xray",true);
+    BooleanValue ignoreXray = this.config.create("Ignore xray", true);
     int delayPassed = 0;
 
     public Nuker() {
@@ -54,7 +54,7 @@ public class Nuker extends Module {
                     if (!bs.isAir() && bs.getBlock() != Blocks.WATER && bs.getBlock() != Blocks.LAVA && bs.getBlock() != Blocks.BEDROCK && b && Atomic.client.world.getWorldBorder().contains(np)) {
                         renders.add(np);
                         if (Atomic.client.player.getAbilities().creativeMode) {
-                            Atomic.client.interactionManager.attackBlock(np,Direction.DOWN);
+                            Atomic.client.interactionManager.attackBlock(np, Direction.DOWN);
                         } else {
                             Atomic.client.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, np, Direction.DOWN));
                             Atomic.client.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, np, Direction.DOWN));

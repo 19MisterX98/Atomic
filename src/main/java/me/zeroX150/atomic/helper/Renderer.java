@@ -194,26 +194,43 @@ public class Renderer {
         return new Vec3d(f2 * f3, f4, f1 * f3).add(camera.getPos());
     }
 
-    public static void fill(Color c, double x1, double y1, double x2, double y2) {
-        float r = c.getRed() / 255f;
-        float g = c.getGreen() / 255f;
-        float b = c.getBlue() / 255f;
-        float a = c.getAlpha() / 255f;
-        Matrix4f matrix = new MatrixStack().peek().getModel();
+    public static void fill(MatrixStack matrices, Color c, double x1, double y1, double x2, double y2) {
+        int color = c.getRGB();
+        double j;
+        if (x1 < x2) {
+            j = x1;
+            x1 = x2;
+            x2 = j;
+        }
+
+        if (y1 < y2) {
+            j = y1;
+            y1 = y2;
+            y2 = j;
+        }
+        Matrix4f matrix = matrices.peek().getModel();
+        float f = (float) (color >> 24 & 255) / 255.0F;
+        float g = (float) (color >> 16 & 255) / 255.0F;
+        float h = (float) (color >> 8 & 255) / 255.0F;
+        float k = (float) (color & 255) / 255.0F;
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
         RenderSystem.enableBlend();
         RenderSystem.disableTexture();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        bufferBuilder.vertex(matrix, (float) x1, (float) y2, 0.0F).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, (float) x2, (float) y2, 0.0F).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, (float) x2, (float) y1, 0.0F).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, (float) x1, (float) y1, 0.0F).color(r, g, b, a).next();
+        bufferBuilder.vertex(matrix, (float) x1, (float) y2, 0.0F).color(g, h, k, f).next();
+        bufferBuilder.vertex(matrix, (float) x2, (float) y2, 0.0F).color(g, h, k, f).next();
+        bufferBuilder.vertex(matrix, (float) x2, (float) y1, 0.0F).color(g, h, k, f).next();
+        bufferBuilder.vertex(matrix, (float) x1, (float) y1, 0.0F).color(g, h, k, f).next();
         bufferBuilder.end();
         BufferRenderer.draw(bufferBuilder);
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
+    }
+
+    public static void fill(Color c, double x1, double y1, double x2, double y2) {
+        fill(new MatrixStack(), c, x1, y1, x2, y2);
     }
 
     public static void lineScreen(Color c, Point... coords) {

@@ -27,14 +27,13 @@ public class Killaura extends Module {
 
     MultiValue mode = this.config.create("Mode", "Single", "Single", "Multi");
 
-    BooleanValue attackEntites = this.config.create("Attack entities", false);
     BooleanValue attackMobs = this.config.create("Attack mobs", true);
     BooleanValue attackPlayers = this.config.create("Attack players", true);
 
     int delayPassed = 0;
 
     public Killaura() {
-        super("Killaura", "No description", ModuleType.MISC);
+        super("Killaura", "No description", ModuleType.COMBAT);
         range.showOnlyIf(() -> !capRangeAtMax.getValue());
         delay.showOnlyIf(() -> !automaticalDelay.getValue());
     }

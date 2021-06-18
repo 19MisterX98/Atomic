@@ -3,12 +3,16 @@ package me.zeroX150.atomic.feature.module;
 import me.zeroX150.atomic.feature.module.impl.combat.AutoLog;
 import me.zeroX150.atomic.feature.module.impl.combat.Criticals;
 import me.zeroX150.atomic.feature.module.impl.combat.Killaura;
-import me.zeroX150.atomic.feature.module.impl.exploit.AntiAntiXray;
+import me.zeroX150.atomic.feature.module.impl.exploit.*;
+import me.zeroX150.atomic.feature.module.impl.external.AntiPacketKick;
+import me.zeroX150.atomic.feature.module.impl.external.ClientConfig;
 import me.zeroX150.atomic.feature.module.impl.movement.*;
 import me.zeroX150.atomic.feature.module.impl.render.ClickGUI;
 import me.zeroX150.atomic.feature.module.impl.render.Hud;
+import me.zeroX150.atomic.feature.module.impl.render.NameTags;
 import me.zeroX150.atomic.feature.module.impl.render.OreSim;
 import me.zeroX150.atomic.feature.module.impl.testing.TestModule;
+import me.zeroX150.atomic.feature.module.impl.world.Fullbright;
 import me.zeroX150.atomic.feature.module.impl.world.Nuker;
 import me.zeroX150.atomic.feature.module.impl.world.XRAY;
 
@@ -44,6 +48,14 @@ public class ModuleRegistry {
         modules.add(new Killaura());
         modules.add(new AntiAntiXray());
         modules.add(new XRAY());
+        modules.add(new AntiOffhandCrash());
+        modules.add(new BoatPhase());
+        modules.add(new SoundLogger());
+        modules.add(new PingSpoof());
+        modules.add(new AntiPacketKick());
+        modules.add(new Fullbright());
+        modules.add(new NameTags());
+        modules.add(new ClientConfig());
     }
 
     public static List<Module> getModules() {

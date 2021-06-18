@@ -1,8 +1,8 @@
 package me.zeroX150.atomic.mixin.chat;
 
-import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.command.Command;
 import me.zeroX150.atomic.feature.command.CommandRegistry;
+import me.zeroX150.atomic.feature.module.impl.external.ClientConfig;
 import me.zeroX150.atomic.helper.Client;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -23,10 +23,10 @@ public class ScreenMixin {
 
     @Inject(method = "sendMessage(Ljava/lang/String;Z)V", at = @At("HEAD"), cancellable = true)
     public void sendMessage(String message, boolean toHud, CallbackInfo ci) {
-        if (message.toLowerCase().startsWith(Atomic.chatPrefix.toLowerCase())) {
+        if (message.toLowerCase().startsWith(ClientConfig.chatPrefix.getValue().toLowerCase())) {
             ci.cancel();
             this.client.inGameHud.getChatHud().addToMessageHistory(message);
-            String[] args = message.substring(Atomic.chatPrefix.length()).split(" +");
+            String[] args = message.substring(ClientConfig.chatPrefix.getValue().length()).split(" +");
             String command = args[0].toLowerCase();
             args = Arrays.copyOfRange(args, 1, args.length);
             Command c = CommandRegistry.getByAlias(command);

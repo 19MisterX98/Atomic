@@ -1,5 +1,8 @@
 package me.zeroX150.atomic.mixin.network;
 
+import io.netty.channel.ChannelHandlerContext;
+import me.zeroX150.atomic.feature.module.ModuleRegistry;
+import me.zeroX150.atomic.feature.module.impl.external.AntiPacketKick;
 import me.zeroX150.atomic.helper.event.Event;
 import me.zeroX150.atomic.helper.event.EventSystem;
 import me.zeroX150.atomic.helper.event.PacketEvent;
@@ -16,6 +19,11 @@ public class ClientConnectionMixin {
     @Inject(method = "handlePacket", at = @At("HEAD"), cancellable = true)
     private static <T extends PacketListener> void packetReceive(Packet<T> packet, PacketListener listener, CallbackInfo ci) {
         if (EventSystem.fireEvent(Event.PACKET_RECEIVE, new PacketEvent(packet))) ci.cancel();
+    }
+
+    @Inject(method = "exceptionCaught", at = @At("HEAD"), cancellable = true)
+    public void exceptionCaught(ChannelHandlerContext context, Throwable ex, CallbackInfo ci) {
+        if (ModuleRegistry.getByClass(AntiPacketKick.class).isEnabled()) ci.cancel();
     }
 
     @Inject(method = "send(Lnet/minecraft/network/Packet;)V", cancellable = true, at = @At("HEAD"))

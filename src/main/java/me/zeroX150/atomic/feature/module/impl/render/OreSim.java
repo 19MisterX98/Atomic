@@ -217,7 +217,7 @@ public class OreSim extends Module {
             if (ore.name == OreType.LDEBRIS || ore.name == OreType.SDEBRIS) {
                 assert worldAccess != null;
                 Identifier id = worldAccess.getRegistryManager().get(Registry.BIOME_KEY)
-                        .getId(worldAccess.getBiomeAccess().getBiomeForNoiseGen(new ChunkPos(chunkX >> 4,chunkZ >> 4)));
+                        .getId(worldAccess.getBiomeAccess().getBiomeForNoiseGen(new ChunkPos(chunkX >> 4, chunkZ >> 4)));
                 if (id == null) {
                     Client.notifyUser("Something went wrong, you may have some mods that mess with world generation");
                     this.setEnabled(false);
