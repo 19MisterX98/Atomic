@@ -3,18 +3,18 @@
   "id": "atomic",
   "version": "${version}",
   "name": "Atomic client",
-  "description": "Cornos but better and 1.17",
+  "description": "based client for 1.17",
   "authors": [
     "0x150"
   ],
   "contributors": [],
   "contact": {
     "homepage": "https://0x150.cf/",
-    "sources": "https://github.com/cornos"
+    "sources": "https://github.com/cornos/Atomic"
   },
   "license": "GPL-3.0",
   "icon": "assets/atomic/icon.png",
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "main": [
       "me.zeroX150.atomic.Atomic"

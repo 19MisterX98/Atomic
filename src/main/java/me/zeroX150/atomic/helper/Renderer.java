@@ -66,6 +66,7 @@ public class Renderer {
 
     //you can call renderOutlineIntern multiple times to save performance
     public static void renderOutline(Vec3d start, Vec3d dimensions, Color color, MatrixStack stack) {
+        RenderSystem.enableBlend();
         BufferBuilder buffer = renderPrepare(color);
 
         renderOutlineIntern(start, dimensions, stack, buffer);
@@ -73,6 +74,7 @@ public class Renderer {
         buffer.end();
         BufferRenderer.draw(buffer);
         GL11.glDepthFunc(GL11.GL_LEQUAL);
+        RenderSystem.disableBlend();
     }
 
     public static BufferBuilder renderPrepare(Color color) {
@@ -110,7 +112,7 @@ public class Renderer {
         RenderSystem.setShader(GameRenderer::getPositionShader);
         GL11.glDepthFunc(GL11.GL_ALWAYS);
         RenderSystem.setShaderColor(red, green, blue, alpha);
-        RenderSystem.lineWidth(2f);
+        RenderSystem.enableBlend();
         buffer.begin(VertexFormat.DrawMode.QUADS,
                 VertexFormats.POSITION);
         buffer.vertex(matrix, x1, y2, z1).next();
@@ -147,6 +149,7 @@ public class Renderer {
 
         BufferRenderer.draw(buffer);
         GL11.glDepthFunc(GL11.GL_LEQUAL);
+        RenderSystem.disableBlend();
     }
 
     public static void line(Vec3d start, Vec3d end, Color color, MatrixStack matrices) {
@@ -170,6 +173,7 @@ public class Renderer {
         GL11.glDepthFunc(GL11.GL_ALWAYS);
         RenderSystem.setShaderColor(red, green, blue, alpha);
         RenderSystem.lineWidth(2f);
+        RenderSystem.enableBlend();
         buffer.begin(VertexFormat.DrawMode.DEBUG_LINES,
                 VertexFormats.POSITION);
 
@@ -180,6 +184,7 @@ public class Renderer {
 
         BufferRenderer.draw(buffer);
         GL11.glDepthFunc(GL11.GL_LEQUAL);
+        RenderSystem.disableBlend();
     }
 
     public static Vec3d getCrosshairVector() {
@@ -292,6 +297,18 @@ public class Renderer {
         Screen.drawTexture(new MatrixStack(), 0, 0, 0, 0, width, height, width, height);
         if (!(Atomic.client.currentScreen instanceof HomeScreen))
             DrawableHelper.fill(new MatrixStack(), 0, 0, width, height, new Color(0, 0, 0, 60).getRGB());
+    }
+
+    /**
+     * @param original       the original color
+     * @param redOverwrite   the new red (or -1 for original)
+     * @param greenOverwrite the new green (or -1 for original)
+     * @param blueOverwrite  the new blue (or -1 for original)
+     * @param alphaOverwrite the new alpha (or -1 for original)
+     * @return the modified color
+     */
+    public static Color modify(Color original, int redOverwrite, int greenOverwrite, int blueOverwrite, int alphaOverwrite) {
+        return new Color(redOverwrite == -1 ? original.getRed() : redOverwrite, greenOverwrite == -1 ? original.getGreen() : greenOverwrite, blueOverwrite == -1 ? original.getBlue() : blueOverwrite, alphaOverwrite == -1 ? original.getAlpha() : alphaOverwrite);
     }
 
 }

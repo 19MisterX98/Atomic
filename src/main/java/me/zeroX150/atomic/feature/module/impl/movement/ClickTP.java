@@ -102,7 +102,7 @@ public class ClickTP extends Module {
     public void onWorldRender(MatrixStack matrices) {
         if (goingToTeleportTo != null) {
             Vec3d bruh = new Vec3d(goingToTeleportTo.getX(), goingToTeleportTo.getY(), goingToTeleportTo.getZ());
-            Renderer.renderFilled(bruh, new Vec3d(1, 1, 1), Client.getCurrentRGB(), matrices);
+            Renderer.renderFilled(bruh, new Vec3d(1, 1, 1), Renderer.modify(Client.getCurrentRGB(), -1, -1, -1, 200), matrices);
         }
     }
 

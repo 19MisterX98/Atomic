@@ -58,7 +58,8 @@ public class Tracers extends Module {
             else if (entity instanceof HostileEntity) c = Color.YELLOW;
             else c = Color.GREEN;
             if (((entity instanceof PlayerEntity && players.getValue()) || entities.getValue())) {
-                Renderer.renderOutline(entity.getPos().subtract(new Vec3d(entity.getWidth(), 0, entity.getWidth()).multiply(0.5)), new Vec3d(entity.getWidth(), entity.getHeight(), entity.getWidth()), Client.getCurrentRGB(), matrices);
+                Renderer.renderFilled(entity.getPos().subtract(new Vec3d(entity.getWidth(), 0, entity.getWidth()).multiply(0.5)), new Vec3d(entity.getWidth(), entity.getHeight(), entity.getWidth()), Renderer.modify(Client.getCurrentRGB(), -1, -1, -1, 130), matrices);
+                //Renderer.renderOutline(entity.getPos().subtract(new Vec3d(entity.getWidth(), 0, entity.getWidth()).multiply(0.5)), new Vec3d(entity.getWidth(), entity.getHeight(), entity.getWidth()), Client.getCurrentRGB(), matrices);
                 if (!onlyBox.getValue())
                     Renderer.line(Renderer.getCrosshairVector(), entity.getPos().add(0, entity.getHeight() / 2, 0), c, matrices);
             }
