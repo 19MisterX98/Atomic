@@ -13,6 +13,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 public class HomeScreen extends Screen {
+
     public HomeScreen() {
         super(Text.of("a"));
     }

@@ -53,6 +53,9 @@ task execBuild(dependsOn: build) {
 
 jar {
 	from "LICENSE"
+	manifest {
+		attributes "Main-Class": "me.zeroX150.atomic.Main"
+	}
 }
 
 // configure the maven publication

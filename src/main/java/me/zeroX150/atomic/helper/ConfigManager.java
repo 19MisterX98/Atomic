@@ -14,9 +14,14 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConfigManager {
     public static boolean loaded = false;
+    public static boolean enabled = false;
+
+    static List<Module> toBeEnabled = new ArrayList<>();
 
     static File CONFIG_FILE;
 
@@ -25,7 +30,7 @@ public class ConfigManager {
     }
 
     public static void saveState() {
-        if (!loaded) {
+        if (!loaded || !enabled) {
             System.out.println("Not saving config because we didnt load it yet");
             return;
         }
@@ -83,7 +88,6 @@ public class ConfigManager {
                                 DynamicValue<?> val = j.config.get(key);
                                 if (val != null) {
                                     Object newValue = TypeConverter.convert(value, val.getType());
-                                    System.out.println(val.getKey() + " = " + value + " (" + newValue + " converted)");
                                     if (newValue != null) val.setValue(newValue);
                                 }
                             }
@@ -96,7 +100,7 @@ public class ConfigManager {
                 for (JsonElement enabled : config.get("enabled").getAsJsonArray()) {
                     String name = enabled.getAsString();
                     Module m = ModuleRegistry.getByName(name);
-                    if (m != null) m.setEnabled(true);
+                    if (m != null) toBeEnabled.add(m);
                 }
             }
 
@@ -105,6 +109,15 @@ public class ConfigManager {
             System.out.println("Failed to load config!");
         } finally {
             KeybindManager.reload();
+        }
+    }
+
+    public static void enableModules() {
+        if (enabled) return;
+        enabled = true;
+        for (Module module : toBeEnabled) {
+            module.setEnabled(true);
+            System.out.println("enabling " + module.getName());
         }
     }
 }

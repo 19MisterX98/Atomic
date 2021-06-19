@@ -2,9 +2,13 @@ package me.zeroX150.atomic.helper;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.zeroX150.atomic.Atomic;
+import me.zeroX150.atomic.feature.gui.screen.HomeScreen;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
@@ -13,6 +17,8 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 
 public class Renderer {
+    public static Identifier OPTIONS_BACKGROUND_TEXTURE = new Identifier("atomic", "background.jpg");
+
 
     public static void renderOutlineIntern(Vec3d start, Vec3d dimensions, MatrixStack stack, BufferBuilder buffer) {
         Camera c = Atomic.client.gameRenderer.getCamera();
@@ -276,6 +282,16 @@ public class Renderer {
 
     public static void renderLineScreen(Vec3d start, Vec3d end, Color color, int width) {
         lineScreen(color, new Point((int) Math.floor(start.x), (int) Math.floor(start.y)), new Point((int) Math.floor(end.x), (int) Math.floor(end.y)));
+    }
+
+    public static void renderBackgroundTexture() {
+        int width = Atomic.client.getWindow().getScaledWidth();
+        int height = Atomic.client.getWindow().getScaledHeight();
+        RenderSystem.setShaderColor(1, 1, 1, 1);
+        RenderSystem.setShaderTexture(0, OPTIONS_BACKGROUND_TEXTURE);
+        Screen.drawTexture(new MatrixStack(), 0, 0, 0, 0, width, height, width, height);
+        if (!(Atomic.client.currentScreen instanceof HomeScreen))
+            DrawableHelper.fill(new MatrixStack(), 0, 0, width, height, new Color(0, 0, 0, 60).getRGB());
     }
 
 }

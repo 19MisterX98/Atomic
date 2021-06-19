@@ -1,12 +1,18 @@
 package me.zeroX150.atomic.feature.module;
 
-import me.zeroX150.atomic.feature.module.impl.combat.*;
+import me.zeroX150.atomic.feature.module.impl.combat.AutoLog;
+import me.zeroX150.atomic.feature.module.impl.combat.Criticals;
+import me.zeroX150.atomic.feature.module.impl.combat.Killaura;
 import me.zeroX150.atomic.feature.module.impl.exploit.*;
-import me.zeroX150.atomic.feature.module.impl.external.*;
-import me.zeroX150.atomic.feature.module.impl.render.*;
+import me.zeroX150.atomic.feature.module.impl.external.Alts;
+import me.zeroX150.atomic.feature.module.impl.external.AntiPacketKick;
+import me.zeroX150.atomic.feature.module.impl.external.ClientConfig;
 import me.zeroX150.atomic.feature.module.impl.movement.*;
-import me.zeroX150.atomic.feature.module.impl.testing.*;
-import me.zeroX150.atomic.feature.module.impl.world.*;
+import me.zeroX150.atomic.feature.module.impl.render.*;
+import me.zeroX150.atomic.feature.module.impl.testing.TestModule;
+import me.zeroX150.atomic.feature.module.impl.world.Fullbright;
+import me.zeroX150.atomic.feature.module.impl.world.Nuker;
+import me.zeroX150.atomic.feature.module.impl.world.XRAY;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,5 +1,6 @@
 package me.zeroX150.atomic;
 
+import me.zeroX150.atomic.helper.ConfigManager;
 import me.zeroX150.atomic.helper.keybind.KeybindManager;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
@@ -22,6 +23,7 @@ public class Atomic implements ModInitializer {
     public void onInitialize() {
         log(Level.INFO, "Initializing");
         KeybindManager.init();
+        ConfigManager.loadState();
         //Runtime.getRuntime().addShutdownHook(new Thread(ConfigManager::saveState));
         //TODO: Initializer
     }

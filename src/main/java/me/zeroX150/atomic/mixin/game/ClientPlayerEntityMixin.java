@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ClientPlayerEntityMixin {
     @Inject(method = "tick", at = @At("HEAD"))
     public void tick(CallbackInfo ci) {
-        if (!ConfigManager.loaded) ConfigManager.loadState();
+        if (!ConfigManager.enabled) ConfigManager.enableModules();
         for (Module module : ModuleRegistry.getModules()) {
             if (module.isEnabled()) module.tick();
         }
