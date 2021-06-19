@@ -123,13 +123,13 @@ public class ConfigWidget {
 
     public void keyPressed(int kc, int sc, int m) {
         for (ClickableWidget child : children.values()) {
-            child.keyPressed(kc, sc, m);
+            if (child instanceof Textbox) child.keyPressed(kc, sc, m);
         }
     }
 
     public void keyReleased(int kc, int sc, int m) {
         for (ClickableWidget child : children.values()) {
-            child.keyReleased(kc, sc, m);
+            if (child instanceof Textbox) child.keyReleased(kc, sc, m);
         }
     }
 

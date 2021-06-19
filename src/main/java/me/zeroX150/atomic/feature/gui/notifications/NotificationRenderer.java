@@ -19,7 +19,7 @@ public class NotificationRenderer {
         double m = System.currentTimeMillis() - lastRender;
         if (m > 1) lastRender = System.currentTimeMillis();
         m /= 12;
-        int currentYOffset = 0;
+        int currentYOffset = -20;
         int baseX = Atomic.client.getWindow().getScaledWidth() - 150;
         int baseY = Atomic.client.getWindow().getScaledHeight() - 50;
         long c = System.currentTimeMillis();
@@ -29,6 +29,7 @@ public class NotificationRenderer {
             timeRemaining = Math.abs(1 - timeRemaining);
             boolean notificationExpired = notification.creationDate + notification.duration < c;
             int notifHeight = 2 + ((notification.contents.length + (notification.title.isEmpty() ? 0 : 1)) * 9);
+            currentYOffset += notifHeight + 2;
             notification.posY = baseY - currentYOffset;
             if (!notificationExpired) {
                 notification.posX = baseX;
@@ -59,8 +60,7 @@ public class NotificationRenderer {
                 Atomic.client.textRenderer.draw(ms, content, (int) notification.renderPosX + 2, (int) notification.renderPosY + currentYOffsetText, 0xFFFFFF);
                 currentYOffsetText += 9;
             }
-
-            currentYOffset += notifHeight + 2;
+            //if (currentYOffset == 0) currentYOffset += notifHeight + 2;
         }
     }
 }
