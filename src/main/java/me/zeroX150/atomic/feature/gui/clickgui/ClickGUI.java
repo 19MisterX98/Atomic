@@ -26,7 +26,7 @@ public class ClickGUI extends Screen {
     public static Color HEADER_RET = new Color(38, 38, 38, 255);
     public static Color HEADER_EXP = new Color(49, 49, 49, 255);
 
-    Identifier LOGO = new Identifier("atomic", "logo.png");
+    public static Identifier LOGO = new Identifier("atomic", "logo.png");
 
     ConfigWidget currentConfig = null;
 
@@ -46,6 +46,7 @@ public class ClickGUI extends Screen {
         double offsetY = me.zeroX150.atomic.feature.module.impl.render.ClickGUI.logoSize.getValue() * 130 + 20;
 
         for (ModuleType value : ModuleType.values()) {
+            if (value == ModuleType.HIDDEN) continue;
             Draggable d = new Draggable(value.getName(), false);
             d.lastRenderX = width / 2d - (100 / 2d);
             d.lastRenderY = height / 2d - (9) / 2d;

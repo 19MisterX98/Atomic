@@ -4,13 +4,11 @@ import me.zeroX150.atomic.feature.module.impl.combat.AutoLog;
 import me.zeroX150.atomic.feature.module.impl.combat.Criticals;
 import me.zeroX150.atomic.feature.module.impl.combat.Killaura;
 import me.zeroX150.atomic.feature.module.impl.exploit.*;
+import me.zeroX150.atomic.feature.module.impl.external.Alts;
 import me.zeroX150.atomic.feature.module.impl.external.AntiPacketKick;
 import me.zeroX150.atomic.feature.module.impl.external.ClientConfig;
 import me.zeroX150.atomic.feature.module.impl.movement.*;
-import me.zeroX150.atomic.feature.module.impl.render.ClickGUI;
-import me.zeroX150.atomic.feature.module.impl.render.Hud;
-import me.zeroX150.atomic.feature.module.impl.render.NameTags;
-import me.zeroX150.atomic.feature.module.impl.render.OreSim;
+import me.zeroX150.atomic.feature.module.impl.render.*;
 import me.zeroX150.atomic.feature.module.impl.testing.TestModule;
 import me.zeroX150.atomic.feature.module.impl.world.Fullbright;
 import me.zeroX150.atomic.feature.module.impl.world.Nuker;
@@ -56,6 +54,8 @@ public class ModuleRegistry {
         modules.add(new Fullbright());
         modules.add(new NameTags());
         modules.add(new ClientConfig());
+        modules.add(new Tracers());
+        modules.add(new Alts());
     }
 
     public static List<Module> getModules() {

@@ -5,6 +5,7 @@
   "mixins": [
     "chat.ScreenMixin",
     "game.ClientPlayerEntityMixin",
+    "game.IdentifierMixin",
     "game.IMinecraftClientAccessor",
     "game.MinecraftClientMixin",
     "game.entity.LivingEntityAccessor",
@@ -13,6 +14,7 @@
     "game.render.BlockMixin",
     "game.render.ButtonWidgetMixin",
     "game.render.EntityRendererMixin",
+    "game.render.EntryListWidgetMixin",
     "game.render.GameRendererMixin",
     "game.render.InGameHudMixin",
     "game.render.ISliderWidgetAccessor",
