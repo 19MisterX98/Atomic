@@ -84,6 +84,7 @@ public class ClickGUI extends Screen {
     @Override
     protected void init() {
         aProg = 1;
+        closed = false;
         int off = 21;
         int offY = 70;
         ButtonWidget sort = new ButtonWidget(width - offY, height - off, 20, 20, Text.of("S"), button -> {
@@ -169,7 +170,7 @@ public class ClickGUI extends Screen {
             RenderSystem.setShaderTexture(0, LOGO);
             Screen.drawTexture(matrices, 1, 1, 0, 0, 0, (int) (504 * logoSize), (int) (130 * logoSize), (int) (130 * logoSize), (int) (504 * logoSize));
         }
-        if (currentConfig != null) currentConfig.render(mouseX, mouseY, delta);
+        if (currentConfig != null) currentConfig.render(matrices, mouseX, mouseY, delta);
         for (Draggable container : containers) {
             MatrixStack ms = new MatrixStack();
             ms.translate(0, aProgI * height, 0);

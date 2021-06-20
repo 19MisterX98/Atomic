@@ -33,6 +33,7 @@ public class ArrowJuke extends Module {
         for (Entity e : Atomic.client.world.getEntities()) {
             if (e instanceof ArrowEntity) {
                 if (e.isOnGround()) continue;
+                if (e.age > 300) continue;
                 Vec3d arrowRot = e.getVelocity();
                 for (double i = 0; i < predict.getValue(); i += accuracy.getValue()) {
                     Vec3d arrowPos = e.getPos().add(arrowRot.multiply(i));
@@ -53,9 +54,10 @@ public class ArrowJuke extends Module {
                             }
                         }
                         if (goTo != null) {
-                            Vec3d np = Atomic.client.player.getPos().add(goTo);
+                            Vec3d nv = goTo.multiply(0.2);
+                            //Vec3d np = Atomic.client.player.getPos().add(goTo);
                             //Atomic.client.player.updatePosition(np.x, np.y, np.z);
-                            Atomic.client.player.addVelocity(np.x, np.y, np.z);
+                            Atomic.client.player.setVelocity(nv.x, nv.y, nv.z);
                         }
                     }
                 }

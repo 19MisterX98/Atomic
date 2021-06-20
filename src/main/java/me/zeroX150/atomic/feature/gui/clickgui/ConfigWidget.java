@@ -119,30 +119,29 @@ public class ConfigWidget {
         }
     }
 
-    public void render(int mx, int my, float delta) {
+    public void render(MatrixStack ms, int mx, int my, float delta) {
         double xDiff = posX - lastRenderX;
         double yDiff = posY - lastRenderY;
         lastRenderX += (xDiff / me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
         lastRenderY += (yDiff / me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
         if (lastRenderY > Atomic.client.getWindow().getScaledHeight() + 5) ClickGUI.INSTANCE.showModuleConfig(null);
 
-        DrawableHelper.fill(new MatrixStack(), (int) (lastRenderX - margin), (int) (lastRenderY - margin), (int) (lastRenderX + width + margin), (int) (lastRenderY + 9 + margin), ClickGUI.HEADER_EXP.getRGB());
-        DrawableHelper.fill(new MatrixStack(), (int) (lastRenderX + width + 1), (int) (lastRenderY - margin + 1), (int) (lastRenderX + width + margin - 1), (int) (lastRenderY + 9 + margin - 1), new Color(238, 37, 37, 255).getRGB());
+        DrawableHelper.fill(ms, (int) (lastRenderX - margin), (int) (lastRenderY - margin), (int) (lastRenderX + width + margin), (int) (lastRenderY + 9 + margin), ClickGUI.HEADER_EXP.getRGB());
+        DrawableHelper.fill(ms, (int) (lastRenderX + width + 1), (int) (lastRenderY - margin + 1), (int) (lastRenderX + width + margin - 1), (int) (lastRenderY + 9 + margin - 1), new Color(238, 37, 37, 255).getRGB());
         int maxOffset = (int) Math.ceil(9 + (margin * 2));
         for (DynamicValue<?> dynamicValue : children.keySet()) {
             if (!dynamicValue.shouldShow()) continue;
             List<ClickableWidget> w = children.get(dynamicValue);
             maxOffset += 12 * w.size();
         }
-        DrawableHelper.fill(new MatrixStack(), (int) lastRenderX, (int) (lastRenderY + 9 + margin), (int) (lastRenderX + width), (int) (lastRenderY + maxOffset + 1), ClickGUI.HEADER_RET.getRGB());
-        DrawableHelper.drawCenteredText(new MatrixStack(), Atomic.client.textRenderer, parent.getName() + " config", (int) (lastRenderX + (width / 2)), (int) (lastRenderY + 1), 0xFFFFFF);
+        DrawableHelper.fill(ms, (int) lastRenderX, (int) (lastRenderY + 9 + margin), (int) (lastRenderX + width), (int) (lastRenderY + maxOffset + 1), ClickGUI.HEADER_RET.getRGB());
+        DrawableHelper.drawCenteredText(ms, Atomic.client.textRenderer, parent.getName() + " config", (int) (lastRenderX + (width / 2)), (int) (lastRenderY + 1), 0xFFFFFF);
         int yOffset = (int) Math.ceil(9 + (margin * 2)) - 1;
         List<DynamicValue<?>> dvL = new ArrayList<>(children.keySet());
         for (DynamicValue<?> child1 : dvL) {
             if (!child1.shouldShow()) continue;
             List<ClickableWidget> children = this.children.get(child1);
             int c = 0xFFFFFF;
-            MatrixStack ms = new MatrixStack();
             if (child1 instanceof ColorValue a) {
                 c = a.getColor().getRGB();
                 DrawableHelper.drawCenteredText(ms, Atomic.client.textRenderer, child1.getKey() + " R", (int) (lastRenderX + (width / 4)), (int) lastRenderY + yOffset + 1, c);
@@ -159,7 +158,7 @@ public class ConfigWidget {
                     child.x = (int) (lastRenderX + width - child.getWidth() - 3);
                     child.y = (int) lastRenderY + yOffset + 1;
                 }
-                child.render(new MatrixStack(), mx, my, delta);
+                child.render(ms, mx, my, delta);
                 yOffset += 12;
             }
         }
