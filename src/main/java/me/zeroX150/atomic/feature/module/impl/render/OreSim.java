@@ -5,25 +5,21 @@ import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.feature.module.config.BooleanValue;
 import me.zeroX150.atomic.feature.module.config.DynamicValue;
+import me.zeroX150.atomic.feature.module.config.MultiValue;
 import me.zeroX150.atomic.feature.module.config.SliderValue;
 import me.zeroX150.atomic.helper.Client;
 import me.zeroX150.atomic.helper.Renderer;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.structure.rule.BlockMatchRuleTest;
-import net.minecraft.structure.rule.RuleTest;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.world.Heightmap;
+import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.ChunkRandom;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -35,6 +31,7 @@ public class OreSim extends Module {
 
     SliderValue chunkRange;
     DynamicValue<String> seedInput;
+    MultiValue airCheck;
 
     BooleanValue diamond;
     BooleanValue redstone;
@@ -47,6 +44,7 @@ public class OreSim extends Module {
     BooleanValue copper;
 
     private Long worldSeed = null;
+    private ChunkPos prevOffset = new ChunkPos(0,0);
 
     public OreSim() {
         super("OreSim", "Worldseed + Math = Ores", ModuleType.RENDER);
@@ -61,6 +59,7 @@ public class OreSim extends Module {
         redstone = this.config.create("Redstone", false);
         ancientDebris = this.config.create("Ancient Debris", false);
 
+        airCheck = this.config.create("Air-check mode", "Off", "Off", "On load", "Rescan");
         seedInput = this.config.create("Seed", "Your Worldseed");
         chunkRange = this.config.create("Chunk Range", 5, 0, 10, 10);
 
@@ -134,6 +133,37 @@ public class OreSim extends Module {
     public void tick() {
         if (hasSeedChanged()) {
             reload();
+        } else if (airCheck.getValue().equals("Rescan")) {
+            if (Atomic.client.player == null || Atomic.client.world == null) return;
+            long chunkX = Atomic.client.player.getChunkPos().x;
+            long chunkZ = Atomic.client.player.getChunkPos().z;
+            ClientWorld world = Atomic.client.world;
+            int renderdistance = MinecraftClient.getInstance().options.viewDistance;
+
+            //maybe another config option? But its already crowded
+            int chunkCounter = 5;
+
+            while (true) {
+                for(long offsetX = prevOffset.x; offsetX <= renderdistance; offsetX++) {
+                    for(long offsetZ = prevOffset.z; offsetZ <= renderdistance; offsetZ++) {
+                        prevOffset = new ChunkPos((int) offsetX, (int) offsetZ);
+                        if(chunkCounter <= 0) {
+                            return;
+                        }
+                        long chunkKey = (chunkX + offsetX) + ( (chunkZ + offsetZ) << 32);
+
+                        if(chunkRenderers.containsKey(chunkKey)) {
+                            chunkRenderers.get(chunkKey).values().forEach(oreSet ->
+                                oreSet.removeIf(ore ->
+                                        !world.getBlockState(new BlockPos((int) ore.x, (int) ore.y, (int) ore.z)).isOpaque())
+                            );
+                        }
+                        chunkCounter--;
+                    }
+                    prevOffset = new ChunkPos((int) offsetX, -renderdistance);
+                }
+                prevOffset = new ChunkPos(-renderdistance, -renderdistance);
+            }
         }
     }
 
@@ -196,16 +226,29 @@ public class OreSim extends Module {
         }
         long chunkKey = (long) chunkX + ((long) chunkZ << 32);
 
-        if (chunkRenderers.containsKey(chunkKey))
+        ClientWorld world = Atomic.client.world;
+
+        if (chunkRenderers.containsKey(chunkKey) || world == null)
             return;
+
+        if(world.getChunkManager().getChunk(chunkX,chunkZ, ChunkStatus.FULL,false) == null) return;
+
         chunkX = chunkX << 4;
         chunkZ = chunkZ << 4;
 
         ChunkRandom random = new ChunkRandom();
         HashMap<OreType, HashSet<Vec3d>> h = new HashMap<>();
-        WorldAccess worldAccess = Atomic.client.world;
 
         long populationSeed = random.setPopulationSeed(worldSeed, chunkX, chunkZ);
+
+        Identifier id = world.getRegistryManager().get(Registry.BIOME_KEY)
+                .getId(world.getBiomeAccess().getBiomeForNoiseGen(new ChunkPos(chunkX >> 4, chunkZ >> 4)));
+        if (id == null) {
+            Client.notifyUser("Something went wrong, you may have some mods that mess with world generation");
+            this.setEnabled(false);
+            return;
+        }
+        String biomeName = id.getPath();
 
         for (Ore ore : Ore.ORES) {
 
@@ -215,18 +258,9 @@ public class OreSim extends Module {
             int index = ore.index;
 
             if (ore.name == OreType.LDEBRIS || ore.name == OreType.SDEBRIS) {
-                assert worldAccess != null;
-                Identifier id = worldAccess.getRegistryManager().get(Registry.BIOME_KEY)
-                        .getId(worldAccess.getBiomeAccess().getBiomeForNoiseGen(new ChunkPos(chunkX >> 4, chunkZ >> 4)));
-                if (id == null) {
-                    Client.notifyUser("Something went wrong, you may have some mods that mess with world generation");
-                    this.setEnabled(false);
-                    return;
-                }
-                String name = id.getPath();
-                if (name.equals("warped_forest")) {
+                if (biomeName.equals("warped_forest")) {
                     index = 13;
-                } else if (name.equals("crimson_forest")) {
+                } else if (biomeName.equals("crimson_forest")) {
                     index = 12;
                 }
                 if (ore.name == OreType.SDEBRIS) {
@@ -237,6 +271,10 @@ public class OreSim extends Module {
             random.setDecoratorSeed(populationSeed, index, ore.step);
 
             if (ore.generatorType == Generator.EMERALD) {
+                if(!biomeName.equals("mountains") && !biomeName.equals("mountain_edge") && !biomeName.equals("wooded_mountains") && !biomeName.equals("gravelly_mountains") && !biomeName.equals("modified_gravelly_mountains")) {
+                    h.put(ore.name, ores);
+                    continue;
+                }
                 repeat = random.nextInt(19) + 6;
             }
 
@@ -254,9 +292,9 @@ public class OreSim extends Module {
                 }
 
                 switch (ore.generatorType) {
-                    case DEFAULT -> ores.addAll(generateNormal(worldAccess, random, new BlockPos(x, y, z), ore.size));
-                    case EMERALD -> ores.add(new Vec3d(x, y, z));
-                    case NO_SURFACE -> ores.addAll(generateHidden(random, new BlockPos(x, y, z), ore.size));
+                    case DEFAULT -> ores.addAll(generateNormal(world, random, new BlockPos(x, y, z), ore.size));
+                    case EMERALD -> { if (!airCheck.getValue().equals("off") || world.getBlockState(new BlockPos(x, y, z)).isOpaque()) ores.add(new Vec3d(x, y, z)); }
+                    case NO_SURFACE -> ores.addAll(generateHidden(world, random, new BlockPos(x, y, z), ore.size));
                     default -> System.out.println(ore.name + " has some unknown generator. Fix it!");
                 }
             }
@@ -265,17 +303,11 @@ public class OreSim extends Module {
         chunkRenderers.put(chunkKey, h);
     }
 
-    @SuppressWarnings("unused")
-    public void setWorldSeed(long seed) {
-        this.seedInput.setValue(seed);
-        chunkRenderers.clear();
-        if (this.isEnabled()) {
-            reload();
-        }
-    }
+    // ====================================
+    // Mojang code
+    // ====================================
 
-    @SuppressWarnings("unused")
-    private ArrayList<Vec3d> generateNormal(WorldAccess worldAccess, Random random, BlockPos blockPos, int veinSize) {
+    private ArrayList<Vec3d> generateNormal(ClientWorld world, Random random, BlockPos blockPos, int veinSize) {
         float f = random.nextFloat() * 3.1415927F;
         float g = (float) veinSize / 8.0F;
         int i = MathHelper.ceil(((float) veinSize / 16.0F * 2.0F + 1.0F) / 2.0F);
@@ -291,22 +323,22 @@ public class OreSim extends Module {
         int q = 2 * (MathHelper.ceil(g) + i);
         int r = 2 * (2 + i);
 
-        // for (int s = n; s <= n + q; ++s) {
-        // for (int t = p; t <= p + q; ++t) {
-        // if(o <= worldAccess.getTopY(Heightmap.Type.OCEAN_FLOOR_WG, s, t)) {
-        return this.generateVeinPart(random, veinSize, d, e, h, j, l, m, n, o, p, q, r);
-        // }
-        // }
-        // }
+        for (int s = n; s <= n + q; ++s) {
+            for (int t = p; t <= p + q; ++t) {
+                if (o <= world.getTopY(Heightmap.Type.MOTION_BLOCKING, s, t)) {
+                  return this.generateVeinPart(world, random, veinSize, d, e, h, j, l, m, n, o, p, q, r);
+                }
+            }
+        }
 
-        // return null;
+        return new ArrayList<>();
     }
 
-    private ArrayList<Vec3d> generateVeinPart(Random random, int veinSize, double startX, double endX, double startZ,
+    private ArrayList<Vec3d> generateVeinPart(ClientWorld world, Random random, int veinSize, double startX, double endX, double startZ,
                                               double endZ, double startY, double endY, int x, int y, int z, int size, int i) {
 
         BitSet bitSet = new BitSet(size * i * size);
-        // BlockPos.Mutable mutable = new BlockPos.Mutable();
+        BlockPos.Mutable mutable = new BlockPos.Mutable();
         double[] ds = new double[veinSize * 4];
 
         ArrayList<Vec3d> poses = new ArrayList<>();
@@ -374,10 +406,10 @@ public class OreSim extends Module {
                                         int an = ah - x + (aj - y) * size + (al - z) * size * i;
                                         if (!bitSet.get(an)) {
                                             bitSet.set(an);
-                                            // mutable.set(ah, aj, al);
-                                            // if (config.target.test(worldAccess.getBlockState(mutable), random)) {
-                                            poses.add(new Vec3d(ah, aj, al));
-                                            // }
+                                            mutable.set(ah, aj, al);
+                                            if (aj > 0 && (!airCheck.getValue().equals("off") || world.getBlockState(mutable).isOpaque())) {
+                                                poses.add(new Vec3d(ah, aj, al));
+                                            }
                                         }
                                     }
                                 }
@@ -391,7 +423,7 @@ public class OreSim extends Module {
         return poses;
     }
 
-    private ArrayList<Vec3d> generateHidden(Random random, BlockPos blockPos, int size) {
+    private ArrayList<Vec3d> generateHidden(ClientWorld world, Random random, BlockPos blockPos, int size) {
 
         ArrayList<Vec3d> poses = new ArrayList<>();
 
@@ -402,15 +434,12 @@ public class OreSim extends Module {
             int x = this.randomCoord(random, size) + blockPos.getX();
             int y = this.randomCoord(random, size) + blockPos.getY();
             int z = this.randomCoord(random, size) + blockPos.getZ();
-            poses.add(new Vec3d(x, y, z));
+            if(!airCheck.getValue().equals("off") || world.getBlockState(new BlockPos(x, y, z)).isOpaque())
+                poses.add(new Vec3d(x, y, z));
         }
 
         return poses;
     }
-
-    // ====================================
-    // Mojang code
-    // ====================================
 
     private int randomCoord(Random random, int size) {
         return Math.round((random.nextFloat() - random.nextFloat()) * (float) size);
@@ -425,30 +454,19 @@ public class OreSim extends Module {
     }
 
     private record Ore(OreType name, int index, int step, int minY,
-                       int maxY, int size, RuleTest replacable, int repeat,
+                       int maxY, int size, int repeat,
                        boolean isDepthAverage,
                        Generator generatorType) {
         public static final ArrayList<Ore> ORES = new ArrayList<>(Arrays.asList(
-                new Ore(OreType.DIAMOND, 11, 6, 0, 17, 8, OreFeatureConfig.Rules.BASE_STONE_OVERWORLD, 1, false,
-                        Generator.DEFAULT),
-                new Ore(OreType.REDSTONE, 10, 6, 0, 16, 8, OreFeatureConfig.Rules.BASE_STONE_OVERWORLD, 8, false,
-                        Generator.DEFAULT),
-                new Ore(OreType.GOLD, 9, 6, 0, 32, 9, OreFeatureConfig.Rules.BASE_STONE_OVERWORLD, 2, false,
-                        Generator.DEFAULT),
-                new Ore(OreType.IRON, 8, 6, 0, 64, 9, OreFeatureConfig.Rules.BASE_STONE_OVERWORLD, 20, false,
-                        Generator.DEFAULT),
-                new Ore(OreType.COAL, 7, 6, 0, 128, 17, OreFeatureConfig.Rules.BASE_STONE_OVERWORLD, 20, false,
-                        Generator.DEFAULT),
-                new Ore(OreType.EMERALD, 17, 6, 4, 32, 1, new BlockMatchRuleTest(Blocks.STONE), 6 - 8, false,
-                        Generator.EMERALD),
-                new Ore(OreType.SDEBRIS, 15, 7, 8, 120, 2, OreFeatureConfig.Rules.BASE_STONE_NETHER, 1, false,
-                        Generator.NO_SURFACE),
-                new Ore(OreType.LDEBRIS, 15, 7, 17, 9, 3, OreFeatureConfig.Rules.BASE_STONE_NETHER, 1, true,
-                        Generator.NO_SURFACE),
-                new Ore(OreType.LAPIS, 12, 6, 16, 16, 7, OreFeatureConfig.Rules.BASE_STONE_OVERWORLD, 1, true,
-                        Generator.DEFAULT),
-                new Ore(OreType.COPPER, 13, 6, 49, 49, 10, OreFeatureConfig.Rules.BASE_STONE_OVERWORLD, 6, true,
-                        Generator.DEFAULT)));
-
+                new Ore(OreType.DIAMOND, 11, 6, 0, 17, 8, 1, false, Generator.DEFAULT),
+                new Ore(OreType.REDSTONE, 10, 6, 0, 16, 8, 8, false, Generator.DEFAULT),
+                new Ore(OreType.GOLD, 9, 6, 0, 32, 9, 2, false, Generator.DEFAULT),
+                new Ore(OreType.IRON, 8, 6, 0, 64, 9, 20, false, Generator.DEFAULT),
+                new Ore(OreType.COAL, 7, 6, 0, 128, 17, 20, false, Generator.DEFAULT),
+                new Ore(OreType.EMERALD, 17, 6, 4, 32, 1, 6 - 8, false, Generator.EMERALD),
+                new Ore(OreType.SDEBRIS, 15, 7, 8, 120, 2, 1, false, Generator.NO_SURFACE),
+                new Ore(OreType.LDEBRIS, 15, 7, 17, 9, 3, 1, true, Generator.NO_SURFACE),
+                new Ore(OreType.LAPIS, 12, 6, 16, 16, 7, 1, true, Generator.DEFAULT),
+                new Ore(OreType.COPPER, 13, 6, 49, 49, 10, 6, true, Generator.DEFAULT)));
     }
 }
