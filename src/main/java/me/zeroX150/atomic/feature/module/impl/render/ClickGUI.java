@@ -13,7 +13,7 @@ public class ClickGUI extends Module {
     public ClickGUI() {
         super("ClickGUI", "Opens the click gui", ModuleType.RENDER);
         logoSize = this.config.create("Logo size", 0.28, 0, 1, 2);
-        smooth = this.config.create("Movement smooth", 10, 1, 30, 1);
+        smooth = this.config.create("Movement smooth", 20, 10, 30, 1);
         this.config.get("Keybind").setValue(344);
     }
 
@@ -21,7 +21,7 @@ public class ClickGUI extends Module {
     public void tick() {
         if (me.zeroX150.atomic.feature.gui.clickgui.ClickGUI.INSTANCE == null)
             new me.zeroX150.atomic.feature.gui.clickgui.ClickGUI();
-        Atomic.client.openScreen(me.zeroX150.atomic.feature.gui.clickgui.ClickGUI.INSTANCE);
+        Atomic.client.openScreen(new me.zeroX150.atomic.feature.gui.clickgui.ClickGUI());
         toggle();
     }
 

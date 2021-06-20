@@ -152,10 +152,10 @@ public class ClickGUI extends Screen {
             Screen.drawTexture(matrices, 1, 1, 0, 0, 0, (int) (504 * logoSize), (int) (130 * logoSize), (int) (130 * logoSize), (int) (504 * logoSize));
         }
 
-        MatrixStack ms = new MatrixStack();
         //ms.translate(0, (Math.abs(animProgressInter - 1) * height), 0);
         if (currentConfig != null) currentConfig.render(mouseX, mouseY, delta);
         for (Draggable container : containers) {
+            MatrixStack ms = new MatrixStack();
             container.render(ms);
         }
 

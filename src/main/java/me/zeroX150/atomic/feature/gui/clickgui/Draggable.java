@@ -4,6 +4,8 @@ import me.zeroX150.atomic.Atomic;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.Vec3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,8 @@ public class Draggable {
     double posY;
     double lastRenderX = -1;
     double lastRenderY = -1;
+    double trackedLastRenderX = -1;
+    double trackedLastRenderY = -1;
     boolean expanded;
     boolean dragged = false;
     long lastRender = System.currentTimeMillis();
@@ -69,6 +73,11 @@ public class Draggable {
         double animProgInter = easeOutBounce(animProg);
         if (lastRenderX == -1) lastRenderX = posX;
         if (lastRenderY == -1) lastRenderY = posY;
+        if (trackedLastRenderX == -1) trackedLastRenderX = lastRenderX;
+        if (trackedLastRenderY == -1) trackedLastRenderY = lastRenderY;
+        double lrXDiff = lastRenderX - trackedLastRenderX;
+        trackedLastRenderX = lastRenderX;
+        trackedLastRenderY = lastRenderY;
         float xDiff = (float) (lastRenderX - posX);
         float yDiff = (float) (lastRenderY - posY);
         double nxDiff = (xDiff / me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
@@ -77,15 +86,21 @@ public class Draggable {
         if (Math.abs(nyDiff) < 0.02) nyDiff = yDiff;
         lastRenderX -= nxDiff;
         lastRenderY -= nyDiff;
+        stack.translate(lastRenderX - margin - paddingX, lastRenderY - margin, 0);
+        stack.multiply(new Quaternion(new Vec3f(0, 0, 1), (float) MathHelper.clamp(lrXDiff, -20, 20), true));
+        //stack.multiply(new Quaternion(new Vec3f(0,1,0),(float) MathHelper.clamp(lrYDiff,-20,20),true));
         if (this.animProg != 0) {
             double yOffset = 9 + margin * 2;
             for (Clickable child : children) {
-                child.render(lastRenderX, lastRenderY + (yOffset * animProgInter), stack, animProgInter);
+                child.render(margin, margin + (yOffset * animProgInter), stack, animProgInter, lastRenderX, lastRenderY + (yOffset * animProgInter));
                 yOffset += 9 + margin * 2;
             }
         }
-        DrawableHelper.fill(stack, (int) (lastRenderX - margin - paddingX), (int) (lastRenderY - margin), (int) (lastRenderX + width + margin + paddingX), (int) (lastRenderY + 9 + margin), this.expanded ? ClickGUI.HEADER_EXP.getRGB() : ClickGUI.HEADER_RET.getRGB());
-        DrawableHelper.drawCenteredText(stack, Atomic.client.textRenderer, title, (int) (lastRenderX + (width / 2)), (int) lastRenderY, 0xFFFFFF);
+        //DrawableHelper.fill(stack, (int) (lastRenderX - margin - paddingX), (int) (lastRenderY - margin), (int) (lastRenderX + width + margin + paddingX), (int) (lastRenderY + 9 + margin), this.expanded ? ClickGUI.HEADER_EXP.getRGB() : ClickGUI.HEADER_RET.getRGB());
+        //DrawableHelper.drawCenteredText(stack, Atomic.client.textRenderer, title, (int) (lastRenderX + (width / 2)), (int) lastRenderY, 0xFFFFFF);
+        DrawableHelper.fill(stack, (int) -paddingX, 0, (int) (width + margin + paddingX * 2), (int) (9 + margin * 2), this.expanded ? ClickGUI.HEADER_EXP.getRGB() : ClickGUI.HEADER_RET.getRGB());
+        DrawableHelper.drawCenteredText(stack, Atomic.client.textRenderer, title, (int) (margin + (width / 2)), (int) margin, 0xFFFFFF);
+        stack.translate(-(lastRenderX - margin - paddingX), -(lastRenderY - margin), 0);
     }
 
     public void mouseMove(double deltaX, double deltaY) {

@@ -14,12 +14,12 @@ public class Clickable {
         this.parent = parent;
     }
 
-    public void render(double x, double y, MatrixStack stack, double animProgress) {
+    public void render(double x, double y, MatrixStack stack, double animProgress, double actualX, double actualY) {
         //Atomic.client.textRenderer.draw(new MatrixStack(),parent.getName(),(float)x,(float)y,0xFFFFFF);
-        if (isHovered(x, y)) {
+        if (isHovered(actualX, actualY)) {
             ClickGUI.INSTANCE.renderDescription(parent.getDescription());
         }
-        DrawableHelper.fill(stack, (int) (x - margin), (int) Math.floor(y - margin), (int) (x + width + margin), (int) Math.floor(y + (margin + 9) * animProgress), parent.isEnabled() || isHovered(x, y) ? ClickGUI.ACTIVE.getRGB() : ClickGUI.INACTIVE.getRGB());
+        DrawableHelper.fill(stack, (int) (x - margin), (int) Math.floor(y - margin), (int) (x + width + margin), (int) Math.floor(y + (margin + 9) * animProgress), parent.isEnabled() || isHovered(actualX, actualY) ? ClickGUI.ACTIVE.getRGB() : ClickGUI.INACTIVE.getRGB());
         DrawableHelper.drawCenteredText(stack, Atomic.client.textRenderer, parent.getName(), (int) (x + (width / 2)), (int) y, 0xFFFFFF);
     }
 

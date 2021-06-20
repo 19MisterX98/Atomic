@@ -53,7 +53,8 @@ public class ArrowJuke extends Module {
                         }
                         if (goTo != null) {
                             Vec3d np = Atomic.client.player.getPos().add(goTo);
-                            Atomic.client.player.updatePosition(np.x, np.y, np.z);
+                            //Atomic.client.player.updatePosition(np.x, np.y, np.z);
+                            Atomic.client.player.addVelocity(np.x, np.y, np.z);
                         }
                     }
                 }
