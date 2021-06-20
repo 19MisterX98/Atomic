@@ -42,6 +42,8 @@ public class OreSim extends Module {
     BooleanValue lapis;
     BooleanValue coal;
     BooleanValue copper;
+    BooleanValue gold_nether;
+    BooleanValue quartz;
 
     private Long worldSeed = null;
     private ChunkPos prevOffset = new ChunkPos(0,0);
@@ -54,9 +56,11 @@ public class OreSim extends Module {
         iron = this.config.create("Iron", false);
         lapis = this.config.create("Lapis", false);
         copper = this.config.create("Kappa", false);
+        quartz = this.config.create("Quartz", false);
         diamond = this.config.create("Diamond", true);
         emerald = this.config.create("Emerald", false);
         redstone = this.config.create("Redstone", false);
+        gold_nether = this.config.create("Nether Gold", false);
         ancientDebris = this.config.create("Ancient Debris", false);
 
         airCheck = this.config.create("Air-check mode", "Off", "Off", "On load", "Rescan");
@@ -116,6 +120,10 @@ public class OreSim extends Module {
             }
             if (this.emerald.getValue())
                 renderOre(chunkKey, OreType.EMERALD, new Color(27, 209, 45), ms);
+            if (this.quartz.getValue())
+                renderOre(chunkKey, OreType.QUARTZ, new Color(205, 205, 205), ms);
+            if (this.gold_nether.getValue())
+                renderOre(chunkKey, OreType.GOLD_NETHER, new Color(247, 229, 30), ms);
         }
     }
 
@@ -257,14 +265,17 @@ public class OreSim extends Module {
             int repeat = ore.repeat;
             int index = ore.index;
 
-            if (ore.name == OreType.LDEBRIS || ore.name == OreType.SDEBRIS) {
+            if (ore.step == 7) {
                 if (biomeName.equals("warped_forest")) {
-                    index = 13;
+                    index = ore.index - 2;
                 } else if (biomeName.equals("crimson_forest")) {
-                    index = 12;
+                    index = ore.index - 3;
                 }
                 if (ore.name == OreType.SDEBRIS) {
                     index++;
+                }
+                if (biomeName.equals("basalt_deltas") && (ore.name == OreType.GOLD_NETHER || ore.name == OreType.QUARTZ)) {
+                    repeat *= 2;
                 }
             }
 
@@ -293,7 +304,7 @@ public class OreSim extends Module {
 
                 switch (ore.generatorType) {
                     case DEFAULT -> ores.addAll(generateNormal(world, random, new BlockPos(x, y, z), ore.size));
-                    case EMERALD -> { if (!airCheck.getValue().equals("off") || world.getBlockState(new BlockPos(x, y, z)).isOpaque()) ores.add(new Vec3d(x, y, z)); }
+                    case EMERALD -> { if (airCheck.getValue().equals("Off") || world.getBlockState(new BlockPos(x, y, z)).isOpaque()) ores.add(new Vec3d(x, y, z)); }
                     case NO_SURFACE -> ores.addAll(generateHidden(world, random, new BlockPos(x, y, z), ore.size));
                     default -> System.out.println(ore.name + " has some unknown generator. Fix it!");
                 }
@@ -407,7 +418,7 @@ public class OreSim extends Module {
                                         if (!bitSet.get(an)) {
                                             bitSet.set(an);
                                             mutable.set(ah, aj, al);
-                                            if (aj > 0 && (!airCheck.getValue().equals("off") || world.getBlockState(mutable).isOpaque())) {
+                                            if (aj > 0 && (airCheck.getValue().equals("Off") || world.getBlockState(mutable).isOpaque())) {
                                                 poses.add(new Vec3d(ah, aj, al));
                                             }
                                         }
@@ -434,7 +445,7 @@ public class OreSim extends Module {
             int x = this.randomCoord(random, size) + blockPos.getX();
             int y = this.randomCoord(random, size) + blockPos.getY();
             int z = this.randomCoord(random, size) + blockPos.getZ();
-            if(!airCheck.getValue().equals("off") || world.getBlockState(new BlockPos(x, y, z)).isOpaque())
+            if(airCheck.getValue().equals("Off") || world.getBlockState(new BlockPos(x, y, z)).isOpaque())
                 poses.add(new Vec3d(x, y, z));
         }
 
@@ -446,7 +457,7 @@ public class OreSim extends Module {
     }
 
     private enum OreType {
-        DIAMOND, REDSTONE, GOLD, IRON, COAL, EMERALD, SDEBRIS, LDEBRIS, LAPIS, COPPER
+        DIAMOND, REDSTONE, GOLD, IRON, COAL, EMERALD, SDEBRIS, LDEBRIS, LAPIS, COPPER, QUARTZ, GOLD_NETHER
     }
 
     private enum Generator {
@@ -464,6 +475,8 @@ public class OreSim extends Module {
                 new Ore(OreType.IRON, 8, 6, 0, 64, 9, 20, false, Generator.DEFAULT),
                 new Ore(OreType.COAL, 7, 6, 0, 128, 17, 20, false, Generator.DEFAULT),
                 new Ore(OreType.EMERALD, 17, 6, 4, 32, 1, 6 - 8, false, Generator.EMERALD),
+                new Ore(OreType.GOLD_NETHER, 13, 7, 10, 118, 10, 10, false, Generator.DEFAULT),
+                new Ore(OreType.QUARTZ, 14, 7, 10, 118, 14, 16, false, Generator.DEFAULT),
                 new Ore(OreType.SDEBRIS, 15, 7, 8, 120, 2, 1, false, Generator.NO_SURFACE),
                 new Ore(OreType.LDEBRIS, 15, 7, 17, 9, 3, 1, true, Generator.NO_SURFACE),
                 new Ore(OreType.LAPIS, 12, 6, 16, 16, 7, 1, true, Generator.DEFAULT),
