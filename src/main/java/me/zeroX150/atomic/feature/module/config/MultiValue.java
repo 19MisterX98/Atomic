@@ -29,6 +29,7 @@ public class MultiValue extends DynamicValue<String> {
         this.setValue(possible.get(next));
     }
 
+    @SuppressWarnings("unused")
     public List<String> getPossible() {
         return possible;
     }

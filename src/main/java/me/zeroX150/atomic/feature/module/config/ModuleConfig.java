@@ -2,6 +2,7 @@ package me.zeroX150.atomic.feature.module.config;
 
 import net.minecraft.util.math.MathHelper;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,13 @@ public class ModuleConfig {
         BooleanValue bv = new BooleanValue(key, initial);
         addProxy(bv);
         return bv;
+    }
+
+    public ColorValue create(String key, Color initial, boolean rgb) {
+        ColorValue cv = new ColorValue(key,initial);
+        cv.setRGB(rgb);
+        addProxy(cv);
+        return cv;
     }
 
     public MultiValue create(String key, String value, String... possible) {

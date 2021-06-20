@@ -19,14 +19,14 @@ public class ClickGUI extends Module {
 
     @Override
     public void tick() {
-        if (me.zeroX150.atomic.feature.gui.clickgui.ClickGUI.INSTANCE == null)
-            new me.zeroX150.atomic.feature.gui.clickgui.ClickGUI();
-        Atomic.client.openScreen(new me.zeroX150.atomic.feature.gui.clickgui.ClickGUI());
-        toggle();
     }
 
     @Override
     public void enable() {
+        if (me.zeroX150.atomic.feature.gui.clickgui.ClickGUI.INSTANCE == null)
+            new me.zeroX150.atomic.feature.gui.clickgui.ClickGUI();
+        Atomic.client.openScreen(me.zeroX150.atomic.feature.gui.clickgui.ClickGUI.INSTANCE);
+        toggle();
     }
 
     @Override

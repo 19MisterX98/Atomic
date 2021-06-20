@@ -12,6 +12,7 @@ public class Gamemode extends Command {
 
     @Override
     public void onExecute(String[] args) {
+        if (Atomic.client.interactionManager == null) return;
         if (args.length == 0) {
             Client.notifyUser("gamemode pls");
         } else {

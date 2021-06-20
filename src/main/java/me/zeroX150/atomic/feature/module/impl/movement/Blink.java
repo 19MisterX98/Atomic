@@ -42,6 +42,7 @@ public class Blink extends Module {
 
     @Override
     public void disable() {
+        if (Atomic.client.player == null || Atomic.client.getNetworkHandler() == null) return;
         for (Packet<?> packet : queue.toArray(new Packet<?>[0])) {
             Atomic.client.getNetworkHandler().sendPacket(packet);
         }

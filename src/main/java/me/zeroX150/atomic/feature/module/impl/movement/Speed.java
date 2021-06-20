@@ -25,6 +25,7 @@ public class Speed extends Module {
 
     @Override
     public void tick() {
+        if (Atomic.client.player == null || Atomic.client.getNetworkHandler() == null) return;
         EntityAttributeInstance speed = Atomic.client.player.getAttributes().getCustomInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
         if (speed == null) return;
         switch (mode.getValue().toLowerCase()) {
@@ -65,12 +66,14 @@ public class Speed extends Module {
 
     @Override
     public void enable() {
+        if (Atomic.client.player == null || Atomic.client.getNetworkHandler() == null) return;
         EntityAttributeInstance eai = Atomic.client.player.getAttributes().getCustomInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
         if (eai != null) prev = eai.getValue();
     }
 
     @Override
     public void disable() {
+        if (Atomic.client.player == null || Atomic.client.getNetworkHandler() == null) return;
         EntityAttributeInstance eai = Atomic.client.player.getAttributes().getCustomInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
         if (eai != null) eai.setBaseValue(prev);
     }

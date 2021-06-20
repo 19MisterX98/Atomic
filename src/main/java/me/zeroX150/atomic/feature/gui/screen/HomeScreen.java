@@ -20,9 +20,9 @@ public class HomeScreen extends Screen {
 
     @Override
     protected void init() {
-        addDrawableChild(createCentered("Singleplayer", 150, height / 2 - 20 - 20 - 10, button -> Atomic.client.openScreen(new SelectWorldScreen(this))));
-        addDrawableChild(createCentered("Multiplayer", 150, height / 2 - 25, button -> Atomic.client.openScreen(new MultiplayerScreen(this))));
-        addDrawableChild(createCentered("Realms", 150, height / 2, button -> Atomic.client.openScreen(new RealmsMainScreen(this))));
+        addDrawableChild(createCentered("Singleplayer", height / 2 - 20 - 20 - 10, button -> Atomic.client.openScreen(new SelectWorldScreen(this))));
+        addDrawableChild(createCentered("Multiplayer", height / 2 - 25, button -> Atomic.client.openScreen(new MultiplayerScreen(this))));
+        addDrawableChild(createCentered("Realms", height / 2, button -> Atomic.client.openScreen(new RealmsMainScreen(this))));
         addDrawableChild(new ButtonWidget(width / 2 - 75, height / 2 + 25, 70, 20, Text.of("Options"), button -> Atomic.client.openScreen(new OptionsScreen(this, Atomic.client.options))));
         addDrawableChild(new ButtonWidget(width / 2 + 5, height / 2 + 25, 70, 20, Text.of("Quit"), button -> Atomic.client.stop()));
         addDrawableChild(new ButtonWidget(width / 2 - (150 / 2), height / 2 + 25 + 25, 150, 20, Text.of("Alts"), button -> Atomic.client.openScreen(new AltManager())));
@@ -39,7 +39,7 @@ public class HomeScreen extends Screen {
         super.render(matrices, mouseX, mouseY, delta);
     }
 
-    ButtonWidget createCentered(String t, int w, int y, ButtonWidget.PressAction action) {
-        return new ButtonWidget(width / 2 - (w / 2), y, w, 20, Text.of(t), action);
+    ButtonWidget createCentered(String t, int y, ButtonWidget.PressAction action) {
+        return new ButtonWidget(width / 2 - (150 / 2), y, 150, 20, Text.of(t), action);
     }
 }

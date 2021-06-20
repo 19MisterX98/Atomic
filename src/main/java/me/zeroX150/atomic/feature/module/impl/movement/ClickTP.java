@@ -4,6 +4,7 @@ import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.feature.module.config.BooleanValue;
+import me.zeroX150.atomic.feature.module.config.ColorValue;
 import me.zeroX150.atomic.helper.Client;
 import me.zeroX150.atomic.helper.Renderer;
 import net.minecraft.block.BlockState;
@@ -13,9 +14,13 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
+import java.awt.*;
+
 public class ClickTP extends Module {
     BooleanValue autoDisable = this.config.create("Auto disable", false);
     BooleanValue smartTarget = this.config.create("Smart target", true);
+
+    ColorValue color = new ColorValue("Color", Color.BLACK);
 
     BlockPos goingToTeleportTo = null;
     boolean flag = false;
@@ -23,10 +28,12 @@ public class ClickTP extends Module {
 
     public ClickTP() {
         super("ClickFly", "Flies you to whereever you look at", ModuleType.MOVEMENT);
+        this.config.getAll().add(color);
     }
 
     @Override
     public void tick() {
+        if (Atomic.client.player == null || Atomic.client.world == null) return;
         HitResult hr = Atomic.client.player.raycast(200, 0, false);
         if (!(hr instanceof BlockHitResult bhr)) goingToTeleportTo = null;
         else {
@@ -91,6 +98,7 @@ public class ClickTP extends Module {
 
     @Override
     public String getContext() {
+        if (Atomic.client.player == null || Atomic.client.getNetworkHandler() == null) return null;
         if (goingToTeleportTo != null) {
             Vec3d v = new Vec3d(goingToTeleportTo.getX(), goingToTeleportTo.getY(), goingToTeleportTo.getZ());
             return (int) Client.roundToN(v.distanceTo(Atomic.client.player.getPos()), 0) + "";
@@ -102,7 +110,7 @@ public class ClickTP extends Module {
     public void onWorldRender(MatrixStack matrices) {
         if (goingToTeleportTo != null) {
             Vec3d bruh = new Vec3d(goingToTeleportTo.getX(), goingToTeleportTo.getY(), goingToTeleportTo.getZ());
-            Renderer.renderFilled(bruh, new Vec3d(1, 1, 1), Renderer.modify(Client.getCurrentRGB(), -1, -1, -1, 200), matrices);
+            Renderer.renderFilled(bruh, new Vec3d(1, 1, 1), color.getColor(), matrices);
         }
     }
 

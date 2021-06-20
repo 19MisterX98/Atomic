@@ -26,7 +26,8 @@ public class NameTags extends Module {
         super("NameTags", "shows better-ish name tags", ModuleType.RENDER);
     }
 
-    public void renderTag(Entity entity, Text text, MatrixStack matrices, VertexConsumerProvider provider, int l, EntityRenderDispatcher dispatcher) {
+    public void renderTag(Entity entity, MatrixStack matrices, EntityRenderDispatcher dispatcher) {
+        if (Atomic.client.player == null) return;
         double d = dispatcher.getSquaredDistanceToCamera(entity);
         if (d > 4096) return;
         if (entity.getUuid() == Atomic.client.player.getUuid()) return;

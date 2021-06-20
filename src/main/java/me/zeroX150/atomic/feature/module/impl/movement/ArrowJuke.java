@@ -28,6 +28,7 @@ public class ArrowJuke extends Module {
 
     @Override
     public void tick() {
+        if (Atomic.client.player == null || Atomic.client.world == null) return;
         bruhMoments.clear();
         for (Entity e : Atomic.client.world.getEntities()) {
             if (e instanceof ArrowEntity) {

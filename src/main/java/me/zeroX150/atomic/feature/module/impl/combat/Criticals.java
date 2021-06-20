@@ -17,6 +17,7 @@ public class Criticals extends Module {
     public Criticals() {
         super("Criticals", "more damage", ModuleType.COMBAT);
         EventSystem.registerEventHandler(Event.PACKET_SEND, event -> {
+            if (Atomic.client.player == null || Atomic.client.getNetworkHandler() == null) return;
             if (event.getPacket() instanceof PlayerInteractEntityC2SPacket && this.isEnabled()) {
                 Vec3d ppos = Atomic.client.player.getPos();
                 switch (mode.getValue().toLowerCase()) {

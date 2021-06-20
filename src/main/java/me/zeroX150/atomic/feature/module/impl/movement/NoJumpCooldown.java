@@ -13,6 +13,7 @@ public class NoJumpCooldown extends Module {
 
     @Override
     public void tick() {
+        if (Atomic.client.player == null || Atomic.client.getNetworkHandler() == null) return;
         ((LivingEntityAccessor) Atomic.client.player).setJumpingCooldown(0);
     }
 

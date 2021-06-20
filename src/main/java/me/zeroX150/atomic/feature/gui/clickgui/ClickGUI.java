@@ -6,17 +6,20 @@ import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.feature.module.ModuleType;
+import me.zeroX150.atomic.helper.Renderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
+import java.util.stream.Collectors;
 
 public class ClickGUI extends Screen {
     public static ClickGUI INSTANCE;
@@ -29,17 +32,18 @@ public class ClickGUI extends Screen {
     public static Identifier LOGO = new Identifier("atomic", "logo.png");
 
     ConfigWidget currentConfig = null;
+    double aProg = 2.0;
 
     long lastRender = System.currentTimeMillis();
 
     List<Draggable> containers = new ArrayList<>();
     int currentSortMode = 0;
+    boolean closed = false;
     String desc = "";
 
     public ClickGUI() {
         super(Text.of(""));
         double width = Atomic.client.getWindow().getScaledWidth();
-        double height = Atomic.client.getWindow().getScaledHeight();
         INSTANCE = this;
 
         double offsetX = 20;
@@ -48,8 +52,8 @@ public class ClickGUI extends Screen {
         for (ModuleType value : ModuleType.values()) {
             if (value == ModuleType.HIDDEN) continue;
             Draggable d = new Draggable(value.getName(), false);
-            d.lastRenderX = width / 2d - (100 / 2d);
-            d.lastRenderY = height / 2d - (9) / 2d;
+            d.lastRenderX = width;
+            d.lastRenderY = offsetY;
             d.posX = offsetX;
             d.posY = offsetY;
             offsetX += 120;
@@ -68,45 +72,48 @@ public class ClickGUI extends Screen {
     }
 
     @Override
+    public boolean shouldCloseOnEsc() {
+        return true;
+    }
+
+    @Override
+    public void onClose() {
+        closed = true;
+    }
+
+    @Override
     protected void init() {
-        ButtonWidget sort = new ButtonWidget(width - 21, height - 21, 20, 20, Text.of("S"), button -> {
+        aProg = 1;
+        int off = 21;
+        int offY = 70;
+        ButtonWidget sort = new ButtonWidget(width - offY, height - off, 20, 20, Text.of("S"), button -> {
             currentSortMode++;
-            currentSortMode %= 3;
-            switch (currentSortMode) {
-                case 0 -> {
-                    double cR = 0;
-                    double rotCircle = 360d / containers.size();
-                    for (Draggable container : containers) {
-                        container.expanded = false;
-                        double rot = Math.toRadians(cR);
-                        container.posX = width / 2d - (100 / 2d) + (Math.sin(rot) * 120);
-                        container.posY = height / 2d - (9 / 2d) + (Math.cos(rot) * 120);
-                        cR += rotCircle;
-                    }
-                }
-                case 1 -> {
-                    double offsetX = 20;
-                    double offsetY = me.zeroX150.atomic.feature.module.impl.render.ClickGUI.logoSize.getValue() * 130 + 20;
-                    for (Draggable container : containers) {
-                        container.posX = offsetX;
-                        container.posY = offsetY;
-                        offsetX += 120;
-                        if (offsetX + 120 > width) {
-                            offsetX = 20;
-                            offsetY += 27;
-                        }
-                    }
-                }
-                case 2 -> {
-                    Random r = new Random();
-                    for (Draggable container : containers) {
-                        container.posX = r.nextInt(width - 120);
-                        container.posY = r.nextInt(height - 27);
-                    }
+            currentSortMode %= 2;
+            double offsetX = 20;
+            double offsetY = me.zeroX150.atomic.feature.module.impl.render.ClickGUI.logoSize.getValue() * 130 + 20;
+            for (Draggable container : containers.stream().sorted(Comparator.comparingInt(value -> currentSortMode == 0 ? value.children.size() : -value.children.size())).collect(Collectors.toList())) {
+                container.posX = offsetX;
+                container.posY = offsetY;
+                offsetX += 120;
+                if (offsetX + 120 > width) {
+                    offsetX = 20;
+                    offsetY += 27;
                 }
             }
         });
+        ButtonWidget expand = new ButtonWidget(width - offY - 21, height - off, 20, 20, Text.of("E"), button -> {
+            for (Draggable container : containers) {
+                container.expanded = true;
+            }
+        });
+        ButtonWidget retract = new ButtonWidget(width - offY - 42, height - off, 20, 20, Text.of("R"), button -> {
+            for (Draggable container : containers) {
+                container.expanded = false;
+            }
+        });
         this.addDrawableChild(sort);
+        addDrawableChild(expand);
+        addDrawableChild(retract);
         super.init();
     }
 
@@ -118,9 +125,9 @@ public class ClickGUI extends Screen {
         if (currentConfig == null) {
             ConfigWidget currentConfig1 = new ConfigWidget(m);
             currentConfig1.posX = width / 2d - (210 / 2d);
-            currentConfig1.posY = 10;
+            currentConfig1.posY = height / 2d;
             currentConfig1.lastRenderX = currentConfig1.posX;
-            currentConfig1.lastRenderY = -height;
+            currentConfig1.lastRenderY = height;
             currentConfig = currentConfig1;
             return;
         }
@@ -140,10 +147,21 @@ public class ClickGUI extends Screen {
         this.desc = desc;
     }
 
+    double easeOutBounce(double x) {
+        return x < 0.5 ? 16 * x * x * x * x * x : 1 - Math.pow(-2 * x + 2, 5) / 2;
+    }
+
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-
-        fill(matrices, 0, 0, width, height, 0x10000000);
+        aProg += closed ? 0.009 : -0.009;
+        aProg = MathHelper.clamp(aProg, 0, 1);
+        if (aProg == 1 && closed) {
+            Atomic.client.openScreen(null);
+            return;
+        }
+        double aProgI = easeOutBounce(aProg);
+        fill(matrices, 0, 0, width, height, Renderer.lerp(new Color(0, 0, 0, 0), new Color(0, 0, 0, 0x50), aProgI).getRGB());
+        matrices.translate(0, aProgI * height, 0);
         if (System.currentTimeMillis() - lastRender > 1) lastRender = System.currentTimeMillis();
         double logoSize = me.zeroX150.atomic.feature.module.impl.render.ClickGUI.logoSize.getValue();
         if (logoSize != 0) {
@@ -151,11 +169,10 @@ public class ClickGUI extends Screen {
             RenderSystem.setShaderTexture(0, LOGO);
             Screen.drawTexture(matrices, 1, 1, 0, 0, 0, (int) (504 * logoSize), (int) (130 * logoSize), (int) (130 * logoSize), (int) (504 * logoSize));
         }
-
-        //ms.translate(0, (Math.abs(animProgressInter - 1) * height), 0);
         if (currentConfig != null) currentConfig.render(mouseX, mouseY, delta);
         for (Draggable container : containers) {
             MatrixStack ms = new MatrixStack();
+            ms.translate(0, aProgI * height, 0);
             container.render(ms);
         }
 

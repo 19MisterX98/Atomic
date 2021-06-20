@@ -1,6 +1,7 @@
 package me.zeroX150.atomic.feature.gui.clickgui;
 
 import me.zeroX150.atomic.Atomic;
+import me.zeroX150.atomic.helper.Renderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
@@ -66,8 +67,8 @@ public class Draggable {
     }
 
     public void render(MatrixStack stack) {
-        if (this.expanded) animProg += (System.currentTimeMillis() - lastRender) / 300d;
-        else animProg -= (System.currentTimeMillis() - lastRender) / 300d;
+        if (this.expanded) animProg += (System.currentTimeMillis() - lastRender) / 500d;
+        else animProg -= (System.currentTimeMillis() - lastRender) / 500d;
         if (System.currentTimeMillis() - lastRender > 1) lastRender = System.currentTimeMillis();
         animProg = MathHelper.clamp(animProg, 0, 1);
         double animProgInter = easeOutBounce(animProg);
@@ -88,7 +89,7 @@ public class Draggable {
         lastRenderY -= nyDiff;
         stack.translate(lastRenderX - margin - paddingX, lastRenderY - margin, 0);
         stack.multiply(new Quaternion(new Vec3f(0, 0, 1), (float) MathHelper.clamp(lrXDiff, -20, 20), true));
-        //stack.multiply(new Quaternion(new Vec3f(0,1,0),(float) MathHelper.clamp(lrYDiff,-20,20),true));
+        stack.multiply(new Quaternion(new Vec3f(0, 0, 1), (float) Math.sin(animProgInter * Math.PI * 2) * 10, true));
         if (this.animProg != 0) {
             double yOffset = 9 + margin * 2;
             for (Clickable child : children) {
@@ -96,9 +97,7 @@ public class Draggable {
                 yOffset += 9 + margin * 2;
             }
         }
-        //DrawableHelper.fill(stack, (int) (lastRenderX - margin - paddingX), (int) (lastRenderY - margin), (int) (lastRenderX + width + margin + paddingX), (int) (lastRenderY + 9 + margin), this.expanded ? ClickGUI.HEADER_EXP.getRGB() : ClickGUI.HEADER_RET.getRGB());
-        //DrawableHelper.drawCenteredText(stack, Atomic.client.textRenderer, title, (int) (lastRenderX + (width / 2)), (int) lastRenderY, 0xFFFFFF);
-        DrawableHelper.fill(stack, (int) -paddingX, 0, (int) (width + margin + paddingX * 2), (int) (9 + margin * 2), this.expanded ? ClickGUI.HEADER_EXP.getRGB() : ClickGUI.HEADER_RET.getRGB());
+        DrawableHelper.fill(stack, (int) -paddingX, 0, (int) (width + margin + paddingX * 2), (int) (9 + margin * 2), Renderer.lerp(ClickGUI.HEADER_EXP, ClickGUI.HEADER_RET, animProgInter).getRGB());
         DrawableHelper.drawCenteredText(stack, Atomic.client.textRenderer, title, (int) (margin + (width / 2)), (int) margin, 0xFFFFFF);
         stack.translate(-(lastRenderX - margin - paddingX), -(lastRenderY - margin), 0);
     }

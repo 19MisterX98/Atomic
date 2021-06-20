@@ -24,6 +24,7 @@ public class Jesus extends Module {
 
     @Override
     public void tick() {
+        if (Atomic.client.player == null || Atomic.client.getNetworkHandler() == null) return;
         if (Atomic.client.player.isWet()) {
             switch (mode.getValue().toLowerCase()) {
                 case "jump" -> Atomic.client.player.jump();

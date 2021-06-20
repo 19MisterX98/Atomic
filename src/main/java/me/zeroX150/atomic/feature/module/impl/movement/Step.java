@@ -15,6 +15,7 @@ public class Step extends Module {
 
     @Override
     public void tick() {
+        if (Atomic.client.player == null || Atomic.client.getNetworkHandler() == null) return;
         Atomic.client.player.stepHeight = (float) (height.getValue() + 0);
     }
 
@@ -25,6 +26,7 @@ public class Step extends Module {
 
     @Override
     public void disable() {
+        if (Atomic.client.player == null || Atomic.client.getNetworkHandler() == null) return;
         Atomic.client.player.stepHeight = 0.6f;
     }
 

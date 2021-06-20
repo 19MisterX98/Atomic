@@ -39,6 +39,7 @@ public class Killaura extends Module {
     }
 
     int getDelay() {
+        if (Atomic.client.player == null) return 0;
         if (!automaticalDelay.getValue()) return (int) (delay.getValue() + 0);
         else {
             //System.out.println(Atomic.client.player.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_SPEED));
@@ -57,12 +58,14 @@ public class Killaura extends Module {
     }
 
     double getRange() {
+        if (Atomic.client.interactionManager == null) return 0;
         if (capRangeAtMax.getValue()) return Atomic.client.interactionManager.getReachDistance();
         else return range.getValue();
     }
 
     @Override
     public void tick() {
+        if(Atomic.client.world == null || Atomic.client.player == null || Atomic.client.interactionManager == null) return;
         if (delayPassed < getDelay()) {
             delayPassed++;
             return;

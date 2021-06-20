@@ -12,6 +12,7 @@ public class AirJump extends Module {
 
     @Override
     public void tick() {
+        if (Atomic.client.player == null || Atomic.client.getNetworkHandler() == null) return;
         if (Atomic.client.options.keyJump.isPressed()) {
             Atomic.client.player.setOnGround(true);
             Atomic.client.player.fallDistance = 0f;

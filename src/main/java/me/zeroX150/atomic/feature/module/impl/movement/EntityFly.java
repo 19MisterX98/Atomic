@@ -23,6 +23,7 @@ public class EntityFly extends Module {
 
     @Override
     public void tick() {
+        if (Atomic.client.player == null || Atomic.client.getNetworkHandler() == null) return;
         Entity vehicle = Atomic.client.player.getVehicle();
         if (vehicle == null) return;
         lastRide = vehicle;

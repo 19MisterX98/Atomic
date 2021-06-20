@@ -16,6 +16,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Objects;
+
 @Mixin(EntityRenderer.class)
 public class EntityRendererMixin<T extends Entity> {
     @Shadow
@@ -30,8 +32,8 @@ public class EntityRendererMixin<T extends Entity> {
         }
 
         if (entity instanceof PlayerEntity) {
-            if (ModuleRegistry.getByClass(NameTags.class).isEnabled()) {
-                ((NameTags) ModuleRegistry.getByClass(NameTags.class)).renderTag(entity, text, matrices, vertexConsumers, light, dispatcher);
+            if (Objects.requireNonNull(ModuleRegistry.getByClass(NameTags.class)).isEnabled()) {
+                ((NameTags) Objects.requireNonNull(ModuleRegistry.getByClass(NameTags.class))).renderTag(entity, matrices, dispatcher);
                 ci.cancel();
             }
         }

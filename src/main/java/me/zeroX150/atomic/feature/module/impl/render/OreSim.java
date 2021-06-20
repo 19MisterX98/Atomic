@@ -265,6 +265,7 @@ public class OreSim extends Module {
         chunkRenderers.put(chunkKey, h);
     }
 
+    @SuppressWarnings("unused")
     public void setWorldSeed(long seed) {
         this.seedInput.setValue(seed);
         chunkRenderers.clear();
@@ -273,6 +274,7 @@ public class OreSim extends Module {
         }
     }
 
+    @SuppressWarnings("unused")
     private ArrayList<Vec3d> generateNormal(WorldAccess worldAccess, Random random, BlockPos blockPos, int veinSize) {
         float f = random.nextFloat() * 3.1415927F;
         float g = (float) veinSize / 8.0F;
@@ -422,7 +424,10 @@ public class OreSim extends Module {
         DEFAULT, EMERALD, NO_SURFACE
     }
 
-    private static class Ore {
+    private record Ore(OreType name, int index, int step, int minY,
+                       int maxY, int size, RuleTest replacable, int repeat,
+                       boolean isDepthAverage,
+                       Generator generatorType) {
         public static final ArrayList<Ore> ORES = new ArrayList<>(Arrays.asList(
                 new Ore(OreType.DIAMOND, 11, 6, 0, 17, 8, OreFeatureConfig.Rules.BASE_STONE_OVERWORLD, 1, false,
                         Generator.DEFAULT),
@@ -445,29 +450,5 @@ public class OreSim extends Module {
                 new Ore(OreType.COPPER, 13, 6, 49, 49, 10, OreFeatureConfig.Rules.BASE_STONE_OVERWORLD, 6, true,
                         Generator.DEFAULT)));
 
-        final OreType name;
-        final int index;
-        final int step;
-        final int minY;
-        final int maxY;
-        final int size;
-        final RuleTest replacable;
-        final int repeat;
-        final boolean isDepthAverage;
-        final Generator generatorType;
-
-        private Ore(OreType name, int index, int step, int minY, int maxY, int size, RuleTest replacable, int repeat,
-                    boolean isDepthAverage, Generator generatorType) {
-            this.name = name;
-            this.index = index;
-            this.step = step;
-            this.minY = minY;
-            this.maxY = maxY;
-            this.size = size;
-            this.replacable = replacable;
-            this.repeat = repeat;
-            this.isDepthAverage = isDepthAverage;
-            this.generatorType = generatorType;
-        }
     }
 }

@@ -17,6 +17,7 @@ public class AutoSneak extends Module {
 
     @Override
     public void tick() {
+        if (Atomic.client.player == null || Atomic.client.world == null) return;
         Box bounding = Atomic.client.player.getBoundingBox();
         bounding = bounding.offset(0, -1, 0);
         bounding = bounding.expand(0.3);

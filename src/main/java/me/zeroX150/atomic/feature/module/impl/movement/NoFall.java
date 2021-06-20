@@ -24,6 +24,7 @@ public class NoFall extends Module {
 
     @Override
     public void tick() {
+        if (Atomic.client.player == null || Atomic.client.getNetworkHandler() == null) return;
         if (Atomic.client.player.fallDistance > fallDist.getValue()) {
             switch (mode.getValue().toLowerCase()) {
                 case "packet" -> Atomic.client.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(true));

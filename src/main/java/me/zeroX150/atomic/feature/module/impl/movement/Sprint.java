@@ -12,6 +12,7 @@ public class Sprint extends Module {
 
     @Override
     public void tick() {
+        if (Atomic.client.player == null || Atomic.client.getNetworkHandler() == null) return;
         if (Atomic.client.options.keyForward.isPressed() && !Atomic.client.options.keyBack.isPressed()
                 && !Atomic.client.player.isSneaking() && !Atomic.client.player.horizontalCollision) {
             Atomic.client.player.setSprinting(true);

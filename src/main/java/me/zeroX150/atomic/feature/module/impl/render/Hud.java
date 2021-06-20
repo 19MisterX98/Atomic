@@ -17,9 +17,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.awt.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
 
 public class Hud extends Module {
@@ -65,6 +63,7 @@ public class Hud extends Module {
 
     @Override
     public void onHudRender() {
+        if (Atomic.client.getNetworkHandler() == null) return;
         if (Atomic.client.player == null) return;
         MatrixStack ms = new MatrixStack();
         List<HudEntry> entries = new ArrayList<>();
@@ -74,7 +73,7 @@ public class Hud extends Module {
         }
         if (fps.getValue()) entries.add(new HudEntry("FPS", Atomic.client.fpsDebugString.split(" ")[0], false, false));
         if (ping.getValue())
-            entries.add(new HudEntry("Ping", Atomic.client.getNetworkHandler().getPlayerListEntry(Atomic.client.player.getUuid()).getLatency() + " ms", false, false));
+            entries.add(new HudEntry("Ping", Objects.requireNonNull(Atomic.client.getNetworkHandler().getPlayerListEntry(Atomic.client.player.getUuid())).getLatency() + " ms", false, false));
         if (bps.getValue()) {
             double px = Atomic.client.player.prevX;
             double py = Atomic.client.player.prevY;

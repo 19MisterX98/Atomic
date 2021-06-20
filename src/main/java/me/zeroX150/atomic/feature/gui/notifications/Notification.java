@@ -6,6 +6,7 @@ import me.zeroX150.atomic.feature.module.impl.render.Hud;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Notification {
     public double posX;
@@ -26,7 +27,7 @@ public class Notification {
 
     public static Notification create(long duration, String title, String... contents) {
         Notification n = new Notification(duration, title, contents);
-        if (ModuleRegistry.getByClass(Hud.class).isEnabled()) NotificationRenderer.notifications.add(0, n);
+        if (Objects.requireNonNull(ModuleRegistry.getByClass(Hud.class)).isEnabled()) NotificationRenderer.notifications.add(0, n);
         return n;
     }
 

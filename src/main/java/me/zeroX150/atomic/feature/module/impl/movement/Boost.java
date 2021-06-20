@@ -23,6 +23,7 @@ public class Boost extends Module {
 
     @Override
     public void enable() {
+        if (Atomic.client.player == null || Atomic.client.getNetworkHandler() == null) return;
         setEnabled(false);
         Vec3d newVelocity = Atomic.client.player.getRotationVector().multiply(strength.getValue());
         if (this.mode.getValue().equalsIgnoreCase("add"))
