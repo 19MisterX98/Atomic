@@ -9,11 +9,13 @@ import net.minecraft.client.util.math.MatrixStack;
 public class ClickGUI extends Module {
     public static SliderValue logoSize;
     public static SliderValue smooth;
+    public static SliderValue dragFactor;
 
     public ClickGUI() {
         super("ClickGUI", "Opens the click gui", ModuleType.RENDER);
         logoSize = this.config.create("Logo size", 0.28, 0, 1, 2);
         smooth = this.config.create("Movement smooth", 20, 10, 30, 1);
+        dragFactor = this.config.create("Drag factor", 1.5, 0, 20, 1);
         this.config.get("Keybind").setValue(344);
     }
 

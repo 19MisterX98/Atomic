@@ -65,7 +65,8 @@ public class Killaura extends Module {
 
     @Override
     public void tick() {
-        if(Atomic.client.world == null || Atomic.client.player == null || Atomic.client.interactionManager == null) return;
+        if (Atomic.client.world == null || Atomic.client.player == null || Atomic.client.interactionManager == null)
+            return;
         if (delayPassed < getDelay()) {
             delayPassed++;
             return;

@@ -56,7 +56,7 @@ public class ModuleRegistry {
         modules.add(new ClientConfig());
         modules.add(new Tracers());
         modules.add(new Alts());
-        modules.add(new Hologram());
+        modules.add(new HologramAura());
     }
 
     public static List<Module> getModules() {

@@ -34,7 +34,7 @@ public class ModuleConfig {
     }
 
     public ColorValue create(String key, Color initial, boolean rgb) {
-        ColorValue cv = new ColorValue(key,initial);
+        ColorValue cv = new ColorValue(key, initial);
         cv.setRGB(rgb);
         addProxy(cv);
         return cv;

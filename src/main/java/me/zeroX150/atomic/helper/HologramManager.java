@@ -16,6 +16,9 @@ public class HologramManager {
         Vec3d pos;
         boolean isEgg = false;
         boolean isChild = false;
+        boolean isVisible = false;
+        boolean hasGravity = false;
+        boolean wrapName = true;
 
         public Hologram() {
             this.text = "";
@@ -27,8 +30,23 @@ public class HologramManager {
             return this;
         }
 
+        public Hologram withGravity(boolean hasGravity) {
+            this.hasGravity = hasGravity;
+            return this;
+        }
+
+        public Hologram withVisible(boolean isVisible) {
+            this.isVisible = isVisible;
+            return this;
+        }
+
         public Hologram withPosition(Vec3d pos) {
             this.pos = pos;
+            return this;
+        }
+
+        public Hologram withWrapName(boolean wrapName) {
+            this.wrapName = wrapName;
             return this;
         }
 
@@ -50,10 +68,10 @@ public class HologramManager {
             pos.add(NbtDouble.of(this.pos.y));
             pos.add(NbtDouble.of(this.pos.z));
             tag.put("CustomNameVisible", NbtByte.ONE);
-            tag.put("CustomName", NbtString.of("{\"text\":\"" + this.text.replaceAll("&", "§") + "\"}"));
-            tag.put("Invisible", NbtByte.ONE);
+            tag.put("CustomName", wrapName ? NbtString.of("{\"text\":\"" + this.text.replaceAll("&", "§") + "\"}") : NbtString.of(this.text.replaceAll("&", "§")));
+            tag.put("Invisible", NbtByte.of(!isVisible));
             tag.put("Invulnerable", NbtByte.ONE);
-            tag.put("NoGravity", NbtByte.ONE);
+            tag.put("NoGravity", NbtByte.of(!hasGravity));
             tag.put("Small", NbtByte.of(isChild));
             tag.put("Pos", pos);
             if (isEgg) tag.put("id", NbtString.of("minecraft:armor_stand"));

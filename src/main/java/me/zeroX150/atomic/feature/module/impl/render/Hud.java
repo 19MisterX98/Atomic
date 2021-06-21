@@ -17,8 +17,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.awt.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 public class Hud extends Module {
     public SliderValue smoothSelectTransition = config.create("Selection smooth", 10, 1, 30, 1);

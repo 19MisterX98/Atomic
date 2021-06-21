@@ -88,7 +88,7 @@ public class Draggable {
         lastRenderX -= nxDiff;
         lastRenderY -= nyDiff;
         stack.translate(lastRenderX - margin - paddingX, lastRenderY - margin, 0);
-        stack.multiply(new Quaternion(new Vec3f(0, 0, 1), (float) MathHelper.clamp(lrXDiff, -20, 20), true));
+        stack.multiply(new Quaternion(new Vec3f(0, 0, 1), (float) (MathHelper.clamp(lrXDiff, -50, 50) * me.zeroX150.atomic.feature.module.impl.render.ClickGUI.dragFactor.getValue()), true));
         stack.multiply(new Quaternion(new Vec3f(0, 0, 1), (float) Math.sin(animProgInter * Math.PI * 2) * 10, true));
         if (this.animProg != 0) {
             double yOffset = 9 + margin * 2;

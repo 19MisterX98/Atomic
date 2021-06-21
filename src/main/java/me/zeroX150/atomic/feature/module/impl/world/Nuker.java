@@ -32,7 +32,8 @@ public class Nuker extends Module {
 
     @Override
     public void tick() {
-        if(Atomic.client.player == null || Atomic.client.world == null || Atomic.client.interactionManager == null || Atomic.client.getNetworkHandler() == null) return;
+        if (Atomic.client.player == null || Atomic.client.world == null || Atomic.client.interactionManager == null || Atomic.client.getNetworkHandler() == null)
+            return;
         if (delayPassed < delay.getValue()) {
             delayPassed++;
             return;

@@ -27,7 +27,8 @@ public class Notification {
 
     public static Notification create(long duration, String title, String... contents) {
         Notification n = new Notification(duration, title, contents);
-        if (Objects.requireNonNull(ModuleRegistry.getByClass(Hud.class)).isEnabled()) NotificationRenderer.notifications.add(0, n);
+        if (Objects.requireNonNull(ModuleRegistry.getByClass(Hud.class)).isEnabled())
+            NotificationRenderer.notifications.add(0, n);
         return n;
     }
 

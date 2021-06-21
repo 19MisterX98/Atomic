@@ -162,7 +162,7 @@ public class ClickGUI extends Screen {
         }
         double aProgI = easeOutBounce(aProg);
         fill(matrices, 0, 0, width, height, Renderer.lerp(new Color(0, 0, 0, 0), new Color(0, 0, 0, 0x50), aProgI).getRGB());
-        matrices.translate(0, aProgI * height, 0);
+        matrices.translate(-aProgI * width, 0, 0);
         if (System.currentTimeMillis() - lastRender > 1) lastRender = System.currentTimeMillis();
         double logoSize = me.zeroX150.atomic.feature.module.impl.render.ClickGUI.logoSize.getValue();
         if (logoSize != 0) {
@@ -170,6 +170,7 @@ public class ClickGUI extends Screen {
             RenderSystem.setShaderTexture(0, LOGO);
             Screen.drawTexture(matrices, 1, 1, 0, 0, 0, (int) (504 * logoSize), (int) (130 * logoSize), (int) (130 * logoSize), (int) (504 * logoSize));
         }
+        matrices.translate(2 * aProgI * width, 0, 0);
         if (currentConfig != null) currentConfig.render(matrices, mouseX, mouseY, delta);
         for (Draggable container : containers) {
             MatrixStack ms = new MatrixStack();
@@ -177,7 +178,7 @@ public class ClickGUI extends Screen {
             container.render(ms);
         }
 
-        DrawableHelper.drawCenteredText(new MatrixStack(), Atomic.client.textRenderer, desc, width / 2, height - 70, 0xFFFFFF);
+        DrawableHelper.drawCenteredText(matrices, Atomic.client.textRenderer, desc, width / 2, height - 70, 0xFFFFFF);
         desc = "";
         super.render(matrices, mouseX, mouseY, delta);
     }

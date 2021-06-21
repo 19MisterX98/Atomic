@@ -14,6 +14,7 @@ public class CommandRegistry {
         commands.add(new Config());
         commands.add(new Gamemode());
         commands.add(new Effect());
+        commands.add(new Hologram());
     }
 
     public static List<Command> getCommands() {

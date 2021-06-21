@@ -24,7 +24,7 @@ public class Atomic implements ModInitializer {
         log(Level.INFO, "Initializing");
         KeybindManager.init();
         ConfigManager.loadState();
-        //Runtime.getRuntime().addShutdownHook(new Thread(ConfigManager::saveState));
+        Runtime.getRuntime().addShutdownHook(new Thread(ConfigManager::saveState));
         //TODO: Initializer
     }
 
