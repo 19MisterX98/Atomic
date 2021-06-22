@@ -29,10 +29,11 @@ public class KeyListenerBtn extends ButtonWidget {
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (!this.listening) return false;
         String v = ((char) (keyCode)) + "";
-        if (keyCode == 47) {
+        if (keyCode == 47 || v.charAt(0) == '-') {
             listening = false;
             kc = -1;
             parent.config.get("Keybind").setValue(kc);
+            KeybindManager.reload();
             return false;
         }
         v = v.toUpperCase();

@@ -57,6 +57,7 @@ public class ModuleRegistry {
         modules.add(new Tracers());
         modules.add(new Alts());
         modules.add(new HologramAura());
+        modules.add(new TexPackSpoof());
     }
 
     public static List<Module> getModules() {

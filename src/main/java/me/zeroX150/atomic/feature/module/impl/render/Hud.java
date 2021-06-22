@@ -9,6 +9,7 @@ import me.zeroX150.atomic.feature.module.config.BooleanValue;
 import me.zeroX150.atomic.feature.module.config.SliderValue;
 import me.zeroX150.atomic.helper.Client;
 import me.zeroX150.atomic.helper.Renderer;
+import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -72,8 +73,9 @@ public class Hud extends Module {
             entries.add(new HudEntry("XYZ", bp.getX() + " " + bp.getY() + " " + bp.getZ(), false, false));
         }
         if (fps.getValue()) entries.add(new HudEntry("FPS", Atomic.client.fpsDebugString.split(" ")[0], false, false));
-        if (ping.getValue())
-            entries.add(new HudEntry("Ping", Objects.requireNonNull(Atomic.client.getNetworkHandler().getPlayerListEntry(Atomic.client.player.getUuid())).getLatency() + " ms", false, false));
+        if (ping.getValue()){
+            PlayerListEntry e = Atomic.client.getNetworkHandler().getPlayerListEntry(Atomic.client.player.getUuid());
+            entries.add(new HudEntry("Ping", (e==null?"?":e.getLatency()) + " ms", false, false));}
         if (bps.getValue()) {
             double px = Atomic.client.player.prevX;
             double py = Atomic.client.player.prevY;
