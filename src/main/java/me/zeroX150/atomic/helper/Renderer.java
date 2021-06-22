@@ -244,6 +244,26 @@ public class Renderer {
         fill(new MatrixStack(), c, x1, y1, x2, y2);
     }
 
+    public static void lineScreenD(Color c, double x, double y, double x1, double y1) {
+        float g = c.getRed() / 255f;
+        float h = c.getGreen() / 255f;
+        float k = c.getBlue() / 255f;
+        float f = c.getAlpha() / 255f;
+        Matrix4f m = new MatrixStack().peek().getModel();
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        RenderSystem.enableBlend();
+        RenderSystem.disableTexture();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
+        bufferBuilder.vertex(m, (float) x, (float) y, 0f).color(g, h, k, f).next();
+        bufferBuilder.vertex(m, (float) x1, (float) y1, 0f).color(g, h, k, f).next();
+        bufferBuilder.end();
+        BufferRenderer.draw(bufferBuilder);
+        RenderSystem.enableTexture();
+        RenderSystem.disableBlend();
+    }
+
     public static void lineScreen(Color c, Point... coords) {
         float g = c.getRed() / 255f;
         float h = c.getGreen() / 255f;

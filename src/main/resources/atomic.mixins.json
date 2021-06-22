@@ -20,6 +20,7 @@
     "game.render.ISliderWidgetAccessor",
     "game.render.TextFieldWidgetMixin",
     "game.screen.CreativeInventoryScreenMixin",
+    "game.screen.GameMenuScreenMixin",
     "game.screen.TitleScreenMixin",
     "network.ClientConnectionMixin",
     "network.ClientPlayNetworkHandlerMixin",

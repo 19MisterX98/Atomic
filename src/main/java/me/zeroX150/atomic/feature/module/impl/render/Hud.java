@@ -18,8 +18,10 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.awt.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
-import java.util.*;
 
 public class Hud extends Module {
     public SliderValue smoothSelectTransition = config.create("Selection smooth", 10, 1, 30, 1);
@@ -73,9 +75,10 @@ public class Hud extends Module {
             entries.add(new HudEntry("XYZ", bp.getX() + " " + bp.getY() + " " + bp.getZ(), false, false));
         }
         if (fps.getValue()) entries.add(new HudEntry("FPS", Atomic.client.fpsDebugString.split(" ")[0], false, false));
-        if (ping.getValue()){
+        if (ping.getValue()) {
             PlayerListEntry e = Atomic.client.getNetworkHandler().getPlayerListEntry(Atomic.client.player.getUuid());
-            entries.add(new HudEntry("Ping", (e==null?"?":e.getLatency()) + " ms", false, false));}
+            entries.add(new HudEntry("Ping", (e == null ? "?" : e.getLatency()) + " ms", false, false));
+        }
         if (bps.getValue()) {
             double px = Atomic.client.player.prevX;
             double py = Atomic.client.player.prevY;
