@@ -154,7 +154,8 @@ public class ClickGUI extends Screen {
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        aProg += closed ? 0.009 : -0.009;
+        double a = 0.009 * (delta + 1);
+        aProg += closed ? a : -a;
         aProg = MathHelper.clamp(aProg, 0, 1);
         if (aProg == 1 && closed) {
             Atomic.client.openScreen(null);
@@ -175,7 +176,7 @@ public class ClickGUI extends Screen {
         for (Draggable container : containers) {
             MatrixStack ms = new MatrixStack();
             ms.translate(0, aProgI * height, 0);
-            container.render(ms);
+            container.render(ms, delta);
         }
 
         DrawableHelper.drawCenteredText(matrices, Atomic.client.textRenderer, desc, width / 2, height - 70, 0xFFFFFF);

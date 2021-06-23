@@ -19,12 +19,13 @@
     "game.render.InGameHudMixin",
     "game.render.ISliderWidgetAccessor",
     "game.render.TextFieldWidgetMixin",
+    "game.render.VertexConsumerMixin",
     "game.screen.CreativeInventoryScreenMixin",
     "game.screen.GameMenuScreenMixin",
     "game.screen.TitleScreenMixin",
     "network.ClientConnectionMixin",
     "network.ClientPlayNetworkHandlerMixin",
-    "network.PlayerMoveC2SPacketMixin"
+    "network.PlayerMoveC2SPacketAccessor"
   ],
   "client": [],
   "server": [],

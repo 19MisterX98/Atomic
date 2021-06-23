@@ -66,7 +66,7 @@ public class Draggable {
         this.dragged = false;
     }
 
-    public void render(MatrixStack stack) {
+    public void render(MatrixStack stack, float delta) {
         if (this.expanded) animProg += (System.currentTimeMillis() - lastRender) / 500d;
         else animProg -= (System.currentTimeMillis() - lastRender) / 500d;
         if (System.currentTimeMillis() - lastRender > 1) lastRender = System.currentTimeMillis();
@@ -81,8 +81,8 @@ public class Draggable {
         trackedLastRenderY = lastRenderY;
         float xDiff = (float) (lastRenderX - posX);
         float yDiff = (float) (lastRenderY - posY);
-        double nxDiff = (xDiff / me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
-        double nyDiff = (yDiff / me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
+        double nxDiff = (xDiff / (me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue())) * (delta + 1);
+        double nyDiff = (yDiff / (me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue())) * (delta + 1);
         if (Math.abs(nxDiff) < 0.02) nxDiff = xDiff;
         if (Math.abs(nyDiff) < 0.02) nyDiff = yDiff;
         lastRenderX -= nxDiff;

@@ -5,12 +5,14 @@ import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.feature.module.config.MultiValue;
 import me.zeroX150.atomic.feature.module.config.SliderValue;
-import me.zeroX150.atomic.mixin.network.PlayerMoveC2SPacketMixin;
+import me.zeroX150.atomic.helper.event.Event;
+import me.zeroX150.atomic.helper.event.EventSystem;
+import me.zeroX150.atomic.mixin.network.PlayerMoveC2SPacketAccessor;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
 /**
- * @see PlayerMoveC2SPacketMixin
+ * @see PlayerMoveC2SPacketAccessor
  */
 public class NoFall extends Module {
     public static MultiValue mode;
@@ -20,6 +22,14 @@ public class NoFall extends Module {
         super("NoFall", "no fall damage", ModuleType.MOVEMENT);
         mode = this.config.create("Mode", "OnGround", "OnGround", "Packet", "BreakFall");
         this.fallDist.showOnlyIf(() -> !mode.getValue().equalsIgnoreCase("onground"));
+        EventSystem.registerEventHandler(Event.PACKET_SEND, event -> {
+            if (!this.isEnabled()) return;
+            if (event.getPacket() instanceof PlayerMoveC2SPacket) {
+                if (mode.getValue().equalsIgnoreCase("onground")) {
+                    ((PlayerMoveC2SPacketAccessor) event.getPacket()).setOnGround(true);
+                }
+            }
+        });
     }
 
     @Override

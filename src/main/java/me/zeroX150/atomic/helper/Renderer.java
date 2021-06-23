@@ -15,6 +15,7 @@ import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.util.Random;
 
 public class Renderer {
     public static Identifier OPTIONS_BACKGROUND_TEXTURE = new Identifier("atomic", "background.jpg");
@@ -172,7 +173,6 @@ public class Renderer {
         RenderSystem.setShader(GameRenderer::getPositionShader);
         GL11.glDepthFunc(GL11.GL_ALWAYS);
         RenderSystem.setShaderColor(red, green, blue, alpha);
-        RenderSystem.lineWidth(2f);
         RenderSystem.enableBlend();
         buffer.begin(VertexFormat.DrawMode.DEBUG_LINES,
                 VertexFormats.POSITION);
@@ -203,6 +203,74 @@ public class Renderer {
         float f4 = MathHelper.sin(-player.getPitch() * f);
 
         return new Vec3d(f2 * f3, f4, f1 * f3).add(camera.getPos());
+    }
+
+    public static void mesh(MatrixStack matrices, Color color, Vec3d[] vertecies) {
+        float red = color.getRed() / 255f;
+        float green = color.getGreen() / 255f;
+        float blue = color.getBlue() / 255f;
+        float alpha = color.getAlpha() / 255f;
+        Camera c = Atomic.client.gameRenderer.getCamera();
+        Vec3d camPos = c.getPos();
+        Matrix4f matrix = matrices.peek().getModel();
+        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        GL11.glDepthFunc(GL11.GL_ALWAYS);
+        RenderSystem.setShaderColor(1, 1, 1, 1);
+        RenderSystem.enableBlend();
+        buffer.begin(VertexFormat.DrawMode.DEBUG_LINES,
+                VertexFormats.POSITION_COLOR);
+        boolean defineTwice = false;
+        Random r = new Random();
+        for (Vec3d vertex : vertecies) {
+            Color cc = new Color(r.nextInt(255), r.nextInt(255), r.nextInt(255), 255);
+            Vec3d actualV = vertex.subtract(camPos);
+            for (int i = 0; i < (defineTwice ? 2 : 1); i++)
+                buffer.vertex(matrix, (float) actualV.x, (float) actualV.y, (float) actualV.z).color(cc.getRed() / 255f, cc.getRed() / 255f, cc.getBlue() / 255f, cc.getAlpha() / 255f).next();
+            defineTwice = true;
+        }
+
+        buffer.end();
+
+        BufferRenderer.draw(buffer);
+        GL11.glDepthFunc(GL11.GL_LEQUAL);
+        RenderSystem.disableBlend();
+    }
+
+    public static void DEBUG_fill3d(MatrixStack matrices, Color color, Vec3d start, Vec3d end) {
+        float red = color.getRed() / 255f;
+        float green = color.getGreen() / 255f;
+        float blue = color.getBlue() / 255f;
+        float alpha = color.getAlpha() / 255f;
+        Camera c = Atomic.client.gameRenderer.getCamera();
+        Vec3d camPos = c.getPos();
+        start = start.subtract(camPos);
+        end = end.subtract(camPos);
+        Matrix4f matrix = matrices.peek().getModel();
+        float x1 = (float) start.x;
+        float y1 = (float) start.y;
+        float z1 = (float) start.z;
+        float x2 = (float) end.x;
+        float y2 = (float) end.y;
+        float z2 = (float) end.z;
+        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+        RenderSystem.setShader(GameRenderer::getPositionShader);
+        GL11.glDepthFunc(GL11.GL_ALWAYS);
+        RenderSystem.setShaderColor(red, green, blue, alpha);
+        RenderSystem.enableBlend();
+        buffer.begin(VertexFormat.DrawMode.QUADS,
+                VertexFormats.POSITION);
+
+        buffer.vertex(matrix, x1, y1, z1).next();
+        buffer.vertex(matrix, x2, y1, z2).next();
+        buffer.vertex(matrix, x2, y2, z2).next();
+        buffer.vertex(matrix, x1, y2, z1).next();
+
+        buffer.end();
+
+        BufferRenderer.draw(buffer);
+        GL11.glDepthFunc(GL11.GL_LEQUAL);
+        RenderSystem.disableBlend();
     }
 
     public static void fill(MatrixStack matrices, Color c, double x1, double y1, double x2, double y2) {
@@ -263,6 +331,7 @@ public class Renderer {
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
     }
+
 
     public static void lineScreen(Color c, Point... coords) {
         float g = c.getRed() / 255f;
