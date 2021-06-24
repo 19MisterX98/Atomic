@@ -31,25 +31,23 @@ import java.util.*;
 public class OreSim extends Module {
 
     private final HashMap<Long, HashMap<OreType, HashSet<Vec3d>>> chunkRenderers = new HashMap<>();
+    private Long worldSeed = null;
+    private ChunkPos prevOffset = new ChunkPos(0,0);
 
     SliderValue chunkRange;
     DynamicValue<String> seedInput;
     MultiValue airCheck;
 
-    BooleanValue diamond;
-    BooleanValue redstone;
-    BooleanValue gold;
-    BooleanValue ancientDebris;
-    BooleanValue iron;
-    BooleanValue emerald;
-    BooleanValue lapis;
-    BooleanValue coal;
-    BooleanValue copper;
-    BooleanValue gold_nether;
-    BooleanValue quartz;
-
-    private Long worldSeed = null;
-    private ChunkPos prevOffset = new ChunkPos(0, 0);
+    private static BooleanValue diamond;
+    private static BooleanValue redstone;
+    private static BooleanValue gold;
+    private static BooleanValue ancientDebris;
+    private static BooleanValue iron;
+    private static BooleanValue emerald;
+    private static BooleanValue lapis;
+    private static BooleanValue coal;
+    private static BooleanValue copper;
+    private static BooleanValue quartz;
 
     public OreSim() {
         super("OreSim", "Worldseed + Math = Ores", ModuleType.RENDER);
@@ -63,7 +61,6 @@ public class OreSim extends Module {
         diamond = this.config.create("Diamond", true);
         emerald = this.config.create("Emerald", false);
         redstone = this.config.create("Redstone", false);
-        gold_nether = this.config.create("Nether Gold", false);
         ancientDebris = this.config.create("Ancient Debris", false);
 
         airCheck = this.config.create("Air-check mode", "Off", "Off", "On load", "Rescan");
@@ -102,48 +99,25 @@ public class OreSim extends Module {
         long chunkKey = (long) x + ((long) z << 32);
 
         if (chunkRenderers.containsKey(chunkKey)) {
-            // renders rarest ores last so you can see them better
-            if (this.coal.getValue())
-                renderOre(chunkKey, OreType.COAL, new Color(47, 44, 54), ms);
-            if (this.iron.getValue())
-                renderOre(chunkKey, OreType.IRON, new Color(236, 173, 119), ms);
-            if (this.copper.getValue())
-                renderOre(chunkKey, OreType.COPPER, new Color(239, 151, 0), ms);
-            if (this.redstone.getValue())
-                renderOre(chunkKey, OreType.REDSTONE, new Color(245, 7, 23), ms);
-            if (this.gold.getValue())
-                renderOre(chunkKey, OreType.GOLD, new Color(247, 229, 30), ms);
-            if (this.lapis.getValue())
-                renderOre(chunkKey, OreType.LAPIS, new Color(8, 26, 189), ms);
-            if (this.diamond.getValue())
-                renderOre(chunkKey, OreType.DIAMOND, new Color(33, 244, 255), ms);
-            if (this.ancientDebris.getValue()) {
-                renderOre(chunkKey, OreType.LDEBRIS, new Color(209, 27, 245), ms);
-                renderOre(chunkKey, OreType.SDEBRIS, new Color(209, 27, 245), ms);
+            for(Ore ore : Ore.ORES) {
+                if (ore.active.getValue()) {
+                    if (!chunkRenderers.get(chunkKey).containsKey(ore.name)) continue;
+                    BufferBuilder buffer = Renderer.renderPrepare(ore.color);
+                    for (Vec3d pos : chunkRenderers.get(chunkKey).get(ore.name)) {
+                        Renderer.renderOutlineIntern(pos, new Vec3d(1, 1, 1), ms, buffer);
+                    }
+                    buffer.end();
+                    BufferRenderer.draw(buffer);
+                    GL11.glDepthFunc(GL11.GL_LEQUAL);
+                }
             }
-            if (this.emerald.getValue())
-                renderOre(chunkKey, OreType.EMERALD, new Color(27, 209, 45), ms);
-            if (this.quartz.getValue())
-                renderOre(chunkKey, OreType.QUARTZ, new Color(205, 205, 205), ms);
-            if (this.gold_nether.getValue())
-                renderOre(chunkKey, OreType.GOLD_NETHER, new Color(247, 229, 30), ms);
         }
-    }
-
-    private void renderOre(long chunkKey, OreType type, Color color, MatrixStack ms) {
-        BufferBuilder buffer = Renderer.renderPrepare(color);
-        for (Vec3d pos : chunkRenderers.get(chunkKey).get(type)) {
-            Renderer.renderOutlineIntern(pos, new Vec3d(1, 1, 1), ms, buffer);
-        }
-        buffer.end();
-        BufferRenderer.draw(buffer);
-        GL11.glDepthFunc(GL11.GL_LEQUAL);
     }
 
     @Override
     public void tick() {
         if (hasSeedChanged()) {
-            reload();
+            loadVisibleChunks();
         } else if (airCheck.getValue().equals("Rescan")) {
             if (Atomic.client.player == null || Atomic.client.world == null) return;
             long chunkX = Atomic.client.player.getChunkPos().x;
@@ -215,8 +189,7 @@ public class OreSim extends Module {
         return false;
     }
 
-    private void reload() {
-
+    private void loadVisibleChunks() {
         int renderdistance = MinecraftClient.getInstance().options.viewDistance;
 
         if (Atomic.client.player == null) return;
@@ -228,6 +201,11 @@ public class OreSim extends Module {
                 doMathOnChunk(i, j);
             }
         }
+    }
+
+    public void reload() {
+        chunkRenderers.clear();
+        loadVisibleChunks();
     }
 
     public void doMathOnChunk(int chunkX, int chunkZ) {
@@ -263,6 +241,8 @@ public class OreSim extends Module {
 
         for (Ore ore : Ore.ORES) {
 
+            if (!world.getRegistryKey().getValue().getPath().equalsIgnoreCase(ore.dimension)) continue;
+
             HashSet<Vec3d> ores = new HashSet<>();
 
             int repeat = ore.repeat;
@@ -273,9 +253,6 @@ public class OreSim extends Module {
                     index = ore.index - 2;
                 } else if (biomeName.equals("crimson_forest")) {
                     index = ore.index - 3;
-                }
-                if (ore.name == OreType.SDEBRIS) {
-                    index++;
                 }
                 if (biomeName.equals("basalt_deltas") && (ore.name == OreType.GOLD_NETHER || ore.name == OreType.QUARTZ)) {
                     repeat *= 2;
@@ -473,19 +450,32 @@ public class OreSim extends Module {
     private record Ore(OreType name, int index, int step, int minY,
                        int maxY, int size, int repeat,
                        boolean isDepthAverage,
-                       Generator generatorType) {
+                       Generator generatorType, String dimension,
+                       BooleanValue active, Color color) {
         public static final ArrayList<Ore> ORES = new ArrayList<>(Arrays.asList(
-                new Ore(OreType.DIAMOND, 11, 6, 0, 17, 8, 1, false, Generator.DEFAULT),
-                new Ore(OreType.REDSTONE, 10, 6, 0, 16, 8, 8, false, Generator.DEFAULT),
-                new Ore(OreType.GOLD, 9, 6, 0, 32, 9, 2, false, Generator.DEFAULT),
-                new Ore(OreType.IRON, 8, 6, 0, 64, 9, 20, false, Generator.DEFAULT),
-                new Ore(OreType.COAL, 7, 6, 0, 128, 17, 20, false, Generator.DEFAULT),
-                new Ore(OreType.EMERALD, 17, 6, 4, 32, 1, 6 - 8, false, Generator.EMERALD),
-                new Ore(OreType.GOLD_NETHER, 13, 7, 10, 118, 10, 10, false, Generator.DEFAULT),
-                new Ore(OreType.QUARTZ, 14, 7, 10, 118, 14, 16, false, Generator.DEFAULT),
-                new Ore(OreType.SDEBRIS, 15, 7, 8, 120, 2, 1, false, Generator.NO_SURFACE),
-                new Ore(OreType.LDEBRIS, 15, 7, 17, 9, 3, 1, true, Generator.NO_SURFACE),
-                new Ore(OreType.LAPIS, 12, 6, 16, 16, 7, 1, true, Generator.DEFAULT),
-                new Ore(OreType.COPPER, 13, 6, 49, 49, 10, 6, true, Generator.DEFAULT)));
+                new Ore(OreType.COAL, 7, 6, 0, 128, 17, 20, false,
+                        Generator.DEFAULT, "overworld", coal, new Color(47, 44, 54)),
+                new Ore(OreType.IRON, 8, 6, 0, 64, 9, 20, false,
+                        Generator.DEFAULT, "overworld", iron, new Color(236, 173, 119)),
+                new Ore(OreType.GOLD, 9, 6, 0, 32, 9, 2, false,
+                        Generator.DEFAULT, "overworld", gold, new Color(247, 229, 30)),
+                new Ore(OreType.REDSTONE, 10, 6, 0, 16, 8, 8, false,
+                        Generator.DEFAULT, "overworld", redstone, new Color(245, 7, 23)),
+                new Ore(OreType.DIAMOND, 11, 6, 0, 17, 8, 1, false,
+                        Generator.DEFAULT, "overworld", diamond, new Color(33, 244, 255)),
+                new Ore(OreType.LAPIS, 12, 6, 16, 16, 7, 1, true,
+                        Generator.DEFAULT, "overworld", lapis, new Color(8, 26, 189)),
+                new Ore(OreType.COPPER, 13, 6, 49, 49, 10, 6, true,
+                        Generator.DEFAULT, "overworld", copper, new Color(239, 151, 0)),
+                new Ore(OreType.EMERALD, 17, 6, 4, 32, 1, 6 - 8, false,
+                        Generator.EMERALD, "overworld", emerald, new Color(27, 209, 45)),
+                new Ore(OreType.GOLD_NETHER, 13, 7, 10, 118, 10, 10, false,
+                        Generator.DEFAULT, "the_nether", gold, new Color(247, 229, 30)),
+                new Ore(OreType.QUARTZ, 14, 7, 10, 118, 14, 16, false,
+                        Generator.DEFAULT, "the_nether", quartz, new Color(205, 205, 205)),
+                new Ore(OreType.LDEBRIS, 15, 7, 17, 9, 3, 1, true,
+                        Generator.NO_SURFACE, "the_nether", ancientDebris, new Color(209, 27, 245)),
+                new Ore(OreType.SDEBRIS, 16, 7, 8, 120, 2, 1, false,
+                        Generator.NO_SURFACE, "the_nether", ancientDebris, new Color(209, 27, 245))));
     }
 }
