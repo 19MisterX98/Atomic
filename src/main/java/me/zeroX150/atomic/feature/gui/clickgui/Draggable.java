@@ -8,10 +8,13 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3f;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Draggable {
+    List<PositionD> recordedPositions = new ArrayList<>();
     double animProg = 0;
     double margin = 4;
     double paddingX = 4;
@@ -27,7 +30,6 @@ public class Draggable {
     long lastRender = System.currentTimeMillis();
     String title;
     List<Clickable> children = new ArrayList<>();
-
     public Draggable(String title, boolean isExpanded) {
         this.title = title;
         this.expanded = isExpanded;
@@ -88,8 +90,24 @@ public class Draggable {
         lastRenderX -= nxDiff;
         lastRenderY -= nyDiff;
         stack.translate(lastRenderX - margin - paddingX, lastRenderY - margin, 0);
-        stack.multiply(new Quaternion(new Vec3f(0, 0, 1), (float) (MathHelper.clamp(lrXDiff, -50, 50) * me.zeroX150.atomic.feature.module.impl.render.ClickGUI.dragFactor.getValue()), true));
-        stack.multiply(new Quaternion(new Vec3f(0, 0, 1), (float) Math.sin(animProgInter * Math.PI * 2) * 10, true));
+        double rotation = MathHelper.clamp(lrXDiff, -50, 50) * me.zeroX150.atomic.feature.module.impl.render.ClickGUI.dragFactor.getValue();
+        rotation += Math.sin(animProgInter * Math.PI * 2) * 10;
+        stack.multiply(new Quaternion(new Vec3f(0, 0, 1), (float) (rotation), true));
+        PositionD v = new PositionD(lastRenderX - margin - paddingX, lastRenderY - margin, rotation);
+        if (!recordedPositions.contains(v)) recordedPositions.add(v);
+        else recordedPositions.add(null);
+        while (recordedPositions.size() > 50) recordedPositions.remove(0);
+        double val = 0;
+        double incr = 1d / recordedPositions.stream().filter(Objects::nonNull).count();
+        for (PositionD recordedPosition : recordedPositions) {
+            if (recordedPosition == null) continue;
+            MatrixStack ms = new MatrixStack();
+            ms.translate(recordedPosition.x(), recordedPosition.y(), -100);
+            ms.multiply(new Quaternion(new Vec3f(0, 0, 1), (float) (recordedPosition.rot()), true));
+            Color c = Renderer.modify(new Color(Color.HSBtoRGB((float) val, 0.6f, 0.6f)), -1, -1, -1, 30);
+            Renderer.fill(ms, c, -paddingX, 0, width + margin + paddingX * 2, 9 + margin * 2);
+            val += incr;
+        }
         if (this.animProg != 0) {
             double yOffset = 9 + margin * 2;
             for (Clickable child : children) {
@@ -107,5 +125,8 @@ public class Draggable {
             this.posX += deltaX;
             this.posY += deltaY;
         }
+    }
+
+    record PositionD(double x, double y, double rot) {
     }
 }

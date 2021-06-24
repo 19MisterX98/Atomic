@@ -1,6 +1,7 @@
 package me.zeroX150.atomic.mixin.game.render;
 
 import me.zeroX150.atomic.helper.Renderer;
+import net.minecraft.client.gui.screen.pack.PackListWidget;
 import net.minecraft.client.gui.widget.EntryListWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,6 +26,6 @@ public class EntryListWidgetMixin {
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         this.renderBackground = false;
         this.renderHorizontalShadows = false;
-        Renderer.renderBackgroundTexture();
+        if (!(((Object) this) instanceof PackListWidget)) Renderer.renderBackgroundTexture();
     }
 }

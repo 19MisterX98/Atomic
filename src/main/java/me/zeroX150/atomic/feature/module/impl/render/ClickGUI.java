@@ -15,7 +15,7 @@ public class ClickGUI extends Module {
         super("ClickGUI", "Opens the click gui", ModuleType.RENDER);
         logoSize = this.config.create("Logo size", 0.28, 0, 1, 2);
         smooth = this.config.create("Movement smooth", 20, 10, 30, 1);
-        dragFactor = this.config.create("Drag factor", 1.5, 0, 20, 1);
+        dragFactor = this.config.create("Drag factor", 1.5, 0, 3, 1);
         this.config.get("Keybind").setValue(344);
     }
 
