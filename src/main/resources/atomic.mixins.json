@@ -22,6 +22,7 @@
     "game.render.VertexConsumerMixin",
     "game.screen.CreativeInventoryScreenMixin",
     "game.screen.GameMenuScreenMixin",
+    "game.screen.GenericContainerScreenMixin",
     "game.screen.TitleScreenMixin",
     "network.ClientConnectionMixin",
     "network.ClientPlayNetworkHandlerMixin",
