@@ -60,8 +60,8 @@ public abstract class TextFieldWidgetMixin extends ClickableWidget {
         if (this.getText().isEmpty()) this.setSuggestion(this.getMessage().asString());
         else this.setSuggestion("");
         int w = this.isFocused() ? 2 : 1;
-        Renderer.fill(new Color(20, 20, 20, 220), x, y, x + width, y + height);
-        Renderer.fill(new Color(0, 194, 111, 255), x, y, x + w, y + height);
+        Renderer.fill(matrices, new Color(20, 20, 20, 220), x, y, x + width, y + height);
+        Renderer.fill(matrices, new Color(0, 194, 111, 255), x, y, x + w, y + height);
         matrices.translate(4, 1 + (height / 2d) - (9 / 2d), 0);
     }
 

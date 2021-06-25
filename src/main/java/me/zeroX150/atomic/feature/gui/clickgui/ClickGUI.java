@@ -19,6 +19,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class ClickGUI extends Screen {
@@ -33,6 +34,9 @@ public class ClickGUI extends Screen {
 
     ConfigWidget currentConfig = null;
     double aProg = 2.0;
+
+    int clicks = 0;
+    int p = 0;
 
     long lastRender = System.currentTimeMillis();
 
@@ -69,6 +73,17 @@ public class ClickGUI extends Screen {
             }
             containers.add(d);
         }
+    }
+
+    @Override
+    public void tick() {
+        p++;
+        if (p > 8) {
+            p = 0;
+            clicks--;
+            clicks = MathHelper.clamp(clicks, 0, 3);
+        }
+        super.tick();
     }
 
     @Override
@@ -202,7 +217,26 @@ public class ClickGUI extends Screen {
                 break;
             }
         }
-        if (!flag && currentConfig != null) currentConfig.mouseClicked(mouseX, mouseY, button);
+        if (!flag && currentConfig != null) {
+            currentConfig.mouseClicked(mouseX, mouseY, button);
+        }
+        if (!flag & button == 1) {
+            clicks++;
+            if (clicks >= 2) {
+                for (Draggable container : containers) {
+                    container.posX = mouseX;
+                    container.posY = mouseY;
+                }
+            }
+            if (clicks >= 3) {
+                Random r = new Random();
+                for (Draggable container : containers) {
+                    container.posX = r.nextInt(width);
+                    container.posY = r.nextInt(height);
+                }
+
+            }
+        }
         return super.mouseClicked(mouseX, mouseY, button);
     }
 

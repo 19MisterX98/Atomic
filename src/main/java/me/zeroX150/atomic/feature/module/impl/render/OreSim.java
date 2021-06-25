@@ -30,14 +30,6 @@ import java.util.*;
 
 public class OreSim extends Module {
 
-    private final HashMap<Long, HashMap<OreType, HashSet<Vec3d>>> chunkRenderers = new HashMap<>();
-    private Long worldSeed = null;
-    private ChunkPos prevOffset = new ChunkPos(0,0);
-
-    SliderValue chunkRange;
-    DynamicValue<String> seedInput;
-    MultiValue airCheck;
-
     private static BooleanValue diamond;
     private static BooleanValue redstone;
     private static BooleanValue gold;
@@ -48,6 +40,12 @@ public class OreSim extends Module {
     private static BooleanValue coal;
     private static BooleanValue copper;
     private static BooleanValue quartz;
+    private final HashMap<Long, HashMap<OreType, HashSet<Vec3d>>> chunkRenderers = new HashMap<>();
+    SliderValue chunkRange;
+    DynamicValue<String> seedInput;
+    MultiValue airCheck;
+    private Long worldSeed = null;
+    private ChunkPos prevOffset = new ChunkPos(0, 0);
 
     public OreSim() {
         super("OreSim", "Worldseed + Math = Ores", ModuleType.RENDER);
@@ -99,7 +97,7 @@ public class OreSim extends Module {
         long chunkKey = (long) x + ((long) z << 32);
 
         if (chunkRenderers.containsKey(chunkKey)) {
-            for(Ore ore : Ore.ORES) {
+            for (Ore ore : Ore.ORES) {
                 if (ore.active.getValue()) {
                     if (!chunkRenderers.get(chunkKey).containsKey(ore.name)) continue;
                     BufferBuilder buffer = Renderer.renderPrepare(ore.color);

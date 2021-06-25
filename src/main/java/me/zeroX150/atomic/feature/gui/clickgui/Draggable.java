@@ -30,6 +30,7 @@ public class Draggable {
     long lastRender = System.currentTimeMillis();
     String title;
     List<Clickable> children = new ArrayList<>();
+
     public Draggable(String title, boolean isExpanded) {
         this.title = title;
         this.expanded = isExpanded;
