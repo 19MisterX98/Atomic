@@ -4,7 +4,6 @@ import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.impl.external.Alts;
 import me.zeroX150.atomic.helper.Client;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.CommandBlockScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;

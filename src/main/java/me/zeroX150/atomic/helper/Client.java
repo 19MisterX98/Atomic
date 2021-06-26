@@ -5,6 +5,7 @@ import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.mixin.game.IMinecraftClientAccessor;
+import net.minecraft.client.input.Input;
 import net.minecraft.client.util.Session;
 import net.minecraft.text.Text;
 import org.apache.logging.log4j.Level;
@@ -14,7 +15,23 @@ import java.net.Proxy;
 import java.util.UUID;
 
 public class Client {
-    public static Session overwrittenSession;
+    private static final Input INPUT_BLOCK = new Input() {
+        @Override
+        public void tick(boolean slowDown) {
+            this.movementSideways = 0f;
+            this.movementForward = 0f;
+        }
+    };
+    private static Input INPUT_NORMAL = null;
+
+    public static void startBlockingMovement() {
+        INPUT_NORMAL = Atomic.client.player.input;
+        Atomic.client.player.input = INPUT_BLOCK;
+    }
+
+    public static void stopBlockingMovement() {
+        if (INPUT_NORMAL != null) Atomic.client.player.input = INPUT_NORMAL;
+    }
 
     public static void notifyUser(String n) {
         if (Atomic.client.player == null) return;

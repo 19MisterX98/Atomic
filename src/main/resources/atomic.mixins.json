@@ -8,6 +8,7 @@
     "game.IdentifierMixin",
     "game.IMinecraftClientAccessor",
     "game.MinecraftClientMixin",
+    "game.entity.IEntity",
     "game.entity.LivingEntityAccessor",
     "game.entity.LivingEntityMixin",
     "game.render.AbstractBlockStateMixin",

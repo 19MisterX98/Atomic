@@ -3,7 +3,6 @@ package me.zeroX150.atomic.feature.gui.notifications;
 import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.helper.Client;
 import me.zeroX150.atomic.helper.Renderer;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 
@@ -54,7 +53,7 @@ public class NotificationRenderer {
             notification.renderPosY -= nyDiff;
 
             //Renderer.fill(new Color(28, 28, 28, 170), notification.renderPosX, notification.renderPosY, notification.renderPosX + 150, notification.renderPosY + notifHeight);
-            Renderer.fillGradientH(new MatrixStack(), new Color(28, 28, 28, 170), Renderer.modify(Client.getCurrentRGB(),-1,-1,-1,170),notification.renderPosX,notification.renderPosY,notification.renderPosX+150,notification.renderPosY+notifHeight);
+            Renderer.fillGradientH(new MatrixStack(), new Color(28, 28, 28, 170), Renderer.modify(Client.getCurrentRGB(), -1, -1, -1, 170), notification.renderPosX, notification.renderPosY, notification.renderPosX + 150, notification.renderPosY + notifHeight);
             Renderer.fill(new Color(47, 47, 47, 170), notification.renderPosX, notification.renderPosY, notification.renderPosX + (150 * timeRemaining), notification.renderPosY + notifHeight);
 
             int currentYOffsetText = 2 + 9;

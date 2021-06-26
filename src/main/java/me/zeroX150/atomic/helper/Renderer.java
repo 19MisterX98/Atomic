@@ -309,14 +309,14 @@ public class Renderer {
     }
 
     public static void fillGradientH(MatrixStack matrices, Color c2, Color c1, double x1, double y1, double x2, double y2) {
-        float r1 = c1.getRed()/255f;
-        float g1 = c1.getGreen()/255f;
-        float b1 = c1.getBlue()/255f;
-        float a1 = c1.getAlpha()/255f;
-        float r2 = c2.getRed()/255f;
-        float g2 = c2.getGreen()/255f;
-        float b2 = c2.getBlue()/255f;
-        float a2 = c2.getAlpha()/255f;
+        float r1 = c1.getRed() / 255f;
+        float g1 = c1.getGreen() / 255f;
+        float b1 = c1.getBlue() / 255f;
+        float a1 = c1.getAlpha() / 255f;
+        float r2 = c2.getRed() / 255f;
+        float g2 = c2.getGreen() / 255f;
+        float b2 = c2.getBlue() / 255f;
+        float a2 = c2.getAlpha() / 255f;
 
         double j;
 

@@ -63,6 +63,7 @@ public class ModuleRegistry {
         modules.add(new Bunker());
         modules.add(new SlotSpammer());
         modules.add(new VerticalPhase());
+        modules.add(new Freecam());
     }
 
     public static List<Module> getModules() {

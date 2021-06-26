@@ -42,21 +42,21 @@ public class Hud extends Module {
 
     DateFormat df = new SimpleDateFormat("h:mm aa");
 
-    double calcTps(double n) {
-        return (20.0 / Math.max((n - 1000.0) / (500.0), 1.0));
-    }
-
     public Hud() {
         super("Hud", "poggies", ModuleType.RENDER);
         lastTimePacketReceived = System.currentTimeMillis();
 
-        EventSystem.registerEventHandler(Event.PACKET_RECEIVE,event -> {
+        EventSystem.registerEventHandler(Event.PACKET_RECEIVE, event -> {
             if (event.getPacket() instanceof WorldTimeUpdateS2CPacket) {
-                currentTps = Client.roundToN(calcTps(System.currentTimeMillis()-lastTimePacketReceived),2);
+                currentTps = Client.roundToN(calcTps(System.currentTimeMillis() - lastTimePacketReceived), 2);
                 lastTimePacketReceived = System.currentTimeMillis();
 
             }
         });
+    }
+
+    double calcTps(double n) {
+        return (20.0 / Math.max((n - 1000.0) / (500.0), 1.0));
     }
 
     @Override
@@ -96,7 +96,7 @@ public class Hud extends Module {
         }
         if (fps.getValue()) entries.add(new HudEntry("FPS", Atomic.client.fpsDebugString.split(" ")[0], false, false));
         if (tps.getValue()) {
-            entries.add(new HudEntry("TPS", (currentTps==-1?"Calculating":currentTps)+"",false,false));
+            entries.add(new HudEntry("TPS", (currentTps == -1 ? "Calculating" : currentTps) + "", false, false));
         }
         if (ping.getValue()) {
             PlayerListEntry e = Atomic.client.getNetworkHandler().getPlayerListEntry(Atomic.client.player.getUuid());
@@ -108,7 +108,7 @@ public class Hud extends Module {
             double pz = Atomic.client.player.prevZ;
             Vec3d v = new Vec3d(px, py, pz);
             double dist = v.distanceTo(Atomic.client.player.getPos());
-            entries.add(new HudEntry("Speed", Client.roundToN(dist*20, 2) + "", false, false));
+            entries.add(new HudEntry("Speed", Client.roundToN(dist * 20, 2) + "", false, false));
         }
         if (time.getValue()) {
             entries.add(new HudEntry("", df.format(new Date()), true, true));

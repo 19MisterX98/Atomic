@@ -10,6 +10,7 @@ import me.zeroX150.atomic.helper.Renderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -49,8 +50,9 @@ public class ClickGUI extends Screen {
         super(Text.of(""));
         double width = Atomic.client.getWindow().getScaledWidth();
         INSTANCE = this;
-
-        double offsetX = 20;
+        double maxWidth = (ModuleType.values().length - 1) * 114;
+        double originalX = width / 2 - (maxWidth / 2);
+        double offsetX = originalX;
         double offsetY = me.zeroX150.atomic.feature.module.impl.render.ClickGUI.logoSize.getValue() * 130 + 20;
 
         for (ModuleType value : ModuleType.values()) {
@@ -62,7 +64,7 @@ public class ClickGUI extends Screen {
             d.posY = offsetY;
             offsetX += 120;
             if (offsetX + 120 > width) {
-                offsetX = 20;
+                offsetX = originalX;
                 offsetY += 27;
             }
             for (Module module : ModuleRegistry.getModules()) {
@@ -105,14 +107,16 @@ public class ClickGUI extends Screen {
         ButtonWidget sort = new ButtonWidget(width - offY, height - off, 20, 20, Text.of("S"), button -> {
             currentSortMode++;
             currentSortMode %= 2;
-            double offsetX = 20;
+            double maxWidth = (ModuleType.values().length - 1) * 114;
+            double originalX = this.width / 2d - (maxWidth / 2);
+            double offsetX = originalX;
             double offsetY = me.zeroX150.atomic.feature.module.impl.render.ClickGUI.logoSize.getValue() * 130 + 20;
             for (Draggable container : containers.stream().sorted(Comparator.comparingInt(value -> currentSortMode == 0 ? value.children.size() : -value.children.size())).collect(Collectors.toList())) {
                 container.posX = offsetX;
                 container.posY = offsetY;
                 offsetX += 120;
                 if (offsetX + 120 > width) {
-                    offsetX = 20;
+                    offsetX = originalX;
                     offsetY += 27;
                 }
             }
@@ -182,9 +186,15 @@ public class ClickGUI extends Screen {
         if (System.currentTimeMillis() - lastRender > 1) lastRender = System.currentTimeMillis();
         double logoSize = me.zeroX150.atomic.feature.module.impl.render.ClickGUI.logoSize.getValue();
         if (logoSize != 0) {
-            RenderSystem.setShaderColor(1, 1, 1, 1);
-            RenderSystem.setShaderTexture(0, LOGO);
-            Screen.drawTexture(matrices, 1, 1, 0, 0, 0, (int) (504 * logoSize), (int) (130 * logoSize), (int) (130 * logoSize), (int) (504 * logoSize));
+            RenderSystem.setShaderTexture(0, ClickGUI.LOGO);
+            RenderSystem.enableBlend();
+            RenderSystem.blendEquation(32774);
+            RenderSystem.blendFunc(770, 1);
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1F, 1F);
+            drawTexture(matrices, (int) (width / 2 - (504 * logoSize / 2)), 10, 0, 0, 0, (int) (504 * logoSize), (int) (130 * logoSize), (int) (130 * logoSize), (int) (504 * logoSize));
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.disableBlend();
         }
         matrices.translate(2 * aProgI * width, 0, 0);
         if (currentConfig != null) currentConfig.render(matrices, mouseX, mouseY, delta);
