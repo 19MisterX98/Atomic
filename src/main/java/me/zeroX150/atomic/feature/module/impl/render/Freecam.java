@@ -37,35 +37,7 @@ public class Freecam extends Module {
 
     @Override
     public void tick() {
-        GameOptions go = Atomic.client.options;
-        float y = Atomic.client.player.getYaw();
-        int mx = 0, my = 0, mz = 0;
 
-        if (go.keyJump.isPressed())
-            my++;
-        if (go.keyBack.isPressed())
-            mz++;
-        if (go.keyLeft.isPressed())
-            mx--;
-        if (go.keyRight.isPressed())
-            mx++;
-        if (go.keySneak.isPressed())
-            my--;
-        if (go.keyForward.isPressed())
-            mz--;
-        double ts = speed.getValue() / 2;
-        double s = Math.sin(Math.toRadians(y));
-        double c = Math.cos(Math.toRadians(y));
-        double nx = ts * mz * s;
-        double nz = ts * mz * -c;
-        double ny = ts * my;
-        nx += ts * mx * -c;
-        nz += ts * mx * -s;
-        Vec3d nv3 = new Vec3d(nx, ny, nz);
-        Vec3d ppos = Atomic.client.player.getPos().add(nv3);
-        Atomic.client.player.updatePosition(ppos.x, ppos.y, ppos.z);
-
-        Atomic.client.player.setVelocity(0, 0, 0);
     }
 
     @Override
@@ -84,6 +56,8 @@ public class Freecam extends Module {
             Atomic.client.player.updatePosition(startloc.x, startloc.y, startloc.z);
         }
         startloc = null;
+        Atomic.client.player.setYaw(yaw);
+        Atomic.client.player.setPitch(pitch);
         yaw = pitch = 0f;
         Atomic.client.player.noClip = false;
         Atomic.client.getCameraEntity().noClip = false;
@@ -101,6 +75,39 @@ public class Freecam extends Module {
         Atomic.client.player.setPose(EntityPose.STANDING);
         Atomic.client.player.noClip = true;
         Atomic.client.getCameraEntity().noClip = true;
+    }
+
+    @Override
+    public void onFastTick() {
+        GameOptions go = Atomic.client.options;
+        float y = Atomic.client.player.getYaw();
+        int mx = 0, my = 0, mz = 0;
+
+        if (go.keyJump.isPressed())
+            my++;
+        if (go.keyBack.isPressed())
+            mz++;
+        if (go.keyLeft.isPressed())
+            mx--;
+        if (go.keyRight.isPressed())
+            mx++;
+        if (go.keySneak.isPressed())
+            my--;
+        if (go.keyForward.isPressed())
+            mz--;
+        double ts = speed.getValue() / 200;
+        double s = Math.sin(Math.toRadians(y));
+        double c = Math.cos(Math.toRadians(y));
+        double nx = ts * mz * s;
+        double nz = ts * mz * -c;
+        double ny = ts * my;
+        nx += ts * mx * -c;
+        nz += ts * mx * -s;
+        Vec3d nv3 = new Vec3d(nx, ny, nz);
+        Vec3d ppos = Atomic.client.player.getPos().add(nv3);
+        Atomic.client.player.updatePosition(ppos.x, ppos.y, ppos.z);
+
+        Atomic.client.player.setVelocity(0, 0, 0);
     }
 
     @Override

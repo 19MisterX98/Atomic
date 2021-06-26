@@ -43,6 +43,10 @@ public abstract class Module {
 
     public abstract void onHudRender();
 
+    public void onFastTick() {
+
+    }
+
     public void toggle() {
         setEnabled(!enabled);
     }

@@ -4,10 +4,7 @@ import me.zeroX150.atomic.feature.module.impl.combat.AutoLog;
 import me.zeroX150.atomic.feature.module.impl.combat.Criticals;
 import me.zeroX150.atomic.feature.module.impl.combat.Killaura;
 import me.zeroX150.atomic.feature.module.impl.exploit.*;
-import me.zeroX150.atomic.feature.module.impl.external.Alts;
-import me.zeroX150.atomic.feature.module.impl.external.AntiPacketKick;
-import me.zeroX150.atomic.feature.module.impl.external.ClientConfig;
-import me.zeroX150.atomic.feature.module.impl.external.SlotSpammer;
+import me.zeroX150.atomic.feature.module.impl.external.*;
 import me.zeroX150.atomic.feature.module.impl.movement.*;
 import me.zeroX150.atomic.feature.module.impl.render.*;
 import me.zeroX150.atomic.feature.module.impl.testing.TestModule;
@@ -64,6 +61,7 @@ public class ModuleRegistry {
         modules.add(new SlotSpammer());
         modules.add(new VerticalPhase());
         modules.add(new Freecam());
+        modules.add(new NoPush());
     }
 
     public static List<Module> getModules() {
