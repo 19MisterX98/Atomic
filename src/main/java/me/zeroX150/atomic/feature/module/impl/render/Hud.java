@@ -9,8 +9,11 @@ import me.zeroX150.atomic.feature.module.config.BooleanValue;
 import me.zeroX150.atomic.feature.module.config.SliderValue;
 import me.zeroX150.atomic.helper.Client;
 import me.zeroX150.atomic.helper.Renderer;
+import me.zeroX150.atomic.helper.event.Event;
+import me.zeroX150.atomic.helper.event.EventSystem;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import org.apache.commons.lang3.ArrayUtils;
@@ -27,16 +30,33 @@ public class Hud extends Module {
     public SliderValue smoothSelectTransition = config.create("Selection smooth", 10, 1, 30, 1);
 
     BooleanValue fps = config.create("FPS", true);
+    BooleanValue tps = config.create("TPS", true);
     BooleanValue coords = config.create("Coordinates", true);
     BooleanValue time = config.create("Time", true);
     BooleanValue ping = config.create("Ping", true);
     BooleanValue bps = config.create("Speed", true);
     BooleanValue modules = config.create("Modules", true);
 
+    long lastTimePacketReceived;
+    double currentTps = 0;
+
     DateFormat df = new SimpleDateFormat("h:mm aa");
+
+    double calcTps(double n) {
+        return (20.0 / Math.max((n - 1000.0) / (500.0), 1.0));
+    }
 
     public Hud() {
         super("Hud", "poggies", ModuleType.RENDER);
+        lastTimePacketReceived = System.currentTimeMillis();
+
+        EventSystem.registerEventHandler(Event.PACKET_RECEIVE,event -> {
+            if (event.getPacket() instanceof WorldTimeUpdateS2CPacket) {
+                currentTps = Client.roundToN(calcTps(System.currentTimeMillis()-lastTimePacketReceived),2);
+                lastTimePacketReceived = System.currentTimeMillis();
+
+            }
+        });
     }
 
     @Override
@@ -75,6 +95,9 @@ public class Hud extends Module {
             entries.add(new HudEntry("XYZ", bp.getX() + " " + bp.getY() + " " + bp.getZ(), false, false));
         }
         if (fps.getValue()) entries.add(new HudEntry("FPS", Atomic.client.fpsDebugString.split(" ")[0], false, false));
+        if (tps.getValue()) {
+            entries.add(new HudEntry("TPS", (currentTps==-1?"Calculating":currentTps)+"",false,false));
+        }
         if (ping.getValue()) {
             PlayerListEntry e = Atomic.client.getNetworkHandler().getPlayerListEntry(Atomic.client.player.getUuid());
             entries.add(new HudEntry("Ping", (e == null ? "?" : e.getLatency()) + " ms", false, false));
@@ -85,14 +108,14 @@ public class Hud extends Module {
             double pz = Atomic.client.player.prevZ;
             Vec3d v = new Vec3d(px, py, pz);
             double dist = v.distanceTo(Atomic.client.player.getPos());
-            entries.add(new HudEntry("Speed", Client.roundToN(dist, 2) + "", false, false));
+            entries.add(new HudEntry("Speed", Client.roundToN(dist*20, 2) + "", false, false));
         }
         if (time.getValue()) {
             entries.add(new HudEntry("", df.format(new Date()), true, true));
         }
         //entries.sort(Comparator.comparingInt(entry -> Atomic.client.textRenderer.getWidth((entry.t.isEmpty()?"":entry.t+" ")+entry.v)));
         int yOffset = 23 / 2 + 9;
-        int changedYOffset = -2;
+        int changedYOffset = -3;
         int xOffset = 2;
         for (HudEntry entry : entries) {
             String t = (entry.t.isEmpty() ? "" : entry.t + " ") + entry.v;

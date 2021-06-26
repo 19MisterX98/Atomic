@@ -1,7 +1,9 @@
 package me.zeroX150.atomic.feature.gui.notifications;
 
 import me.zeroX150.atomic.Atomic;
+import me.zeroX150.atomic.helper.Client;
 import me.zeroX150.atomic.helper.Renderer;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 
@@ -51,9 +53,10 @@ public class NotificationRenderer {
             notification.renderPosX -= nxDiff;
             notification.renderPosY -= nyDiff;
 
-            //DrawableHelper.fill(ms,(int)notification.renderPosX,(int)notification.renderPosY,(int)notification.renderPosX+150,(int)notification.renderPosY+notifHeight, new Color(28, 28, 28, 170).getRGB());
-            Renderer.fill(new Color(28, 28, 28, 170), notification.renderPosX, notification.renderPosY, notification.renderPosX + 150, notification.renderPosY + notifHeight);
-            Renderer.fill(new Color(47, 47, 47, 211), notification.renderPosX, notification.renderPosY, notification.renderPosX + (150 * timeRemaining), notification.renderPosY + notifHeight);
+            //Renderer.fill(new Color(28, 28, 28, 170), notification.renderPosX, notification.renderPosY, notification.renderPosX + 150, notification.renderPosY + notifHeight);
+            Renderer.fillGradientH(new MatrixStack(), new Color(28, 28, 28, 170), Renderer.modify(Client.getCurrentRGB(),-1,-1,-1,170),notification.renderPosX,notification.renderPosY,notification.renderPosX+150,notification.renderPosY+notifHeight);
+            Renderer.fill(new Color(47, 47, 47, 170), notification.renderPosX, notification.renderPosY, notification.renderPosX + (150 * timeRemaining), notification.renderPosY + notifHeight);
+
             int currentYOffsetText = 2 + 9;
             Atomic.client.textRenderer.draw(ms, notification.title, (int) notification.renderPosX + 2, (int) notification.renderPosY + 2, 0xFFFFFF);
             for (String content : notification.contents) {
