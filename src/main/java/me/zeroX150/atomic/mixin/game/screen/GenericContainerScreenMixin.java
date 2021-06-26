@@ -5,6 +5,7 @@ import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.feature.module.impl.external.SlotSpammer;
 import me.zeroX150.atomic.helper.Client;
 import me.zeroX150.atomic.helper.Renderer;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -31,6 +32,7 @@ public abstract class GenericContainerScreenMixin<T extends ScreenHandler> exten
     protected int y;
     boolean isSelecting = false;
     ButtonWidget bw;
+
     protected GenericContainerScreenMixin(Text title) {
         super(title);
     }
@@ -41,7 +43,7 @@ public abstract class GenericContainerScreenMixin<T extends ScreenHandler> exten
     @Inject(method = "init", at = @At("TAIL"))
     public void initCustom(CallbackInfo ci) {
         int w = Atomic.client.getWindow().getScaledWidth();
-        bw = new ButtonWidget(w / 2 - (150 / 2), 5, 150, 20, Text.of("Slot spammer"), button -> {
+        bw = new ButtonWidget(w / 2 - (150 / 2), 11, 150, 20, Text.of("Slot spammer"), button -> {
             if (ModuleRegistry.getByClass(SlotSpammer.class).isEnabled()) {
                 ModuleRegistry.getByClass(SlotSpammer.class).setEnabled(false);
             } else isSelecting = !isSelecting;
@@ -71,12 +73,15 @@ public abstract class GenericContainerScreenMixin<T extends ScreenHandler> exten
 
     @Inject(method = "render", at = @At("TAIL"))
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        String t = "disabled";
         if (ModuleRegistry.getByClass(SlotSpammer.class).isEnabled()) {
-            bw.setMessage(Text.of("Slot spammer running"));
+            bw.setMessage(Text.of("Click to disable"));
+            t = "running";
         } else if (isSelecting) {
             bw.setMessage(Text.of("Click a slot..."));
+            t = "selecting";
         } else bw.setMessage(Text.of("Slot spammer"));
-
+        DrawableHelper.drawCenteredText(matrices, textRenderer, "Slot spammer " + t, width / 2, 1, 0xFFFFFF);
         if (SlotSpammer.slotToSpam != null) {
             Renderer.fill(Renderer.modify(Client.getCurrentRGB(), -1, -1, -1, 100), this.x + SlotSpammer.slotToSpam.x, this.y + SlotSpammer.slotToSpam.y, this.x + SlotSpammer.slotToSpam.x + 16, this.y + SlotSpammer.slotToSpam.y + 16);
         }

@@ -62,6 +62,7 @@ public class ModuleRegistry {
         modules.add(new TexPackSpoof());
         modules.add(new Bunker());
         modules.add(new SlotSpammer());
+        modules.add(new VerticalPhase());
     }
 
     public static List<Module> getModules() {
