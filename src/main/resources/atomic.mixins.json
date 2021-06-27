@@ -4,13 +4,13 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "chat.ScreenMixin",
+    "game.BlockHitResultMixin",
     "game.ClientPlayerEntityMixin",
     "game.IdentifierMixin",
     "game.IMinecraftClientAccessor",
     "game.MinecraftClientMixin",
     "game.entity.ClientPlayerEntityMixin",
-    "game.entity.IEntity",
-    "game.entity.LivingEntityAccessor",
+    "game.entity.ILivingEntityAccessor",
     "game.entity.LivingEntityMixin",
     "game.render.AbstractBlockStateMixin",
     "game.render.BlockMixin",
@@ -28,7 +28,8 @@
     "game.screen.TitleScreenMixin",
     "network.ClientConnectionMixin",
     "network.ClientPlayNetworkHandlerMixin",
-    "network.PlayerMoveC2SPacketAccessor"
+    "network.IPlayerInteractBlockC2SPacket",
+    "network.IPlayerMoveC2SPacketAccessor"
   ],
   "client": [],
   "server": [],

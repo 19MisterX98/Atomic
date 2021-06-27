@@ -8,10 +8,7 @@ import me.zeroX150.atomic.feature.module.impl.external.*;
 import me.zeroX150.atomic.feature.module.impl.movement.*;
 import me.zeroX150.atomic.feature.module.impl.render.*;
 import me.zeroX150.atomic.feature.module.impl.testing.TestModule;
-import me.zeroX150.atomic.feature.module.impl.world.Bunker;
-import me.zeroX150.atomic.feature.module.impl.world.Fullbright;
-import me.zeroX150.atomic.feature.module.impl.world.Nuker;
-import me.zeroX150.atomic.feature.module.impl.world.XRAY;
+import me.zeroX150.atomic.feature.module.impl.world.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +59,8 @@ public class ModuleRegistry {
         modules.add(new VerticalPhase());
         modules.add(new Freecam());
         modules.add(new NoPush());
+        modules.add(new BuildLimit());
+        modules.add(new WaterClutch());
     }
 
     public static List<Module> getModules() {

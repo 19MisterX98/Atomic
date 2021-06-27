@@ -7,12 +7,12 @@ import me.zeroX150.atomic.feature.module.config.MultiValue;
 import me.zeroX150.atomic.feature.module.config.SliderValue;
 import me.zeroX150.atomic.helper.event.Event;
 import me.zeroX150.atomic.helper.event.EventSystem;
-import me.zeroX150.atomic.mixin.network.PlayerMoveC2SPacketAccessor;
+import me.zeroX150.atomic.mixin.network.IPlayerMoveC2SPacketAccessor;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
 /**
- * @see PlayerMoveC2SPacketAccessor
+ * @see IPlayerMoveC2SPacketAccessor
  */
 public class NoFall extends Module {
     public static MultiValue mode;
@@ -26,7 +26,7 @@ public class NoFall extends Module {
             if (!this.isEnabled()) return;
             if (event.getPacket() instanceof PlayerMoveC2SPacket) {
                 if (mode.getValue().equalsIgnoreCase("onground")) {
-                    ((PlayerMoveC2SPacketAccessor) event.getPacket()).setOnGround(true);
+                    ((IPlayerMoveC2SPacketAccessor) event.getPacket()).setOnGround(true);
                 }
             }
         });

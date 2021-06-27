@@ -1,20 +1,17 @@
-package me.zeroX150.atomic.feature.module.impl.movement;
+package me.zeroX150.atomic.feature.module.impl.external;
 
-import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleType;
-import me.zeroX150.atomic.mixin.game.entity.ILivingEntityAccessor;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class NoJumpCooldown extends Module {
-    public NoJumpCooldown() {
-        super("NoJumpCooldown", "removes gay shit", ModuleType.MOVEMENT);
+public class BuildLimit extends Module {
+    public BuildLimit() {
+        super("BuildLimit", "places shit below you", ModuleType.WORLD);
     }
 
     @Override
     public void tick() {
-        if (Atomic.client.player == null || Atomic.client.getNetworkHandler() == null) return;
-        ((ILivingEntityAccessor) Atomic.client.player).setJumpingCooldown(0);
+
     }
 
     @Override
