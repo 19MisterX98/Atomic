@@ -5,8 +5,8 @@ import java.util.List;
 
 public class DynamicValue<T> {
     private final String key;
+    public List<SelectorRunnable> selectors = new ArrayList<>();
     protected T value;
-    List<SelectorRunnable> selectors = new ArrayList<>();
 
     public DynamicValue(String key, T value) {
         this.key = key;

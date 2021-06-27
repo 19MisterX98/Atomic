@@ -35,6 +35,7 @@ public class ConfigWidget {
         List<DynamicValue<?>> v = parent.config.getAll();
         if (parent.config.organizeClickGUIList) {
             v.sort(Comparator.comparingInt(value -> value.getKey().equalsIgnoreCase("keybind") ? -1 : Atomic.client.textRenderer.getWidth(value.getKey())));
+            v.sort(Comparator.comparingInt(value -> value.selectors.size()));
         }
 
         for (DynamicValue<?> dynamicValue : v) {

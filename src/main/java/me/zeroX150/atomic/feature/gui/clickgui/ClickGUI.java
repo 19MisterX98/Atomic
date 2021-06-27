@@ -28,6 +28,7 @@ public class ClickGUI extends Screen {
 
     public static Color INACTIVE = new Color(17, 17, 17, 220);
     public static Color ACTIVE = new Color(40, 40, 40, 220);
+    public static Color L_HIGHLIGHT = new Color(0, 194, 111, 220);
     public static Color HEADER_RET = new Color(38, 38, 38, 255);
     public static Color HEADER_EXP = new Color(49, 49, 49, 255);
 

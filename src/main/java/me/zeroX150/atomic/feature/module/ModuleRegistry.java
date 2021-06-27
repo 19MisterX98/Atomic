@@ -61,6 +61,7 @@ public class ModuleRegistry {
         modules.add(new NoPush());
         modules.add(new BuildLimit());
         modules.add(new WaterClutch());
+        modules.add(new Zoom());
     }
 
     public static List<Module> getModules() {
