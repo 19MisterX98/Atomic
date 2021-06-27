@@ -3,6 +3,7 @@ package me.zeroX150.atomic.feature.gui.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.gui.clickgui.ClickGUI;
+import me.zeroX150.atomic.feature.gui.particles.ParticleManager;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
@@ -14,6 +15,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 public class HomeScreen extends Screen {
+    ParticleManager pm = new ParticleManager(500);
 
     public HomeScreen() {
         super(Text.of("a"));
@@ -31,8 +33,15 @@ public class HomeScreen extends Screen {
     }
 
     @Override
+    public void tick() {
+        pm.tick();
+        super.tick();
+    }
+
+    @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         renderBackgroundTexture(0);
+        pm.render();
         double logoSize = 0.3;
         RenderSystem.setShaderTexture(0, ClickGUI.LOGO);
         RenderSystem.enableBlend();

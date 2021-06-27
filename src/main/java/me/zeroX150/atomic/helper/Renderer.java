@@ -187,6 +187,30 @@ public class Renderer {
         RenderSystem.disableBlend();
     }
 
+    public static void gradientLineScreen(Color start, Color end, double x, double y, double x1, double y1) {
+        float g = start.getRed() / 255f;
+        float h = start.getGreen() / 255f;
+        float k = start.getBlue() / 255f;
+        float f = start.getAlpha() / 255f;
+        float g1 = end.getRed() / 255f;
+        float h1 = end.getGreen() / 255f;
+        float k1 = end.getBlue() / 255f;
+        float f1 = end.getAlpha() / 255f;
+        Matrix4f m = new MatrixStack().peek().getModel();
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        RenderSystem.enableBlend();
+        RenderSystem.disableTexture();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
+        bufferBuilder.vertex(m, (float) x, (float) y, 0f).color(g, h, k, f).next();
+        bufferBuilder.vertex(m, (float) x1, (float) y1, 0f).color(g1, h1, k1, f1).next();
+        bufferBuilder.end();
+        BufferRenderer.draw(bufferBuilder);
+        RenderSystem.enableTexture();
+        RenderSystem.disableBlend();
+    }
+
     public static Vec3d getCrosshairVector() {
 
         Camera camera = Atomic.client.gameRenderer.getCamera();
