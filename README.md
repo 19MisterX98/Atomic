@@ -1,4 +1,4 @@
-# ![image](https://raw.githubusercontent.com/cornos/Atomic/master/src/main/resources/assets/atomic/logo.png) client
+![image](https://raw.githubusercontent.com/cornos/Atomic/master/src/main/resources/assets/atomic/logo.png)
 
 ## Why?
 This is the sequel to [cornos](https://cornos.cf), but ported to 1.17, with a new look and functionality. Cornos became a bit stale, so I decided to start this.
