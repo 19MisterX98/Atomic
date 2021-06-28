@@ -3,6 +3,7 @@ package me.zeroX150.atomic.feature.gui.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.gui.clickgui.ClickGUI;
+import me.zeroX150.atomic.feature.gui.overlay.WelcomeOverlay;
 import me.zeroX150.atomic.feature.gui.particles.ParticleManager;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
@@ -15,7 +16,8 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 public class HomeScreen extends Screen {
-    ParticleManager pm = new ParticleManager(500);
+    static boolean shownWelcome = false;
+    ParticleManager pm = new ParticleManager(200);
 
     public HomeScreen() {
         super(Text.of("a"));
@@ -23,6 +25,10 @@ public class HomeScreen extends Screen {
 
     @Override
     protected void init() {
+        if (!shownWelcome) {
+            shownWelcome = true;
+            Atomic.client.setOverlay(new WelcomeOverlay());
+        }
         addDrawableChild(createCentered("Singleplayer", height / 2 - 20 - 20 - 10, button -> Atomic.client.openScreen(new SelectWorldScreen(this))));
         addDrawableChild(createCentered("Multiplayer", height / 2 - 25, button -> Atomic.client.openScreen(new MultiplayerScreen(this))));
         addDrawableChild(createCentered("Realms", height / 2, button -> Atomic.client.openScreen(new RealmsMainScreen(this))));

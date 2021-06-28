@@ -18,6 +18,7 @@
     "game.render.EntityRendererMixin",
     "game.render.EntryListWidgetMixin",
     "game.render.GameRendererMixin",
+    "game.render.IGameRendererMixin",
     "game.render.InGameHudMixin",
     "game.render.ISliderWidgetAccessor",
     "game.render.TextFieldWidgetMixin",

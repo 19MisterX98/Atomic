@@ -27,14 +27,17 @@ public class ParticleManager {
     }
 
     public void render() {
+        int w = Atomic.client.getWindow().getScaledWidth();
+        int h = Atomic.client.getWindow().getScaledHeight();
         for (Particle particle : particles) {
             Renderer.fill(Renderer.modify(particle.color, -1, -1, -1, (int) MathHelper.clamp(particle.brightness * 255, 0, 255)), particle.x - 0.5, particle.y - 0.5, particle.x + .5, particle.y + .5);
             for (Particle particle1 : particles) {
                 Vec2f v = new Vec2f((float) particle1.x, (float) particle1.y);
                 Vec2f v1 = new Vec2f((float) particle.x, (float) particle.y);
                 double dist = v1.distanceSquared(v);
-                if (dist < 3000) {
-                    double dCalc = dist / 3000d;
+                double md = 3 * (w + h);
+                if (dist < md) {
+                    double dCalc = dist / md;
                     double dCalcR = Math.abs(1 - dCalc);
                     Renderer.gradientLineScreen(Renderer.modify(particle.color, -1, -1, -1, (int) MathHelper.clamp(particle.brightness * 255 * dCalcR, 0, 255)), Renderer.modify(particle1.color, -1, -1, -1, (int) MathHelper.clamp(particle1.brightness * 255 * dCalcR, 0, 255)), particle.x, particle.y, particle1.x, particle1.y);
                 }

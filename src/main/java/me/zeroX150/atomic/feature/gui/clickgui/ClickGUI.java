@@ -7,6 +7,7 @@ import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.helper.Renderer;
+import me.zeroX150.atomic.mixin.game.render.IGameRendererMixin;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -46,6 +47,7 @@ public class ClickGUI extends Screen {
     int currentSortMode = 0;
     boolean closed = false;
     String desc = "";
+    boolean alreadyInitialized = false;
 
     public ClickGUI() {
         super(Text.of(""));
@@ -97,10 +99,14 @@ public class ClickGUI extends Screen {
     @Override
     public void onClose() {
         closed = true;
+        alreadyInitialized = false;
     }
 
     @Override
     protected void init() {
+        if (!alreadyInitialized)
+            ((IGameRendererMixin) Atomic.client.gameRenderer).callLoadShader(new Identifier("shaders/post/antialias.json"));
+        alreadyInitialized = true;
         aProg = 1;
         closed = false;
         int off = 21;
@@ -177,8 +183,10 @@ public class ClickGUI extends Screen {
         double a = 0.009 * (delta + 1);
         aProg += closed ? a : -a;
         aProg = MathHelper.clamp(aProg, 0, 1);
+
         if (aProg == 1 && closed) {
             Atomic.client.openScreen(null);
+            ((IGameRendererMixin) Atomic.client.gameRenderer).callLoadShader(new Identifier("shaders/post/none.json"));
             return;
         }
         double aProgI = easeOutBounce(aProg);
