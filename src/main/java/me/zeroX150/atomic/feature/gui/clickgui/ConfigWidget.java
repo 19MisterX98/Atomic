@@ -126,7 +126,7 @@ public class ConfigWidget {
         lastRenderY += (yDiff / me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
         if (lastRenderY > Atomic.client.getWindow().getScaledHeight() + 5) ClickGUI.INSTANCE.showModuleConfig(null);
 
-        Renderer.fill(ms, ClickGUI.HEADER_EXP, lastRenderX - margin, lastRenderY - margin, lastRenderX + width + margin, lastRenderY + 9 + margin);
+        Renderer.fill(ms, ClickGUI.currentActiveTheme.h_exp(), lastRenderX - margin, lastRenderY - margin, lastRenderX + width + margin, lastRenderY + 9 + margin);
         Renderer.fill(ms, new Color(238, 37, 37, 255), lastRenderX + width + 1, lastRenderY - margin + 1, lastRenderX + width + margin - 1, lastRenderY + 9 + margin - 1);
         //DrawableHelper.fill(ms, (int) (lastRenderX - margin), (int) (lastRenderY - margin), (int) (lastRenderX + width + margin), (int) (lastRenderY + 9 + margin), ClickGUI.HEADER_EXP.getRGB());
         //DrawableHelper.fill(ms, (int) (lastRenderX + width + 1), (int) (lastRenderY - margin + 1), (int) (lastRenderX + width + margin - 1), (int) (lastRenderY + 9 + margn - 1), new Color(238, 37, 37, 255).getRGB());
@@ -136,16 +136,16 @@ public class ConfigWidget {
             List<ClickableWidget> w = children.get(dynamicValue);
             maxOffset += 12 * w.size();
         }
-        Renderer.fill(ms, ClickGUI.HEADER_RET, lastRenderX, lastRenderY + 9 + margin, lastRenderX + width, lastRenderY + maxOffset + 1);
+        Renderer.fill(ms, ClickGUI.currentActiveTheme.h_ret(), lastRenderX, lastRenderY + 9 + margin, lastRenderX + width, lastRenderY + maxOffset + 1);
         //DrawableHelper.fill(ms, (int) lastRenderX, (int) (lastRenderY + 9 + margin), (int) (lastRenderX + width), (int) (lastRenderY + maxOffset + 1), ClickGUI.HEADER_RET.getRGB());
-        Atomic.fontRenderer.drawCenteredString(ms, parent.getName() + " config", lastRenderX + (width / 2f), lastRenderY - 1, 0xFFFFFF);
+        Atomic.fontRenderer.drawCenteredString(ms, parent.getName() + " config", lastRenderX + (width / 2f), lastRenderY, ClickGUI.currentActiveTheme.fontColor().getRGB());
         //DrawableHelper.drawCenteredText(ms, Atomic.client.textRenderer, parent.getName() + " config", (int) (lastRenderX + (width / 2)), (int) (lastRenderY + 1), 0xFFFFFF);
         int yOffset = (int) Math.ceil(9 + (margin * 2)) - 1;
         List<DynamicValue<?>> dvL = new ArrayList<>(children.keySet());
         for (DynamicValue<?> child1 : dvL) {
             if (!child1.shouldShow()) continue;
             List<ClickableWidget> children = this.children.get(child1);
-            int c = 0xFFFFFF;
+            int c = ClickGUI.currentActiveTheme.fontColor().getRGB();
             if (child1 instanceof ColorValue a) {
                 c = a.getColor().getRGB();
                 Atomic.fontRenderer.drawCenteredString(ms, child1.getKey() + " R", lastRenderX + (width / 4f), lastRenderY + yOffset, c);

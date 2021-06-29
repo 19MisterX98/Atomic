@@ -28,9 +28,9 @@ public class Slider extends ClickableWidget {
 
     @Override
     public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        fill(matrices, x, y, x + width, y + height, ClickGUI.INACTIVE.getRGB());
-        fill(matrices, x, y, (int) (x + (width * getValue())), y + height, ClickGUI.ACTIVE.getRGB());
-        Atomic.fontRenderer.drawCenteredString(matrices, Client.roundToN(value, prec) + "", x + width / 2f, y + height / 2f - 8 / 2f, 0xFFFFFF);
+        fill(matrices, x, y, x + width, y + height, ClickGUI.currentActiveTheme.inactive().getRGB());
+        fill(matrices, x, y, (int) (x + (width * getValue())), y + height, ClickGUI.currentActiveTheme.active().getRGB());
+        Atomic.fontRenderer.drawCenteredString(matrices, Client.roundToN(value, prec) + "", x + width / 2f, y + height / 2f - 8 / 2f, ClickGUI.currentActiveTheme.fontColor().getRGB());
         //drawCenteredText(matrices, Atomic.client.textRenderer, Client.roundToN(value, prec) + "", x + (width / 2), y + (height / 2 - (9 / 2)), 0xFFFFFF);
     }
 

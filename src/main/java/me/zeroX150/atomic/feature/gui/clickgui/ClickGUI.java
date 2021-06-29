@@ -7,6 +7,7 @@ import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.helper.Renderer;
+import me.zeroX150.atomic.helper.Transitions;
 import me.zeroX150.atomic.mixin.game.render.IGameRendererMixin;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -26,11 +27,7 @@ import java.util.stream.Collectors;
 public class ClickGUI extends Screen {
     public static ClickGUI INSTANCE;
 
-    public static Color INACTIVE = new Color(17, 17, 17, 220);
-    public static Color ACTIVE = new Color(40, 40, 40, 220);
-    public static Color L_HIGHLIGHT = new Color(0, 194, 111, 220);
-    public static Color HEADER_RET = new Color(38, 38, 38, 255);
-    public static Color HEADER_EXP = new Color(49, 49, 49, 255);
+    public static Themes.Palette currentActiveTheme = Themes.Theme.ATOMIC.getPalette();
 
     public static Identifier LOGO = new Identifier("atomic", "logo.png");
 
@@ -188,6 +185,23 @@ public class ClickGUI extends Screen {
             ((IGameRendererMixin) Atomic.client.gameRenderer).callLoadShader(new Identifier("shaders/post/none.json"));
             return;
         }
+
+        Themes.Palette cTheme = currentActiveTheme;
+        Themes.Theme aTheme = switch (me.zeroX150.atomic.feature.module.impl.render.ClickGUI.theme.getValue().toLowerCase()) {
+            case "walmart sigma" -> Themes.Theme.SIGMA;
+            default -> Themes.Theme.ATOMIC;
+        };
+        Color newInactive = Transitions.transition(cTheme.inactive(), aTheme.p.inactive(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
+        Color newActive = Transitions.transition(cTheme.active(), aTheme.p.active(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
+        Color newHiglight = Transitions.transition(cTheme.l_highlight(), aTheme.p.l_highlight(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
+        Color newRet = Transitions.transition(cTheme.h_ret(), aTheme.p.h_ret(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
+        Color newExp = Transitions.transition(cTheme.h_exp(), aTheme.p.h_exp(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
+        Color newFCol = Transitions.transition(cTheme.fontColor(), aTheme.p.fontColor(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
+        double newMargin = Transitions.transition(cTheme.h_margin(), aTheme.p.h_margin(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
+        double newPadding = Transitions.transition(cTheme.h_paddingX(), aTheme.p.h_paddingX(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
+        currentActiveTheme = new Themes.Palette(newInactive, newActive, newHiglight, newRet, newExp, newFCol, newMargin, newPadding);
+
+
         double aProgI = easeOutBounce(aProg);
         fill(matrices, 0, 0, width, height, Renderer.lerp(new Color(0, 0, 0, 0), new Color(0, 0, 0, 0x50), aProgI).getRGB());
         matrices.translate(-aProgI * width, 0, 0);
@@ -211,7 +225,7 @@ public class ClickGUI extends Screen {
             ms.translate(0, aProgI * height, 0);
             container.render(ms, delta);
         }
-        Atomic.fontRenderer.drawCenteredString(matrices, desc, width / 2f, height - 70, 0xFFFFFF);
+        Atomic.fontRenderer.drawCenteredString(matrices, desc, width / 2f, height - 70, ClickGUI.currentActiveTheme.fontColor().getRGB());
         //DrawableHelper.drawCenteredText(matrices, Atomic.client.textRenderer, desc, width / 2, height - 70, 0xFFFFFF);
         desc = "";
         super.render(matrices, mouseX, mouseY, delta);

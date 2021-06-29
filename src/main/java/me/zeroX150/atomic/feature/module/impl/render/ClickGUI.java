@@ -4,6 +4,7 @@ import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.feature.module.config.BooleanValue;
+import me.zeroX150.atomic.feature.module.config.MultiValue;
 import me.zeroX150.atomic.feature.module.config.SliderValue;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -14,6 +15,8 @@ public class ClickGUI extends Module {
     public static BooleanValue enableTails;
     public static SliderValue tailSize;
 
+    public static MultiValue theme;
+
     public ClickGUI() {
         super("ClickGUI", "Opens the click gui", ModuleType.RENDER);
         logoSize = this.config.create("Logo size", 0.28, 0, 1, 2);
@@ -21,6 +24,7 @@ public class ClickGUI extends Module {
         dragFactor = this.config.create("Drag factor", 1.5, 0, 3, 1);
         enableTails = this.config.create("Enable tails", true);
         tailSize = this.config.create("Tail size", 50, 10, 200, 0);
+        theme = this.config.create("Theme", "Atomic", "Atomic", "Walmart Sigma");
         tailSize.showOnlyIf(() -> enableTails.getValue());
         this.config.get("Keybind").setValue(344);
     }

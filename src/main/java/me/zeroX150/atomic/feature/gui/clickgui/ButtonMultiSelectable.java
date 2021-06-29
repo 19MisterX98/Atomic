@@ -25,8 +25,8 @@ public class ButtonMultiSelectable extends ButtonWidget {
 
     @Override
     public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        fill(matrices, x, y, x + width, y + height, this.isHovered() ? ClickGUI.ACTIVE.getRGB() : ClickGUI.INACTIVE.getRGB());
-        Atomic.fontRenderer.drawCenteredString(matrices, this.getMessage().asString(), x + (width / 2f), y + (height / 4f - 1), 0xFFFFFF);
+        fill(matrices, x, y, x + width, y + height, (this.isHovered() ? ClickGUI.currentActiveTheme.active() : ClickGUI.currentActiveTheme.inactive()).getRGB());
+        Atomic.fontRenderer.drawCenteredString(matrices, this.getMessage().asString(), x + (width / 2f), y + (height / 4f - 1), ClickGUI.currentActiveTheme.fontColor().getRGB());
         //DrawableHelper.drawCenteredText(matrices, Atomic.client.textRenderer, this.getMessage(), x + (width / 2), y + (height / 2 - 9 / 2), 0xFFFFFF);
     }
 }

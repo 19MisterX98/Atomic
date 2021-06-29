@@ -194,6 +194,8 @@ public class FontRenderer {
     }
 
     public final void drawString(MatrixStack matrixStack, String text, float x, float y, FontType fontType, int color) {
+        Color c = new Color(color);
+        if (c.getRed() < 50 && c.getGreen() < 50 && c.getBlue() < 50) fontType = FontType.NORMAL;
         matrixStack.scale(0.5f, 0.5f, 1);
         Color o = new Color(color);
         drawString(matrixStack, text, x, y, fontType, color, Renderer.modify(o, 0, 0, 0, Math.min(0xBB, o.getAlpha())).getRGB());
@@ -201,6 +203,13 @@ public class FontRenderer {
     }
 
     private void drawer(MatrixStack matrixStack, String text, float x, float y, int color) {
+        StringBuilder finalText = new StringBuilder();
+
+        for (char c : text.toCharArray()) {
+            if (c >= this.startChar && c <= this.endChar) finalText.append(c);
+            else finalText.append("?");
+        }
+        text = finalText.toString();
         x *= 2.0F;
         y *= 2.0F;
         RenderSystem.enableBlend();
@@ -240,9 +249,7 @@ public class FontRenderer {
                     char c = scramble ? obfText.charAt((int) (new Random().nextFloat() * (obfText.length() - 1))) : text.charAt(i);
                     drawChar(matrixStack, c, x, y, newColor);
                     x += getStringWidth(Character.toString(c)) * 2.0F;
-                } catch (ArrayIndexOutOfBoundsException indexException) {
-                    char c = text.charAt(i);
-                    Atomic.log(Level.ERROR, "Can't draw character: " + c + " (" + Character.getNumericValue(c) + ")");
+                } catch (ArrayIndexOutOfBoundsException ignored) {
 
                 }
             }

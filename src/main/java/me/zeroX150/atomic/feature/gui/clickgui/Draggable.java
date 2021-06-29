@@ -16,8 +16,6 @@ import java.util.Objects;
 public class Draggable {
     List<PositionD> recordedPositions = new ArrayList<>();
     double animProg = 0;
-    double margin = 4;
-    double paddingX = 4;
     double width = 100;
     double posX;
     double posY;
@@ -36,26 +34,34 @@ public class Draggable {
         this.expanded = isExpanded;
     }
 
+    double getMargin() {
+        return ClickGUI.currentActiveTheme.h_margin();
+    }
+
+    double getPaddingX() {
+        return ClickGUI.currentActiveTheme.h_paddingX();
+    }
+
     public void addChild(Clickable child) {
         this.children.add(child);
     }
 
     public boolean mouseClicked(boolean isLeft, double x, double y) {
-        if (lastRenderX + width + margin > x && lastRenderX - margin < x && lastRenderY + 9 + margin > y && lastRenderY - margin < y) {
+        if (lastRenderX + width + getMargin() > x && lastRenderX - getMargin() < x && lastRenderY + 9 + getMargin() > y && lastRenderY - getMargin() < y) {
             if (isLeft) {
                 this.dragged = true;
             } else this.expanded = !this.expanded;
             return true;
         } else if (this.expanded) {
-            double yOffset = 9 + margin * 2;
+            double yOffset = 9 + getMargin() * 2;
             for (Clickable child : children) {
                 double childPosY = lastRenderY + yOffset;
                 double childPosX = lastRenderX;
-                if (childPosX + width + margin > x && childPosX - margin < x && childPosY + 9 + margin > y && childPosY - margin < y) {
+                if (childPosX + width + getMargin() > x && childPosX - getMargin() < x && childPosY + 9 + getMargin() > y && childPosY - getMargin() < y) {
                     child.clicked(isLeft);
                     break;
                 }
-                yOffset += 9 + margin * 2;
+                yOffset += 9 + getMargin() * 2;
             }
         }
         return false;
@@ -90,11 +96,11 @@ public class Draggable {
         if (Math.abs(nyDiff) < 0.02) nyDiff = yDiff;
         lastRenderX -= nxDiff;
         lastRenderY -= nyDiff;
-        stack.translate(lastRenderX - margin - paddingX, lastRenderY - margin, 0);
+        stack.translate(lastRenderX - getMargin() - getPaddingX(), lastRenderY - getMargin(), 0);
         double rotation = MathHelper.clamp(lrXDiff, -50, 50) * me.zeroX150.atomic.feature.module.impl.render.ClickGUI.dragFactor.getValue();
         rotation += Math.sin(animProgInter * Math.PI * 2) * 10;
         stack.multiply(new Quaternion(new Vec3f(0, 0, 1), (float) (rotation), true));
-        PositionD v = new PositionD(lastRenderX - margin - paddingX, lastRenderY - margin, rotation);
+        PositionD v = new PositionD(lastRenderX - getMargin() - getPaddingX(), lastRenderY - getMargin(), rotation);
         if (!recordedPositions.contains(v)) recordedPositions.add(v);
         else recordedPositions.add(null);
         while (recordedPositions.size() > me.zeroX150.atomic.feature.module.impl.render.ClickGUI.tailSize.getValue())
@@ -108,20 +114,20 @@ public class Draggable {
                 ms.translate(recordedPosition.x(), recordedPosition.y(), -100);
                 ms.multiply(new Quaternion(new Vec3f(0, 0, 1), (float) (recordedPosition.rot()), true));
                 Color c = Renderer.modify(new Color(Color.HSBtoRGB((float) val, 0.6f, 0.6f)), -1, -1, -1, 30);
-                Renderer.fill(ms, c, -paddingX, 0, width + margin + paddingX * 2, 9 + margin * 2);
+                Renderer.fill(ms, c, -getPaddingX() * 2, 0, width + getMargin() + getPaddingX() * 2 + 4, 9 + getMargin() * 2);
                 val += incr;
             }
         if (this.animProg != 0) {
-            double yOffset = 9 + margin * 2;
+            double yOffset = 9 + getMargin() * 2;
             for (Clickable child : children) {
-                child.render(margin, margin + (yOffset * animProgInter), stack, animProgInter, lastRenderX, lastRenderY + (yOffset * animProgInter), delta);
-                yOffset += 9 + margin * 2;
+                child.render(getMargin(), getMargin() + (yOffset * animProgInter), stack, animProgInter, lastRenderX, lastRenderY + (yOffset * animProgInter), delta);
+                yOffset += 9 + getMargin() * 2;
             }
         }
-        DrawableHelper.fill(stack, (int) -paddingX, 0, (int) (width + margin + paddingX * 2), (int) (9 + margin * 2), Renderer.lerp(ClickGUI.HEADER_EXP, ClickGUI.HEADER_RET, animProgInter).getRGB());
-        Atomic.fontRenderer.drawCenteredString(stack, title, margin + width / 2f, margin, 0xFFFFFF);
-        //DrawableHelper.drawCenteredText(stack, Atomic.client.textRenderer, title, (int) (margin + (width / 2)), (int) margin, 0xFFFFFF);
-        stack.translate(-(lastRenderX - margin - paddingX), -(lastRenderY - margin), 0);
+        DrawableHelper.fill(stack, (int) -(getPaddingX() * 2), 0, (int) (width + getMargin() + 4 + getPaddingX() * 2), (int) (9 + getMargin() * 2), Renderer.lerp(ClickGUI.currentActiveTheme.h_exp(), ClickGUI.currentActiveTheme.h_ret(), animProgInter).getRGB());
+        Atomic.fontRenderer.drawCenteredString(stack, title, getMargin() + width / 2f, getMargin(), ClickGUI.currentActiveTheme.fontColor().getRGB());
+        //DrawableHelper.drawCenteredText(stack, Atomic.client.textRenderer, title, (int) (getMargin() + (width / 2)), (int) margin, 0xFFFFFF);
+        stack.translate(-(lastRenderX - getMargin() - getPaddingX()), -(lastRenderY - getMargin()), 0);
     }
 
     public void mouseMove(double deltaX, double deltaY) {
