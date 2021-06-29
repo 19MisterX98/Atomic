@@ -264,7 +264,7 @@ public class OreSim extends Module {
                     h.put(ore.name, ores);
                     continue;
                 }
-                repeat = random.nextInt(19) + 6;
+                repeat = random.nextInt(3) + 6;
             }
 
             for (int i = 0; i < repeat; i++) {
@@ -459,7 +459,7 @@ public class OreSim extends Module {
                         Generator.DEFAULT, "overworld", gold, new Color(247, 229, 30)),
                 new Ore(OreType.REDSTONE, 10, 6, 0, 16, 8, 8, false,
                         Generator.DEFAULT, "overworld", redstone, new Color(245, 7, 23)),
-                new Ore(OreType.DIAMOND, 11, 6, 0, 17, 8, 1, false,
+                new Ore(OreType.DIAMOND, 11, 6, 0, 16, 8, 1, false,
                         Generator.DEFAULT, "overworld", diamond, new Color(33, 244, 255)),
                 new Ore(OreType.LAPIS, 12, 6, 16, 16, 7, 1, true,
                         Generator.DEFAULT, "overworld", lapis, new Color(8, 26, 189)),
