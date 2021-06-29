@@ -11,9 +11,7 @@ import java.awt.*;
 
 public class WelcomeOverlay extends Overlay {
     String[] texts = new String[]{
-            "Welcome, " + Atomic.client.getSession().getUsername() + ".",
-            "We are getting things ready, for you.",
-            "Almost done...",
+            "Loading...",
             "Welcome, " + Atomic.client.getSession().getUsername() + ", to Atomic."
     };
     double d = 0;
@@ -33,11 +31,13 @@ public class WelcomeOverlay extends Overlay {
             return;
         }
 
-        d += 2 * delta;
+        d += 2.35 * delta;
         float c = (float) Math.abs(Math.sin(Math.toRadians(d)));
         int index = (int) Math.floor(d / 180);
         int c1 = Color.BLACK.getRGB();
+        boolean finalStage = false;
         if (index >= texts.length - 1) {
+            finalStage = true;
             if (prevVal > c) decl = true;
             if (decl) {
                 if (Atomic.client.currentScreen == null) Atomic.client.openScreen(new HomeScreen());
@@ -52,8 +52,9 @@ public class WelcomeOverlay extends Overlay {
             return;
         }
         if (c > 0.07) {
-            matrices.scale(1.5f, 1.5f, 1.5f);
-            DrawableHelper.drawCenteredText(matrices, Atomic.client.textRenderer, texts[index], (int) ((w / 2) / 1.5), (int) ((h / 2 - (9 / 2)) / 1.5), BackgroundHelper.ColorMixer.getArgb((int) (c * 255), 255, 255, 255));
+            float m = finalStage?1.5f:1.0f;
+            matrices.scale(m,m,m);
+            DrawableHelper.drawCenteredText(matrices, Atomic.client.textRenderer, texts[index], (int) ((w / 2) / m), (int) ((h / 2 - (9 / 2)) / m), BackgroundHelper.ColorMixer.getArgb((int) (c * 255), 255, 255, 255));
         }
     }
 }
