@@ -119,10 +119,10 @@ public class Hud extends Module {
         int xOffset = 2;
         for (HudEntry entry : entries) {
             String t = (entry.t.isEmpty() ? "" : entry.t + " ") + entry.v;
-            int width = Atomic.client.textRenderer.getWidth(t);
+            float width = Atomic.fontRenderer.getStringWidth(t);
             int offsetToUse = Atomic.client.getWindow().getScaledHeight() - (entry.renderTaskBar ? ((23 / 2 + 9 / 2)) : yOffset);
-            int xL = (entry.renderTaskBar && entry.renderRTaskBar) ? (Atomic.client.getWindow().getScaledWidth() - 5 - width) : xOffset;
-            if (xL == xOffset) xOffset += width + Atomic.client.textRenderer.getWidth(" ");
+            float xL = (entry.renderTaskBar && entry.renderRTaskBar) ? (Atomic.client.getWindow().getScaledWidth() - 5 - width) : xOffset;
+            if (xL == xOffset) xOffset += width + Atomic.fontRenderer.getStringWidth(" ");
             changedYOffset++;
             if (!entry.renderTaskBar && changedYOffset == 0) {
                 yOffset -= 10;
@@ -131,10 +131,13 @@ public class Hud extends Module {
             //Atomic.client.textRenderer.draw(ms,t,xL,offsetToUse,0xFFFFFF);
             if (!entry.t.isEmpty()) {
                 Color rgb = Client.getCurrentRGB();
-                Atomic.client.textRenderer.draw(ms, entry.t, xL, offsetToUse, Client.getCurrentRGB().getRGB());
-                Atomic.client.textRenderer.draw(ms, entry.v, xL + Atomic.client.textRenderer.getWidth(entry.t + " "), offsetToUse, rgb.darker().getRGB());
+                Atomic.fontRenderer.drawString(ms, entry.t, xL, offsetToUse, Client.getCurrentRGB().getRGB());
+                //Atomic.client.textRenderer.draw(ms, entry.t, xL, offsetToUse, Client.getCurrentRGB().getRGB());
+                Atomic.fontRenderer.drawString(ms, entry.v, xL + Atomic.fontRenderer.getStringWidth(entry.t + " "), offsetToUse, rgb.darker().getRGB());
+                //Atomic.client.textRenderer.draw(ms, entry.v, xL + Atomic.client.textRenderer.getWidth(entry.t + " "), offsetToUse, rgb.darker().getRGB());
             } else {
-                Atomic.client.textRenderer.draw(ms, t, xL, offsetToUse, Client.getCurrentRGB().getRGB());
+                Atomic.fontRenderer.drawString(ms, t, xL, offsetToUse, Client.getCurrentRGB().getRGB());
+                //Atomic.client.textRenderer.draw(ms, t, xL, offsetToUse, Client.getCurrentRGB().getRGB());
             }
         }
 
@@ -145,7 +148,7 @@ public class Hud extends Module {
             // jesus fuck
             Module[] v = ModuleRegistry.getModules().stream()
                     .filter(Module::isEnabled)
-                    .sorted(Comparator.comparingInt(value -> Atomic.client.textRenderer.getWidth(value.getName() + (value.getContext() != null ? " " + value.getContext() : "")))) // i mean it works?
+                    .sorted(Comparator.comparingDouble(value -> Atomic.fontRenderer.getStringWidth(value.getName() + (value.getContext() != null ? " " + value.getContext() : "")))) // i mean it works?
                     .toArray(Module[]::new);
             ArrayUtils.reverse(v);
             for (Module module : v) {
@@ -153,13 +156,13 @@ public class Hud extends Module {
                 int r = Color.HSBtoRGB(currentRgbSeed, 0.7f, 1f);
                 currentRgbSeed += rgbIncrementer;
                 String w = module.getName() + (module.getContext() == null ? "" : " " + module.getContext());
-                int wr = Atomic.client.getWindow().getScaledWidth() - Atomic.client.textRenderer.getWidth(w) - 3;
-                Atomic.client.textRenderer.draw(ms, module.getName(), wr, moduleOffset + 1, r);
+                float wr = Atomic.client.getWindow().getScaledWidth() - Atomic.fontRenderer.getStringWidth(w) - 3;
+                Atomic.fontRenderer.drawString(ms, module.getName(), wr, moduleOffset + 1, r);
                 Color c = new Color(r);
                 Color inv = new Color(Math.abs(c.getRed() - 255), Math.abs(c.getGreen() - 255), Math.abs(c.getBlue() - 255));
                 Renderer.fill(c, Atomic.client.getWindow().getScaledWidth() - 2, moduleOffset, Atomic.client.getWindow().getScaledWidth(), moduleOffset + 10);
                 if (module.getContext() != null)
-                    Atomic.client.textRenderer.draw(ms, module.getContext(), wr + Atomic.client.textRenderer.getWidth(module.getName() + " "), moduleOffset + 1, inv.getRGB());
+                    Atomic.fontRenderer.drawString(ms, module.getContext(), wr + Atomic.fontRenderer.getStringWidth(module.getName() + " "), moduleOffset + 1, inv.getRGB());
                 moduleOffset += 10;
             }
         }

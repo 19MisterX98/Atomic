@@ -119,7 +119,8 @@ public class Draggable {
             }
         }
         DrawableHelper.fill(stack, (int) -paddingX, 0, (int) (width + margin + paddingX * 2), (int) (9 + margin * 2), Renderer.lerp(ClickGUI.HEADER_EXP, ClickGUI.HEADER_RET, animProgInter).getRGB());
-        DrawableHelper.drawCenteredText(stack, Atomic.client.textRenderer, title, (int) (margin + (width / 2)), (int) margin, 0xFFFFFF);
+        Atomic.fontRenderer.drawCenteredString(stack, title, margin + width / 2f, margin, 0xFFFFFF);
+        //DrawableHelper.drawCenteredText(stack, Atomic.client.textRenderer, title, (int) (margin + (width / 2)), (int) margin, 0xFFFFFF);
         stack.translate(-(lastRenderX - margin - paddingX), -(lastRenderY - margin), 0);
     }
 

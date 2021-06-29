@@ -52,9 +52,8 @@ public class WelcomeOverlay extends Overlay {
             return;
         }
         if (c > 0.07) {
-            float m = finalStage?1.5f:1.0f;
-            matrices.scale(m,m,m);
-            DrawableHelper.drawCenteredText(matrices, Atomic.client.textRenderer, texts[index], (int) ((w / 2) / m), (int) ((h / 2 - (9 / 2)) / m), BackgroundHelper.ColorMixer.getArgb((int) (c * 255), 255, 255, 255));
+            Atomic.fontRenderer.drawCenteredString(matrices, texts[index], w / 2f, h / 2f, BackgroundHelper.ColorMixer.getArgb((int) (c * 255), 255, 255, 255));
+            //DrawableHelper.drawCenteredText(matrices, Atomic.client.textRenderer, texts[index], (int) ((w / 2) / m), (int) ((h / 2 - (9 / 2)) / m), BackgroundHelper.ColorMixer.getArgb((int) (c * 255), 255, 255, 255));
         }
     }
 }

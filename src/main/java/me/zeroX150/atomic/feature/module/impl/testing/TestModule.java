@@ -38,7 +38,7 @@ public class TestModule extends Module {
 
     @Override
     public void onHudRender() {
-        Atomic.client.textRenderer.draw(new MatrixStack(), "Screen: " + Atomic.client.currentScreen, 1, 1, 0xFFFFFF);
+        Atomic.fontRenderer.drawString(new MatrixStack(), "Screen: " + Atomic.client.currentScreen, 1, 1, 0xFFFFFF);
         if (System.currentTimeMillis() % 1000 == 0) {
             System.out.println(Atomic.client.currentScreen);
         }

@@ -36,7 +36,7 @@ public class Notification {
         List<String> splitContent = new ArrayList<>();
         StringBuilder line = new StringBuilder();
         for (String c : split.split(" +")) {
-            if (Atomic.client.textRenderer.getWidth(line + " " + c) >= 145) {
+            if (Atomic.fontRenderer.getStringWidth(line + " " + c) >= 145) {
                 splitContent.add(line.toString());
                 line = new StringBuilder();
             }

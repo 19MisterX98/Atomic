@@ -8,7 +8,6 @@ import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.helper.Renderer;
 import me.zeroX150.atomic.mixin.game.render.IGameRendererMixin;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GameRenderer;
@@ -212,8 +211,8 @@ public class ClickGUI extends Screen {
             ms.translate(0, aProgI * height, 0);
             container.render(ms, delta);
         }
-
-        DrawableHelper.drawCenteredText(matrices, Atomic.client.textRenderer, desc, width / 2, height - 70, 0xFFFFFF);
+        Atomic.fontRenderer.drawCenteredString(matrices, desc, width / 2f, height - 70, 0xFFFFFF);
+        //DrawableHelper.drawCenteredText(matrices, Atomic.client.textRenderer, desc, width / 2, height - 70, 0xFFFFFF);
         desc = "";
         super.render(matrices, mouseX, mouseY, delta);
     }

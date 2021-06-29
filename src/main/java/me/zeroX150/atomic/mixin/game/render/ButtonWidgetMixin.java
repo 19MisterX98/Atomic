@@ -74,9 +74,10 @@ public abstract class ButtonWidgetMixin {
         if (!b) {
             Renderer.fill(matrices, new Color(0, 194, 111, 255), x, y, x + (a + 1), y + height);
         } else {
-            DrawableHelper.fill(matrices, dxStart, dyStart, dxStart + dWidth, dyStart + dHeight, new Color(0, 194, 111, 255).getRGB());
+            DrawableHelper.fill(matrices, dxStart, dyStart, dxStart + dWidth, dyStart + dHeight + 1, new Color(0, 194, 111, 255).getRGB());
         }
         DrawableHelper.fill(matrices, x, y, x + width, y + height, this.active ? Renderer.lerp(new Color(38, 83, 92, 70), unselectedColor, a).getRGB() : disabledColor.getRGB());
+        //Atomic.fontRenderer.drawCenteredString(matrices, this.getMessage().asString(),this.x+this.width/2f,this.y+(this.height-8)/2f,Color.WHITE.getRGB());
         DrawableHelper.drawCenteredText(matrices, Atomic.client.textRenderer, this.getMessage(), this.x + this.width / 2,
                 this.y + (this.height - 8) / 2, Color.white.getRGB());
     }

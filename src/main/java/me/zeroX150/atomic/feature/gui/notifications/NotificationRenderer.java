@@ -57,9 +57,11 @@ public class NotificationRenderer {
             Renderer.fill(new Color(47, 47, 47, 170), notification.renderPosX, notification.renderPosY, notification.renderPosX + (150 * timeRemaining), notification.renderPosY + notifHeight);
 
             int currentYOffsetText = 2 + 9;
-            Atomic.client.textRenderer.draw(ms, notification.title, (int) notification.renderPosX + 2, (int) notification.renderPosY + 2, 0xFFFFFF);
+            Atomic.fontRenderer.drawString(ms, notification.title, notification.renderPosX + 2, notification.renderPosY + 2, 0xFFFFFF);
+            //Atomic.client.textRenderer.draw(ms, notification.title, (int) notification.renderPosX + 2, (int) notification.renderPosY + 2, 0xFFFFFF);
             for (String content : notification.contents) {
-                Atomic.client.textRenderer.draw(ms, content, (int) notification.renderPosX + 2, (int) notification.renderPosY + currentYOffsetText, 0xFFFFFF);
+                Atomic.fontRenderer.drawString(ms, content, notification.renderPosX + 2, notification.renderPosY + currentYOffsetText, 0xFFFFFF);
+                //Atomic.client.textRenderer.draw(ms, content, (int) notification.renderPosX + 2, (int) notification.renderPosY + currentYOffsetText, 0xFFFFFF);
                 currentYOffsetText += 9;
             }
             //if (currentYOffset == 0) currentYOffset += notifHeight + 2;

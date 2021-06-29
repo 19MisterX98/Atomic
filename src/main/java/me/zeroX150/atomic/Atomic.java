@@ -3,6 +3,7 @@ package me.zeroX150.atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.helper.ConfigManager;
+import me.zeroX150.atomic.helper.font.FontRenderer;
 import me.zeroX150.atomic.helper.keybind.KeybindManager;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
@@ -14,6 +15,7 @@ public class Atomic implements ModInitializer {
 
     public static final String MOD_ID = "atomic";
     public static final String MOD_NAME = "Atomic client";
+    public static FontRenderer fontRenderer;
     public static MinecraftClient client = MinecraftClient.getInstance();
     public static Logger LOGGER = LogManager.getLogger();
 
@@ -26,6 +28,7 @@ public class Atomic implements ModInitializer {
     @Override
     public void onInitialize() {
         log(Level.INFO, "Initializing");
+        fontRenderer = new FontRenderer(Atomic.class.getClassLoader().getResourceAsStream("Font.ttf"));
         KeybindManager.init();
         ConfigManager.loadState();
         Runtime.getRuntime().addShutdownHook(new Thread(ConfigManager::saveState));
