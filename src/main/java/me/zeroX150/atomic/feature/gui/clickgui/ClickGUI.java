@@ -199,7 +199,8 @@ public class ClickGUI extends Screen {
         Color newFCol = Transitions.transition(cTheme.fontColor(), aTheme.p.fontColor(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
         double newMargin = Transitions.transition(cTheme.h_margin(), aTheme.p.h_margin(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
         double newPadding = Transitions.transition(cTheme.h_paddingX(), aTheme.p.h_paddingX(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
-        currentActiveTheme = new Themes.Palette(newInactive, newActive, newHiglight, newRet, newExp, newFCol, newMargin, newPadding);
+        //double newTextOffset = Transitions.transition(cTheme.h_t_indent(), aTheme.p.h_t_indent(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
+        currentActiveTheme = new Themes.Palette(newInactive, newActive, newHiglight, newRet, newExp, newFCol, newMargin, newPadding, aTheme.p.centerText());
 
 
         double aProgI = easeOutBounce(aProg);

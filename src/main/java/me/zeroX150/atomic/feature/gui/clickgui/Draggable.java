@@ -120,12 +120,17 @@ public class Draggable {
         if (this.animProg != 0) {
             double yOffset = 9 + getMargin() * 2;
             for (Clickable child : children) {
-                child.render(getMargin(), getMargin() + (yOffset * animProgInter), stack, animProgInter, lastRenderX, lastRenderY + (yOffset * animProgInter), delta);
+                double px = this.dragged ? -1 : lastRenderX;
+                double py = this.dragged ? -1 : lastRenderY + (yOffset * animProgInter);
+                child.render(getMargin(), getMargin() + (yOffset * animProgInter), stack, animProgInter, px, py, delta);
                 yOffset += 9 + getMargin() * 2;
             }
         }
         DrawableHelper.fill(stack, (int) -(getPaddingX() * 2), 0, (int) (width + getMargin() + 4 + getPaddingX() * 2), (int) (9 + getMargin() * 2), Renderer.lerp(ClickGUI.currentActiveTheme.h_exp(), ClickGUI.currentActiveTheme.h_ret(), animProgInter).getRGB());
-        Atomic.fontRenderer.drawCenteredString(stack, title, getMargin() + width / 2f, getMargin(), ClickGUI.currentActiveTheme.fontColor().getRGB());
+        if (!ClickGUI.currentActiveTheme.centerText())
+            Atomic.fontRenderer.drawString(stack, title, getMargin(), getMargin() + 1, ClickGUI.currentActiveTheme.fontColor().getRGB());
+        else
+            Atomic.fontRenderer.drawCenteredString(stack, title, getMargin() + width / 2f, getMargin(), ClickGUI.currentActiveTheme.fontColor().getRGB());
         //DrawableHelper.drawCenteredText(stack, Atomic.client.textRenderer, title, (int) (getMargin() + (width / 2)), (int) margin, 0xFFFFFF);
         stack.translate(-(lastRenderX - getMargin() - getPaddingX()), -(lastRenderY - getMargin()), 0);
     }

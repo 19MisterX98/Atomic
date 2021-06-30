@@ -19,10 +19,9 @@ public class Clickable {
 
     public void render(double x, double y, MatrixStack stack, double animProgress, double actualX, double actualY, float delta) {
         //Atomic.client.textRenderer.draw(new MatrixStack(),parent.getName(),(float)x,(float)y,0xFFFFFF);
-        if (isHovered(actualX, actualY)) {
+        boolean isHovered = (actualX != -1 && actualY != -1 && isHovered(actualX, actualY));
+        if (isHovered) {
             ClickGUI.INSTANCE.renderDescription(parent.getDescription());
-        }
-        if (isHovered(actualX, actualY)) {
             animProg += 0.03 * (delta + 0.5);
         } else animProg -= 0.03 * (delta + 0.5);
         if (parent.isEnabled()) {
@@ -35,7 +34,10 @@ public class Clickable {
         DrawableHelper.fill(stack, (int) (x - margin), (int) Math.floor(y - margin), (int) (x + width + margin), (int) Math.floor(y + (margin + 9) * animProgress), ClickGUI.currentActiveTheme.inactive().getRGB());
         DrawableHelper.fill(stack, (int) (x - margin), (int) Math.floor(y - margin), (int) (x - margin + (width + margin * 2) * animProgInter), (int) Math.floor(y + (margin + 9) * animProgress), ClickGUI.currentActiveTheme.active().getRGB());
         DrawableHelper.fill(stack, (int) (x - margin), (int) Math.floor(y - margin), (int) (x - margin + 1), (int) Math.floor(y - margin + ((margin * 2 + 9) * animProg1Inter) * animProgress), ClickGUI.currentActiveTheme.l_highlight().getRGB());
-        Atomic.fontRenderer.drawCenteredString(stack, parent.getName(), (float) (x + (width / 2f)), (float) y, ClickGUI.currentActiveTheme.fontColor().getRGB());
+        if (ClickGUI.currentActiveTheme.centerText())
+            Atomic.fontRenderer.drawCenteredString(stack, parent.getName(), (float) (x + (width / 2f)), (float) y, ClickGUI.currentActiveTheme.fontColor().getRGB());
+        else
+            Atomic.fontRenderer.drawString(stack, parent.getName(), (float) (x), (float) y, ClickGUI.currentActiveTheme.fontColor().getRGB());
         //DrawableHelper.drawCenteredText(stack, Atomic.client.textRenderer, parent.getName(), (int) (x + (width / 2)), (int) y, 0xFFFFFF);
     }
 
