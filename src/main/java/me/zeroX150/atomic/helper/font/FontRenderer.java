@@ -190,7 +190,7 @@ public class FontRenderer {
     }
 
     public void drawCenteredString(MatrixStack matrixStack, String text, float x, float y, int color) {
-        drawString(matrixStack, text, (x - getStringWidth(text) / 2), y - (8 / 2f), FontType.SHADOW_THIN, color);
+        drawString(matrixStack, text, (x - getStringWidth(text) / 2), y - ((getStringHeight(text) - 2) / 2f), FontType.SHADOW_THIN, color);
     }
 
     public final void drawString(MatrixStack matrixStack, String text, float x, float y, FontType fontType, int color) {
@@ -433,7 +433,7 @@ public class FontRenderer {
     }
 
     public void drawString(MatrixStack ms, String title, double x, double y, int color) {
-        drawString(ms, title, (float) x, (float) y - 10 / 2f, FontType.SHADOW_THIN, color);
+        drawString(ms, title, (float) x, (float) y - (getStringHeight(title) - 2) / 2f, FontType.SHADOW_THIN, color);
     }
 
     public enum FontType {

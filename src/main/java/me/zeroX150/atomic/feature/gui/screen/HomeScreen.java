@@ -35,6 +35,7 @@ public class HomeScreen extends Screen {
         addDrawableChild(new ButtonWidget(width / 2 - 75, height / 2 + 25, 70, 20, Text.of("Options"), button -> Atomic.client.openScreen(new OptionsScreen(this, Atomic.client.options))));
         addDrawableChild(new ButtonWidget(width / 2 + 5, height / 2 + 25, 70, 20, Text.of("Quit"), button -> Atomic.client.stop()));
         addDrawableChild(new ButtonWidget(width / 2 - (150 / 2), height / 2 + 25 + 25, 150, 20, Text.of("Alts"), button -> Atomic.client.openScreen(new AltManager())));
+        addDrawableChild(new ButtonWidget(1, 1, 20, 20, Text.of("D"), button -> Atomic.client.openScreen(new TestScreen())));
         super.init();
     }
 

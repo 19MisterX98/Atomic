@@ -16,6 +16,7 @@ public class Atomic implements ModInitializer {
     public static final String MOD_ID = "atomic";
     public static final String MOD_NAME = "Atomic client";
     public static FontRenderer fontRenderer;
+    public static FontRenderer monoFontRenderer;
     public static MinecraftClient client = MinecraftClient.getInstance();
     public static Logger LOGGER = LogManager.getLogger();
 
@@ -29,6 +30,7 @@ public class Atomic implements ModInitializer {
     public void onInitialize() {
         log(Level.INFO, "Initializing");
         fontRenderer = new FontRenderer(Atomic.class.getClassLoader().getResourceAsStream("Font.ttf"));
+        monoFontRenderer = new FontRenderer(Atomic.class.getClassLoader().getResourceAsStream("Mono.ttf"));
         KeybindManager.init();
         ConfigManager.loadState();
         Runtime.getRuntime().addShutdownHook(new Thread(ConfigManager::saveState));
