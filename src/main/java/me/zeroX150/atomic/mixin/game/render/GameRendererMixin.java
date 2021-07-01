@@ -1,5 +1,6 @@
 package me.zeroX150.atomic.mixin.game.render;
 
+import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.feature.module.impl.render.Zoom;
@@ -16,6 +17,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
 
+    private boolean vb;
+    private boolean dis;
+
     @Inject(
             at = {@At(value = "FIELD",
                     target = "Lnet/minecraft/client/render/GameRenderer;renderHand:Z",
@@ -24,6 +28,10 @@ public class GameRendererMixin {
             method = {
                     "renderWorld(FJLnet/minecraft/client/util/math/MatrixStack;)V"})
     void onRenderWorld(float tickDelta, long limitTime, MatrixStack matrix, CallbackInfo ci) {
+        if (vb) {
+            Atomic.client.options.bobView = true;
+            vb = false;
+        }
         for (Module module : ModuleRegistry.getModules()) {
             if (module.isEnabled()) module.onWorldRender(matrix);
         }
@@ -33,5 +41,22 @@ public class GameRendererMixin {
     public void getFov(Camera camera, float tickDelta, boolean changingFov, CallbackInfoReturnable<Double> cir) {
         double zv = Zoom.getZoomValue(cir.getReturnValue());
         cir.setReturnValue(zv);
+    }
+
+    // Mixins are broken as shit in this version or something so I have to do it this fucking dumbass way
+
+    @Inject(at = @At("HEAD"), method = "renderWorld")
+    private void renderWorldHead(float tickDelta, long limitTime, MatrixStack matrix, CallbackInfo ci) {
+        dis = true;
+    }
+
+    @Inject(at = @At("HEAD"), method = "bobView", cancellable = true)
+    private void fixTracerBobbing(MatrixStack matrices, float f, CallbackInfo ci) {
+        if (Atomic.client.options.bobView && dis) {
+            vb = true;
+            Atomic.client.options.bobView = false;
+            dis = false;
+            ci.cancel();
+        }
     }
 }
