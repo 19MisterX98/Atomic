@@ -17,6 +17,18 @@ public class ModuleRegistry {
     static List<Module> modules = new ArrayList<>();
 
     static {
+        /* mods to add
+        *
+        * elytrafly
+        * autototem
+        * (seedcrackerx)
+        * nobreakdelay
+        * antilevitate
+        * hitboxes
+        * shulkerpeek
+        * inventory walk
+        * */
+
         modules.add(new TestModule());
         modules.add(new ClickGUI());
         modules.add(new AirJump());
