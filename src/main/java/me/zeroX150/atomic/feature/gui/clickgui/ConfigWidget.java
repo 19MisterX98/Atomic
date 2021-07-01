@@ -2,7 +2,7 @@ package me.zeroX150.atomic.feature.gui.clickgui;
 
 import com.google.common.collect.Lists;
 import me.zeroX150.atomic.Atomic;
-import me.zeroX150.atomic.feature.gui.widget.ConfTextFieldWidget;
+import me.zeroX150.atomic.feature.gui.widget.SimpleCustomTextFieldWidget;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.config.*;
 import me.zeroX150.atomic.helper.Renderer;
@@ -113,7 +113,7 @@ public class ConfigWidget {
                 children.put(dynamicValue, Lists.asList(red, new ClickableWidget[]{green, blue, isRGB}));
 
             } else {
-                ConfTextFieldWidget w = new ConfTextFieldWidget(1, yOffset, 100, 12, Text.of(dynamicValue.getKey())) {
+                SimpleCustomTextFieldWidget w = new SimpleCustomTextFieldWidget(1, yOffset, 100, 12, Text.of(dynamicValue.getKey())) {
                     @Override
                     public void event_onTextChange() {
                         dynamicValue.setValue(this.getText());
@@ -202,7 +202,7 @@ public class ConfigWidget {
     public void charTyped(char c, int mod) {
         for (List<ClickableWidget> children : this.children.values()) {
             for (ClickableWidget child : children) {
-                if (child instanceof ConfTextFieldWidget) child.charTyped(c, mod);
+                if (child instanceof SimpleCustomTextFieldWidget) child.charTyped(c, mod);
             }
         }
     }
@@ -218,7 +218,7 @@ public class ConfigWidget {
     public void keyPressed(int kc, int sc, int m) {
         for (List<ClickableWidget> children : this.children.values()) {
             for (ClickableWidget child : children) {
-                if (child instanceof ConfTextFieldWidget) child.keyPressed(kc, sc, m);
+                if (child instanceof SimpleCustomTextFieldWidget) child.keyPressed(kc, sc, m);
             }
         }
     }
@@ -226,7 +226,7 @@ public class ConfigWidget {
     public void keyReleased(int kc, int sc, int m) {
         for (List<ClickableWidget> children : this.children.values()) {
             for (ClickableWidget child : children) {
-                if (child instanceof ConfTextFieldWidget) child.keyReleased(kc, sc, m);
+                if (child instanceof SimpleCustomTextFieldWidget) child.keyReleased(kc, sc, m);
             }
         }
     }

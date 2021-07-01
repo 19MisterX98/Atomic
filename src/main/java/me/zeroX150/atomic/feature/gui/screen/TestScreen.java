@@ -1,12 +1,12 @@
 package me.zeroX150.atomic.feature.gui.screen;
 
-import me.zeroX150.atomic.feature.gui.widget.ConfTextFieldWidget;
+import me.zeroX150.atomic.feature.gui.widget.SimpleCustomTextFieldWidget;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 public class TestScreen extends Screen {
-    ConfTextFieldWidget widget;
+    SimpleCustomTextFieldWidget widget;
 
     public TestScreen() {
         super(Text.of(""));
@@ -14,7 +14,7 @@ public class TestScreen extends Screen {
 
     @Override
     protected void init() {
-        widget = new ConfTextFieldWidget(width / 2, height / 2, 100, 12, Text.of("amogus"));
+        widget = new SimpleCustomTextFieldWidget(width / 2, height / 2, 100, 12, Text.of("amogus"));
         addDrawableChild(widget);
         super.init();
     }

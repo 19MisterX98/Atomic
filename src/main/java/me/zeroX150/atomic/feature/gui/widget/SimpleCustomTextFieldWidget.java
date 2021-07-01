@@ -5,8 +5,10 @@ import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.gui.clickgui.ClickGUI;
 import me.zeroX150.atomic.helper.Renderer;
 import net.minecraft.SharedConstants;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -17,15 +19,16 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConfTextFieldWidget extends ClickableWidget implements Drawable, Element {
+public class SimpleCustomTextFieldWidget extends ClickableWidget implements Drawable, Element {
 
     boolean selected = false;
     String text = "";
     int cursorIndex = 0;
     int rStartIndex = 0;
 
-    public ConfTextFieldWidget(int x, int y, int width, int height, Text message) {
+    public SimpleCustomTextFieldWidget(int x, int y, int width, int height, Text message) {
         super(x, y, width, height, message);
+
     }
 
     @Override
@@ -55,6 +58,10 @@ public class ConfTextFieldWidget extends ClickableWidget implements Drawable, El
             cursorIndex++;
         } else if (keyCode == 263) { // arrow left
             cursorIndex--;
+        } else if (Screen.isPaste(keyCode)) {
+            for (char c : MinecraftClient.getInstance().keyboard.getClipboard().toCharArray()) {
+                charTyped(c, 0);
+            }
         }
         return false;
     }
@@ -89,7 +96,9 @@ public class ConfTextFieldWidget extends ClickableWidget implements Drawable, El
             if (v1.isEmpty()) break;
             v1 = v1.substring(0, v1.length() - 1);
         }
-        Atomic.monoFontRenderer.drawString(matrices, v1, x + 1, y + (height / 2f) - (8 / 2f), 0xFFFFFF);
+        Color c = ClickGUI.currentActiveTheme.inactive();
+        Color c1 = new Color((int) Math.floor(Math.abs(255 - c.getRed())), (int) Math.floor(Math.abs(255 - c.getGreen())), (int) Math.floor(Math.abs(255 - c.getBlue())), 255);
+        Atomic.monoFontRenderer.drawString(matrices, v1, x + 1, y + (height / 2f) - (8 / 2f), c1.getRGB());
         float w = text.isEmpty() ? 0 : Atomic.monoFontRenderer.getStringWidth(text.substring(rStartIndex, cursorIndex));
 
         float v = (System.currentTimeMillis() % 1000) / 1000f;
@@ -99,7 +108,7 @@ public class ConfTextFieldWidget extends ClickableWidget implements Drawable, El
             rStartIndex++;
         }
         if (selected) {
-            Renderer.fill(new Color(255, 255, 255, (int) Math.floor(opacity * 255)), x + w + 1, y + 1, x + w + 2, y + height - 1);
+            Renderer.fill(matrices, Renderer.modify(c1, -1, -1, -1, (int) Math.floor(opacity * 255)), x + w + 1, y + 1, x + w + 2, y + height - 1);
         }
     }
 
