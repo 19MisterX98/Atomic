@@ -28,6 +28,7 @@ public class Draggable {
     long lastRender = System.currentTimeMillis();
     String title;
     List<Clickable> children = new ArrayList<>();
+    double lrXDiff = 0;
 
     public Draggable(String title, boolean isExpanded) {
         this.title = title;
@@ -67,6 +68,22 @@ public class Draggable {
         return false;
     }
 
+    public void tick() {
+        float xDiff = (float) (lastRenderX - posX);
+        float yDiff = (float) (lastRenderY - posY);
+        double nxDiff = (xDiff / (me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue()));
+        double nyDiff = (yDiff / (me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue()));
+        if (Math.abs(nxDiff) < 0.02) nxDiff = xDiff;
+        if (Math.abs(nyDiff) < 0.02) nyDiff = yDiff;
+        lastRenderX -= nxDiff;
+        lastRenderY -= nyDiff;
+        if (trackedLastRenderX == -1) trackedLastRenderX = lastRenderX;
+        if (trackedLastRenderY == -1) trackedLastRenderY = lastRenderY;
+        lrXDiff = lastRenderX - trackedLastRenderX;
+        trackedLastRenderX = lastRenderX;
+        trackedLastRenderY = lastRenderY;
+    }
+
     double easeOutBounce(double x) {
         return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
     }
@@ -83,19 +100,6 @@ public class Draggable {
         double animProgInter = easeOutBounce(animProg);
         if (lastRenderX == -1) lastRenderX = posX;
         if (lastRenderY == -1) lastRenderY = posY;
-        if (trackedLastRenderX == -1) trackedLastRenderX = lastRenderX;
-        if (trackedLastRenderY == -1) trackedLastRenderY = lastRenderY;
-        double lrXDiff = lastRenderX - trackedLastRenderX;
-        trackedLastRenderX = lastRenderX;
-        trackedLastRenderY = lastRenderY;
-        float xDiff = (float) (lastRenderX - posX);
-        float yDiff = (float) (lastRenderY - posY);
-        double nxDiff = (xDiff / (me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue())) * (delta + 1);
-        double nyDiff = (yDiff / (me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue())) * (delta + 1);
-        if (Math.abs(nxDiff) < 0.02) nxDiff = xDiff;
-        if (Math.abs(nyDiff) < 0.02) nyDiff = yDiff;
-        lastRenderX -= nxDiff;
-        lastRenderY -= nyDiff;
         stack.translate(lastRenderX - getMargin() - getPaddingX(), lastRenderY - getMargin(), 0);
         double rotation = MathHelper.clamp(lrXDiff, -50, 50) * me.zeroX150.atomic.feature.module.impl.render.ClickGUI.dragFactor.getValue();
         rotation += Math.sin(animProgInter * Math.PI * 2) * 10;
@@ -120,8 +124,8 @@ public class Draggable {
         if (this.animProg != 0) {
             double yOffset = 9 + getMargin() * 2;
             for (Clickable child : children) {
-                double px = this.dragged ? -1 : lastRenderX;
-                double py = this.dragged ? -1 : lastRenderY + (yOffset * animProgInter);
+                double px = this.dragged || animProgInter != 1 ? -1 : lastRenderX;
+                double py = this.dragged || animProgInter != 1 ? -1 : lastRenderY + (yOffset * animProgInter);
                 child.render(getMargin(), getMargin() + (yOffset * animProgInter), stack, animProgInter, px, py, delta);
                 yOffset += 9 + getMargin() * 2;
             }

@@ -70,6 +70,7 @@ public class ConfTextFieldWidget extends ClickableWidget implements Drawable, El
             }
             text = sb.toString();
             cursorIndex++;
+            event_onTextChange();
         }
         return false;
     }
@@ -92,13 +93,21 @@ public class ConfTextFieldWidget extends ClickableWidget implements Drawable, El
         float w = text.isEmpty() ? 0 : Atomic.monoFontRenderer.getStringWidth(text.substring(rStartIndex, cursorIndex));
 
         float v = (System.currentTimeMillis() % 1000) / 1000f;
-        boolean f = v > 0.5f;
+        double opacity = Math.sin(v * Math.PI);
         if (w > width) {
             w = width - 2;
             rStartIndex++;
         }
-        if (f && selected) {
-            Renderer.fill(Color.WHITE, x + w + 1, y + 1, x + w + 2, y + height - 1);
+        if (selected) {
+            Renderer.fill(new Color(255, 255, 255, (int) Math.floor(opacity * 255)), x + w + 1, y + 1, x + w + 2, y + height - 1);
         }
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void event_onTextChange() {
+
     }
 }

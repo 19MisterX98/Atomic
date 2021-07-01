@@ -3,6 +3,7 @@ package me.zeroX150.atomic.feature.gui.clickgui;
 import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.config.SliderValue;
 import me.zeroX150.atomic.helper.Client;
+import me.zeroX150.atomic.helper.Renderer;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -28,8 +29,8 @@ public class Slider extends ClickableWidget {
 
     @Override
     public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        fill(matrices, x, y, x + width, y + height, ClickGUI.currentActiveTheme.inactive().getRGB());
-        fill(matrices, x, y, (int) (x + (width * getValue())), y + height, ClickGUI.currentActiveTheme.active().getRGB());
+        Renderer.fill(matrices, ClickGUI.currentActiveTheme.inactive(), (x + (width * getValue())), y, x + width, y + height);
+        Renderer.fill(matrices, ClickGUI.currentActiveTheme.active(), x, y, (x + (width * getValue())), y + height);
         Atomic.fontRenderer.drawCenteredString(matrices, Client.roundToN(value, prec) + "", x + width / 2f, y + height / 2f - 8 / 2f, ClickGUI.currentActiveTheme.fontColor().getRGB());
         //drawCenteredText(matrices, Atomic.client.textRenderer, Client.roundToN(value, prec) + "", x + (width / 2), y + (height / 2 - (9 / 2)), 0xFFFFFF);
     }

@@ -1,5 +1,6 @@
 package me.zeroX150.atomic;
 
+import me.zeroX150.atomic.feature.gui.clickgui.ClickGUI;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.helper.ConfigManager;
@@ -44,6 +45,7 @@ public class Atomic implements ModInitializer {
                 for (Module module : ModuleRegistry.getModules()) {
                     if (module.isEnabled()) module.onFastTick();
                 }
+                if (ClickGUI.INSTANCE != null) ClickGUI.INSTANCE.onFastTick();
             }
         }, "100_tps_ticker");
         FAST_TICKER.start();

@@ -9,6 +9,7 @@ import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.helper.Renderer;
 import me.zeroX150.atomic.helper.Transitions;
 import me.zeroX150.atomic.mixin.game.render.IGameRendererMixin;
+import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GameRenderer;
@@ -16,6 +17,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -49,23 +51,14 @@ public class ClickGUI extends Screen {
         super(Text.of(""));
         double width = Atomic.client.getWindow().getScaledWidth();
         INSTANCE = this;
-        double maxWidth = (ModuleType.values().length - 1) * 114;
-        double originalX = width / 2 - (maxWidth / 2);
-        double offsetX = originalX;
-        double offsetY = me.zeroX150.atomic.feature.module.impl.render.ClickGUI.logoSize.getValue() * 130 + 20;
 
         for (ModuleType value : ModuleType.values()) {
             if (value == ModuleType.HIDDEN) continue;
             Draggable d = new Draggable(value.getName(), false);
             d.lastRenderX = width;
-            d.lastRenderY = offsetY;
-            d.posX = offsetX;
-            d.posY = offsetY;
-            offsetX += 120;
-            if (offsetX + 120 > width) {
-                offsetX = originalX;
-                offsetY += 27;
-            }
+            d.lastRenderY = 0;
+            d.posX = 0;
+            d.posY = 0;
             for (Module module : ModuleRegistry.getModules()) {
                 if (module.getModuleType() == value) {
                     Clickable w = new Clickable(module);
@@ -74,6 +67,17 @@ public class ClickGUI extends Screen {
             }
             containers.add(d);
         }
+        sort();
+    }
+
+    public void onFastTick() {
+        double a = 0.011;
+        aProg += closed ? a : -a;
+        aProg = MathHelper.clamp(aProg, 0, 1);
+        for (Draggable container : containers) {
+            container.tick();
+        }
+        if (currentConfig != null) currentConfig.tick();
     }
 
     @Override
@@ -92,6 +96,22 @@ public class ClickGUI extends Screen {
         return true;
     }
 
+    void sort() {
+        currentSortMode++;
+        currentSortMode %= 2;
+        double offsetX = 20;
+        double offsetY = me.zeroX150.atomic.feature.module.impl.render.ClickGUI.logoSize.getValue() * 130 + 20;
+        for (Draggable container : containers.stream().sorted(Comparator.comparingInt(value -> currentSortMode == 0 ? value.children.size() : -value.children.size())).collect(Collectors.toList())) {
+            container.posX = offsetX;
+            container.posY = offsetY;
+            offsetX += 120;
+            if (offsetX + 120 > Atomic.client.getWindow().getScaledWidth()) {
+                offsetX = 20;
+                offsetY += 27;
+            }
+        }
+    }
+
     @Override
     public void onClose() {
         closed = true;
@@ -107,23 +127,7 @@ public class ClickGUI extends Screen {
         closed = false;
         int off = 21;
         int offY = 70;
-        ButtonWidget sort = new ButtonWidget(width - offY, height - off, 20, 20, Text.of("S"), button -> {
-            currentSortMode++;
-            currentSortMode %= 2;
-            double maxWidth = (ModuleType.values().length - 1) * 114;
-            double originalX = this.width / 2d - (maxWidth / 2);
-            double offsetX = originalX;
-            double offsetY = me.zeroX150.atomic.feature.module.impl.render.ClickGUI.logoSize.getValue() * 130 + 20;
-            for (Draggable container : containers.stream().sorted(Comparator.comparingInt(value -> currentSortMode == 0 ? value.children.size() : -value.children.size())).collect(Collectors.toList())) {
-                container.posX = offsetX;
-                container.posY = offsetY;
-                offsetX += 120;
-                if (offsetX + 120 > width) {
-                    offsetX = originalX;
-                    offsetY += 27;
-                }
-            }
-        });
+        ButtonWidget sort = new ButtonWidget(width - offY, height - off, 20, 20, Text.of("S"), button -> sort());
         ButtonWidget expand = new ButtonWidget(width - offY - 21, height - off, 20, 20, Text.of("E"), button -> {
             for (Draggable container : containers) {
                 container.expanded = true;
@@ -176,10 +180,6 @@ public class ClickGUI extends Screen {
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        double a = 0.009 * (delta + 1);
-        aProg += closed ? a : -a;
-        aProg = MathHelper.clamp(aProg, 0, 1);
-
         if (aProg == 1 && closed) {
             Atomic.client.openScreen(null);
             ((IGameRendererMixin) Atomic.client.gameRenderer).callLoadShader(new Identifier("shaders/post/none.json"));
@@ -187,10 +187,7 @@ public class ClickGUI extends Screen {
         }
 
         Themes.Palette cTheme = currentActiveTheme;
-        Themes.Theme aTheme = switch (me.zeroX150.atomic.feature.module.impl.render.ClickGUI.theme.getValue().toLowerCase()) {
-            case "walmart sigma" -> Themes.Theme.SIGMA;
-            default -> Themes.Theme.ATOMIC;
-        };
+        Themes.Theme aTheme = me.zeroX150.atomic.feature.module.impl.render.ClickGUI.theme.getValue().equalsIgnoreCase("walmart sigma") ? Themes.Theme.SIGMA : Themes.Theme.ATOMIC;
         Color newInactive = Transitions.transition(cTheme.inactive(), aTheme.p.inactive(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
         Color newActive = Transitions.transition(cTheme.active(), aTheme.p.active(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
         Color newHiglight = Transitions.transition(cTheme.l_highlight(), aTheme.p.l_highlight(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
@@ -226,7 +223,7 @@ public class ClickGUI extends Screen {
             ms.translate(0, aProgI * height, 0);
             container.render(ms, delta);
         }
-        Atomic.fontRenderer.drawCenteredString(matrices, desc, width / 2f, height - 70, ClickGUI.currentActiveTheme.fontColor().getRGB());
+        Atomic.fontRenderer.drawCenteredString(matrices, desc, width / 2f, height - 70, Color.WHITE.getRGB());
         //DrawableHelper.drawCenteredText(matrices, Atomic.client.textRenderer, desc, width / 2, height - 70, 0xFFFFFF);
         desc = "";
         super.render(matrices, mouseX, mouseY, delta);
@@ -300,7 +297,13 @@ public class ClickGUI extends Screen {
     @Override
     public boolean charTyped(char chr, int modifiers) {
         if (currentConfig != null) currentConfig.charTyped(chr, modifiers);
-        return super.charTyped(chr, modifiers);
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public Element getFocused() {
+        return null;
     }
 
     @Override

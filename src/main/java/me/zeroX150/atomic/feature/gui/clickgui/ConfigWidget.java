@@ -2,6 +2,7 @@ package me.zeroX150.atomic.feature.gui.clickgui;
 
 import com.google.common.collect.Lists;
 import me.zeroX150.atomic.Atomic;
+import me.zeroX150.atomic.feature.gui.widget.ConfTextFieldWidget;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.config.*;
 import me.zeroX150.atomic.helper.Renderer;
@@ -112,19 +113,28 @@ public class ConfigWidget {
                 children.put(dynamicValue, Lists.asList(red, new ClickableWidget[]{green, blue, isRGB}));
 
             } else {
-                Textbox t = new Textbox(Atomic.client.textRenderer, 1, yOffset, 98, Text.of(dynamicValue.getKey()), dynamicValue);
-                children.put(dynamicValue, Lists.asList(t, new ClickableWidget[0]));
+                ConfTextFieldWidget w = new ConfTextFieldWidget(1, yOffset, 100, 12, Text.of(dynamicValue.getKey())) {
+                    @Override
+                    public void event_onTextChange() {
+                        dynamicValue.setValue(this.getText());
+                    }
+                };
+                children.put(dynamicValue, Lists.asList(w, new ClickableWidget[0]));
             }
             yOffset += 12;
         }
     }
 
-    public void render(MatrixStack ms, int mx, int my, float delta) {
+    public void tick() {
         double xDiff = posX - lastRenderX;
         double yDiff = posY - lastRenderY;
         lastRenderX += (xDiff / me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
         lastRenderY += (yDiff / me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
         if (lastRenderY > Atomic.client.getWindow().getScaledHeight() + 5) ClickGUI.INSTANCE.showModuleConfig(null);
+    }
+
+    public void render(MatrixStack ms, int mx, int my, float delta) {
+
 
         Renderer.fill(ms, ClickGUI.currentActiveTheme.h_exp(), lastRenderX - margin, lastRenderY - margin, lastRenderX + width + margin, lastRenderY + 9 + margin);
         Renderer.fill(ms, new Color(238, 37, 37, 255), lastRenderX + width + 1, lastRenderY - margin + 1, lastRenderX + width + margin - 1, lastRenderY + 9 + margin - 1);
@@ -156,13 +166,8 @@ public class ConfigWidget {
                 Atomic.fontRenderer.drawCenteredString(ms, child1.getKey(), lastRenderX + (width / 4f), lastRenderY + yOffset, c);
             //DrawableHelper.drawCenteredText(ms, Atomic.client.textRenderer, child1.getKey(), (int) (lastRenderX + (width / 4)), (int) lastRenderY + yOffset + 1, c);
             for (ClickableWidget child : children) {
-                if (!(child instanceof Textbox)) {
-                    child.x = (int) (lastRenderX + width - child.getWidth() - 2);
-                    child.y = (int) lastRenderY + yOffset;
-                } else {
-                    child.x = (int) (lastRenderX + width - child.getWidth() - 3);
-                    child.y = (int) lastRenderY + yOffset + 1;
-                }
+                child.x = (int) (lastRenderX + width - child.getWidth() - 3);
+                child.y = (int) lastRenderY + yOffset + 1;
                 child.render(ms, mx, my, delta);
                 yOffset += 12;
             }
@@ -197,7 +202,7 @@ public class ConfigWidget {
     public void charTyped(char c, int mod) {
         for (List<ClickableWidget> children : this.children.values()) {
             for (ClickableWidget child : children) {
-                if (!(child instanceof Toggleable)) child.charTyped(c, mod);
+                if (child instanceof ConfTextFieldWidget) child.charTyped(c, mod);
             }
         }
     }
@@ -213,7 +218,7 @@ public class ConfigWidget {
     public void keyPressed(int kc, int sc, int m) {
         for (List<ClickableWidget> children : this.children.values()) {
             for (ClickableWidget child : children) {
-                if (!(child instanceof Toggleable)) child.keyPressed(kc, sc, m);
+                if (child instanceof ConfTextFieldWidget) child.keyPressed(kc, sc, m);
             }
         }
     }
@@ -221,7 +226,7 @@ public class ConfigWidget {
     public void keyReleased(int kc, int sc, int m) {
         for (List<ClickableWidget> children : this.children.values()) {
             for (ClickableWidget child : children) {
-                if (!(child instanceof Toggleable)) child.keyReleased(kc, sc, m);
+                if (child instanceof ConfTextFieldWidget) child.keyReleased(kc, sc, m);
             }
         }
     }
