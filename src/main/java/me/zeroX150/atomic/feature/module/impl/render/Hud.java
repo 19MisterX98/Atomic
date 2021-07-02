@@ -9,8 +9,8 @@ import me.zeroX150.atomic.feature.module.config.BooleanValue;
 import me.zeroX150.atomic.feature.module.config.SliderValue;
 import me.zeroX150.atomic.helper.Client;
 import me.zeroX150.atomic.helper.Renderer;
-import me.zeroX150.atomic.helper.event.Event;
-import me.zeroX150.atomic.helper.event.EventSystem;
+import me.zeroX150.atomic.helper.event.Events;
+import me.zeroX150.atomic.helper.event.PacketEvents;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
@@ -46,7 +46,7 @@ public class Hud extends Module {
         super("Hud", "poggies", ModuleType.RENDER);
         lastTimePacketReceived = System.currentTimeMillis();
 
-        EventSystem.registerEventHandler(Event.PACKET_RECEIVE, event -> {
+        Events.Packets.registerEventHandler(PacketEvents.PACKET_RECEIVE, event -> {
             if (event.getPacket() instanceof WorldTimeUpdateS2CPacket) {
                 currentTps = Client.roundToN(calcTps(System.currentTimeMillis() - lastTimePacketReceived), 2);
                 lastTimePacketReceived = System.currentTimeMillis();

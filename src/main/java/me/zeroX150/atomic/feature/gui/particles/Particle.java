@@ -36,5 +36,11 @@ public class Particle {
         if (ny < 0) y = 1;
         brightness += (Math.random() - 0.5) / 8;
         brightness = brightness > 0.3f ? 0.3f : (brightness < 0 ? 0 : brightness);
+        double perX = x / Atomic.client.getWindow().getScaledWidth();
+        double perY = y / Atomic.client.getWindow().getScaledHeight();
+        int r = (int) Math.floor(perX * 255);
+        int g = Math.abs(255 - r);
+        int b = (int) Math.floor(perY * 255);
+        color = new Color(r, g, b);
     }
 }

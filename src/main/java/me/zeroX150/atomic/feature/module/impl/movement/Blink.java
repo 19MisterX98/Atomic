@@ -4,8 +4,8 @@ import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.feature.module.config.MultiValue;
-import me.zeroX150.atomic.helper.event.Event;
-import me.zeroX150.atomic.helper.event.EventSystem;
+import me.zeroX150.atomic.helper.event.Events;
+import me.zeroX150.atomic.helper.event.PacketEvents;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.c2s.play.KeepAliveC2SPacket;
@@ -20,7 +20,7 @@ public class Blink extends Module {
     public Blink() {
         super("Blink", "hehe blink go brrr", ModuleType.MOVEMENT);
         Module parent = this;
-        EventSystem.registerEventHandler(Event.PACKET_SEND, event -> {
+        Events.Packets.registerEventHandler(PacketEvents.PACKET_SEND, event -> {
             if (!parent.isEnabled()) return;
             if (event.getPacket() instanceof KeepAliveC2SPacket) return;
             event.setCancelled(true);

@@ -6,8 +6,8 @@ import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.feature.module.config.BooleanValue;
 import me.zeroX150.atomic.feature.module.config.SliderValue;
 import me.zeroX150.atomic.helper.Client;
-import me.zeroX150.atomic.helper.event.Event;
-import me.zeroX150.atomic.helper.event.EventSystem;
+import me.zeroX150.atomic.helper.event.Events;
+import me.zeroX150.atomic.helper.event.PacketEvents;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EntityPose;
@@ -23,7 +23,7 @@ public class Freecam extends Module {
 
     public Freecam() {
         super("Freecam", "p", ModuleType.RENDER);
-        EventSystem.registerEventHandler(Event.PACKET_SEND, event -> {
+        Events.Packets.registerEventHandler(PacketEvents.PACKET_SEND, event -> {
             if (!this.isEnabled()) return;
             if (event.getPacket() instanceof PlayerMoveC2SPacket) event.setCancelled(true);
             if (event.getPacket() instanceof PlayerInputC2SPacket) event.setCancelled(true);

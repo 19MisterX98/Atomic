@@ -3,9 +3,9 @@ package me.zeroX150.atomic.mixin.network;
 import io.netty.channel.ChannelHandlerContext;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.feature.module.impl.external.AntiPacketKick;
-import me.zeroX150.atomic.helper.event.Event;
-import me.zeroX150.atomic.helper.event.EventSystem;
+import me.zeroX150.atomic.helper.event.Events;
 import me.zeroX150.atomic.helper.event.PacketEvent;
+import me.zeroX150.atomic.helper.event.PacketEvents;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
 import net.minecraft.network.listener.PacketListener;
@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ClientConnectionMixin {
     @Inject(method = "handlePacket", at = @At("HEAD"), cancellable = true)
     private static <T extends PacketListener> void packetReceive(Packet<T> packet, PacketListener listener, CallbackInfo ci) {
-        if (EventSystem.fireEvent(Event.PACKET_RECEIVE, new PacketEvent(packet))) ci.cancel();
+        if (Events.Packets.fireEvent(PacketEvents.PACKET_RECEIVE, new PacketEvent(packet))) ci.cancel();
     }
 
     @Inject(method = "exceptionCaught", at = @At("HEAD"), cancellable = true)
@@ -28,6 +28,6 @@ public class ClientConnectionMixin {
 
     @Inject(method = "send(Lnet/minecraft/network/Packet;)V", cancellable = true, at = @At("HEAD"))
     public void send(Packet<?> packet, CallbackInfo ci) {
-        if (EventSystem.fireEvent(Event.PACKET_SEND, new PacketEvent(packet))) ci.cancel();
+        if (Events.Packets.fireEvent(PacketEvents.PACKET_SEND, new PacketEvent(packet))) ci.cancel();
     }
 }

@@ -5,8 +5,8 @@ import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.feature.module.config.MultiValue;
 import me.zeroX150.atomic.feature.module.config.SliderValue;
-import me.zeroX150.atomic.helper.event.Event;
-import me.zeroX150.atomic.helper.event.EventSystem;
+import me.zeroX150.atomic.helper.event.Events;
+import me.zeroX150.atomic.helper.event.PacketEvents;
 import me.zeroX150.atomic.mixin.network.IPlayerMoveC2SPacketAccessor;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
@@ -22,7 +22,7 @@ public class NoFall extends Module {
         super("NoFall", "no fall damage", ModuleType.MOVEMENT);
         mode = this.config.create("Mode", "OnGround", "OnGround", "Packet", "BreakFall");
         this.fallDist.showOnlyIf(() -> !mode.getValue().equalsIgnoreCase("onground"));
-        EventSystem.registerEventHandler(Event.PACKET_SEND, event -> {
+        Events.Packets.registerEventHandler(PacketEvents.PACKET_SEND, event -> {
             if (!this.isEnabled()) return;
             if (event.getPacket() instanceof PlayerMoveC2SPacket) {
                 if (mode.getValue().equalsIgnoreCase("onground")) {
