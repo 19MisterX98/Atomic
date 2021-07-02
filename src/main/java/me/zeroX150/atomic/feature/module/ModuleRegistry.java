@@ -1,5 +1,6 @@
 package me.zeroX150.atomic.feature.module;
 
+import me.zeroX150.atomic.feature.module.impl.combat.AutoEndermanAngry;
 import me.zeroX150.atomic.feature.module.impl.combat.AutoLog;
 import me.zeroX150.atomic.feature.module.impl.combat.Criticals;
 import me.zeroX150.atomic.feature.module.impl.combat.Killaura;
@@ -74,6 +75,8 @@ public class ModuleRegistry {
         modules.add(new BuildLimit());
         modules.add(new WaterClutch());
         modules.add(new Zoom());
+        modules.add(new AutoEndermanAngry());
+        modules.add(new MidAirPlace());
     }
 
     public static List<Module> getModules() {

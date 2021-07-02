@@ -119,6 +119,7 @@ public class ConfigWidget {
                         dynamicValue.setValue(this.getText());
                     }
                 };
+                w.setText(dynamicValue.getValue().toString());
                 children.put(dynamicValue, Lists.asList(w, new ClickableWidget[0]));
             }
             yOffset += 12;
@@ -218,7 +219,8 @@ public class ConfigWidget {
     public void keyPressed(int kc, int sc, int m) {
         for (List<ClickableWidget> children : this.children.values()) {
             for (ClickableWidget child : children) {
-                if (child instanceof SimpleCustomTextFieldWidget) child.keyPressed(kc, sc, m);
+                if (child instanceof SimpleCustomTextFieldWidget || child instanceof KeyListenerBtn)
+                    child.keyPressed(kc, sc, m);
             }
         }
     }

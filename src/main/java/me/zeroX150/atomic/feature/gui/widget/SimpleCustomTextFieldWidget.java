@@ -119,4 +119,10 @@ public class SimpleCustomTextFieldWidget extends ClickableWidget implements Draw
     public void event_onTextChange() {
 
     }
+
+    public void setText(String text) {
+        this.text = text;
+        this.cursorIndex = 0;
+        this.rStartIndex = 0;
+    }
 }

@@ -220,7 +220,7 @@ public class ClickGUI extends Screen {
         if (currentConfig != null) currentConfig.render(matrices, mouseX, mouseY, delta);
         for (Draggable container : containers) {
             MatrixStack ms = new MatrixStack();
-            ms.translate(0, aProgI * height, 0);
+            ms.translate(aProgI * width, 0, 0);
             container.render(ms, delta);
         }
         Atomic.fontRenderer.drawCenteredString(matrices, desc, width / 2f, height - 70, Color.WHITE.getRGB());

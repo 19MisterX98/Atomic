@@ -7,6 +7,7 @@ import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.feature.module.config.BooleanValue;
 import me.zeroX150.atomic.feature.module.config.MultiValue;
 import me.zeroX150.atomic.feature.module.config.SliderValue;
+import me.zeroX150.atomic.helper.Packets;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
@@ -81,7 +82,7 @@ public class Killaura extends Module {
             else if (entity instanceof MobEntity && attackMobs.getValue()) attacks.add(entity);
         }
         for (Entity attack : attacks) {
-            System.out.println("Attacking a " + attack.getType().getTranslationKey());
+            Packets.sendServerSideLook(attack.getEyePos());
             Atomic.client.interactionManager.attackEntity(Atomic.client.player, attack);
             if (mode.getValue().equalsIgnoreCase("single")) break;
         }

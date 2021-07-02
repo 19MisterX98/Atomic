@@ -2,6 +2,7 @@ package me.zeroX150.atomic.feature.gui.clickgui;
 
 import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
+import me.zeroX150.atomic.helper.Client;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
@@ -38,7 +39,6 @@ public class Clickable {
             Atomic.fontRenderer.drawCenteredString(stack, parent.getName(), (float) (x + (width / 2f)), (float) y, ClickGUI.currentActiveTheme.fontColor().getRGB());
         else
             Atomic.fontRenderer.drawString(stack, parent.getName(), (float) (x), (float) y, ClickGUI.currentActiveTheme.fontColor().getRGB());
-        //DrawableHelper.drawCenteredText(stack, Atomic.client.textRenderer, parent.getName(), (int) (x + (width / 2)), (int) y, 0xFFFFFF);
     }
 
     double easeOutBounce(double x) {
@@ -51,8 +51,8 @@ public class Clickable {
     }
 
     boolean isHovered(double x, double y) {
-        double mx = Atomic.client.mouse.getX() / 2;
-        double my = Atomic.client.mouse.getY() / 2;
+        double mx = Client.getMouseX();
+        double my = Client.getMouseY();
         return mx < x + width + margin && mx > x - margin && my < y + 9 + margin && my > y - margin;
     }
 }

@@ -78,4 +78,12 @@ public class Client {
             return false;
         }
     }
+
+    public static double getMouseX() {
+        return Atomic.client.mouse.getX() / Atomic.client.options.guiScale;
+    }
+
+    public static double getMouseY() {
+        return Atomic.client.mouse.getY() / Atomic.client.options.guiScale;
+    }
 }
