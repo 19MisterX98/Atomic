@@ -42,8 +42,12 @@ public class Atomic implements ModInitializer {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                if (Atomic.client.player == null || Atomic.client.world == null) continue;
                 for (Module module : ModuleRegistry.getModules()) {
-                    if (module.isEnabled()) module.onFastTick();
+                    try {
+                        if (module.isEnabled()) module.onFastTick();
+                    } catch (Exception ignored) {
+                    }
                 }
                 if (ClickGUI.INSTANCE != null) ClickGUI.INSTANCE.onFastTick();
             }
