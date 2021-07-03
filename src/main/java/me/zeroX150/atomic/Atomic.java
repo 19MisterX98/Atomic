@@ -8,8 +8,6 @@ import me.zeroX150.atomic.helper.font.FontRenderer;
 import me.zeroX150.atomic.helper.keybind.KeybindManager;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.minecraft.client.render.entity.EntityRenderer;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

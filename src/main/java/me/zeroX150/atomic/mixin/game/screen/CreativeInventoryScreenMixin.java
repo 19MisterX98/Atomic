@@ -1,6 +1,5 @@
 package me.zeroX150.atomic.mixin.game.screen;
 
-import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.gui.screen.ItemExploitsScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
@@ -19,9 +18,7 @@ public class CreativeInventoryScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("TAIL"))
     public void init(CallbackInfo ci) {
-        ButtonWidget bw = new ButtonWidget(1, 1, 150, 20, Text.of("Item exploits"), button -> {
-            Atomic.client.openScreen(new ItemExploitsScreen());
-        });
+        ButtonWidget bw = new ButtonWidget(1, 1, 150, 20, Text.of("Item exploits"), button -> ItemExploitsScreen.open());
         addDrawableChild(bw);
     }
 }

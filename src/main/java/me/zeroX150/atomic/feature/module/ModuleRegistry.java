@@ -19,16 +19,16 @@ public class ModuleRegistry {
 
     static {
         /* mods to add
-        *
-        * elytrafly
-        * autototem
-        * (seedcrackerx)
-        * nobreakdelay
-        * antilevitate
-        * hitboxes
-        * shulkerpeek
-        * inventory walk
-        * */
+         *
+         * elytrafly
+         * autototem
+         * (seedcrackerx)
+         * nobreakdelay
+         * antilevitate
+         * hitboxes
+         * shulkerpeek
+         * inventory walk
+         * */
 
         modules.add(new TestModule());
         modules.add(new ClickGUI());

@@ -92,7 +92,8 @@ public class Draggable {
         this.dragged = false;
     }
 
-    public void render(MatrixStack stack, float delta) {
+    public void render(MatrixStack stack, float delta, double aProgI) {
+
         if (this.expanded) animProg += (System.currentTimeMillis() - lastRender) / 500d;
         else animProg -= (System.currentTimeMillis() - lastRender) / 500d;
         if (System.currentTimeMillis() - lastRender > 1) lastRender = System.currentTimeMillis();
@@ -116,6 +117,7 @@ public class Draggable {
                 if (recordedPosition == null) continue;
                 MatrixStack ms = new MatrixStack();
                 ms.translate(recordedPosition.x(), recordedPosition.y(), -100);
+                ms.translate(aProgI * Atomic.client.getWindow().getScaledWidth(), 0, 0);
                 ms.multiply(new Quaternion(new Vec3f(0, 0, 1), (float) (recordedPosition.rot()), true));
                 Color c = Renderer.modify(new Color(Color.HSBtoRGB((float) val, 0.6f, 0.6f)), -1, -1, -1, 30);
                 Renderer.fill(ms, c, -getPaddingX() * 2, 0, width + getMargin() + getPaddingX() * 2 + 4, 9 + getMargin() * 2);

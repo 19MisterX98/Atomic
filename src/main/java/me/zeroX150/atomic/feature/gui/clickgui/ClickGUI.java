@@ -6,17 +6,16 @@ import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.feature.module.ModuleType;
-import me.zeroX150.atomic.helper.Renderer;
 import me.zeroX150.atomic.helper.Transitions;
-import me.zeroX150.atomic.mixin.game.render.IGameRendererMixin;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Matrix4f;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
@@ -120,8 +119,6 @@ public class ClickGUI extends Screen {
 
     @Override
     protected void init() {
-        if (!alreadyInitialized)
-            ((IGameRendererMixin) Atomic.client.gameRenderer).callLoadShader(new Identifier("shaders/post/antialias.json"));
         alreadyInitialized = true;
         aProg = 1;
         closed = false;
@@ -182,10 +179,8 @@ public class ClickGUI extends Screen {
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         if (aProg == 1 && closed) {
             Atomic.client.openScreen(null);
-            ((IGameRendererMixin) Atomic.client.gameRenderer).callLoadShader(new Identifier("shaders/post/none.json"));
             return;
         }
-
         Themes.Palette cTheme = currentActiveTheme;
         Themes.Theme aTheme = me.zeroX150.atomic.feature.module.impl.render.ClickGUI.theme.getValue().equalsIgnoreCase("walmart sigma") ? Themes.Theme.SIGMA : Themes.Theme.ATOMIC;
         Color newInactive = Transitions.transition(cTheme.inactive(), aTheme.p.inactive(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
@@ -196,12 +191,31 @@ public class ClickGUI extends Screen {
         Color newFCol = Transitions.transition(cTheme.fontColor(), aTheme.p.fontColor(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
         double newMargin = Transitions.transition(cTheme.h_margin(), aTheme.p.h_margin(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
         double newPadding = Transitions.transition(cTheme.h_paddingX(), aTheme.p.h_paddingX(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
-        //double newTextOffset = Transitions.transition(cTheme.h_t_indent(), aTheme.p.h_t_indent(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
         currentActiveTheme = new Themes.Palette(newInactive, newActive, newHiglight, newRet, newExp, newFCol, newMargin, newPadding, aTheme.p.centerText());
-
-
         double aProgI = easeOutBounce(aProg);
-        fill(matrices, 0, 0, width, height, Renderer.lerp(new Color(0, 0, 0, 0), new Color(0, 0, 0, 0x50), aProgI).getRGB());
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.enableBlend();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        Matrix4f matrices4 = matrices.peek().getModel();
+        int a = (int) Math.floor(Math.abs(1 - aProgI) * 80);
+        float offset = (float) ((System.currentTimeMillis() % 3000) / 3000d);
+        float hsv2p = 0.25f + offset;
+        float hsv3p = 0.5f + offset;
+        float hsv4p = 0.75f + offset;
+        Color hsv1 = Color.getHSBColor(offset % 1, 0.6f, 1f);
+        Color hsv2 = Color.getHSBColor(hsv2p % 1, 0.6f, 1f);
+        Color hsv3 = Color.getHSBColor(hsv3p % 1, 0.6f, 1f);
+        Color hsv4 = Color.getHSBColor(hsv4p % 1, 0.6f, 1f);
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+        bufferBuilder.vertex(matrices4, 0, 0, 0).color(hsv1.getRed(), hsv1.getGreen(), hsv1.getBlue(), a).next();
+        bufferBuilder.vertex(matrices4, 0, height, 0).color(hsv2.getRed(), hsv2.getGreen(), hsv2.getBlue(), a).next();
+        bufferBuilder.vertex(matrices4, width, height, 0).color(hsv3.getRed(), hsv3.getGreen(), hsv3.getBlue(), a).next();
+        bufferBuilder.vertex(matrices4, width, 0, 0).color(hsv4.getRed(), hsv4.getGreen(), hsv4.getBlue(), a).next();
+        bufferBuilder.end();
+        BufferRenderer.draw(bufferBuilder);
+        RenderSystem.disableBlend();
         matrices.translate(-aProgI * width, 0, 0);
         if (System.currentTimeMillis() - lastRender > 1) lastRender = System.currentTimeMillis();
         double logoSize = me.zeroX150.atomic.feature.module.impl.render.ClickGUI.logoSize.getValue();
@@ -221,10 +235,9 @@ public class ClickGUI extends Screen {
         for (Draggable container : containers) {
             MatrixStack ms = new MatrixStack();
             ms.translate(aProgI * width, 0, 0);
-            container.render(ms, delta);
+            container.render(ms, delta, aProgI);
         }
         Atomic.fontRenderer.drawCenteredString(matrices, desc, width / 2f, height - 70, Color.WHITE.getRGB());
-        //DrawableHelper.drawCenteredText(matrices, Atomic.client.textRenderer, desc, width / 2, height - 70, 0xFFFFFF);
         desc = "";
         super.render(matrices, mouseX, mouseY, delta);
     }
