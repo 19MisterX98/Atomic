@@ -92,7 +92,7 @@ public class Draggable {
         this.dragged = false;
     }
 
-    public void render(MatrixStack stack, float delta, double aProgI) {
+    public void render(MatrixStack stack, float delta, double aProgI, double yOff) {
 
         if (this.expanded) animProg += (System.currentTimeMillis() - lastRender) / 500d;
         else animProg -= (System.currentTimeMillis() - lastRender) / 500d;
@@ -128,7 +128,7 @@ public class Draggable {
             for (Clickable child : children) {
                 double px = this.dragged || animProgInter != 1 ? -1 : lastRenderX;
                 double py = this.dragged || animProgInter != 1 ? -1 : lastRenderY + (yOffset * animProgInter);
-                child.render(getMargin(), getMargin() + (yOffset * animProgInter), stack, animProgInter, px, py, delta);
+                child.render(getMargin(), getMargin() + (yOffset * animProgInter), stack, animProgInter, px, py + yOff, delta);
                 yOffset += 9 + getMargin() * 2;
             }
         }

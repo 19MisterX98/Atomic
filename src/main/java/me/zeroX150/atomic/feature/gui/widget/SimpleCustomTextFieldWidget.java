@@ -62,6 +62,8 @@ public class SimpleCustomTextFieldWidget extends ClickableWidget implements Draw
             for (char c : MinecraftClient.getInstance().keyboard.getClipboard().toCharArray()) {
                 charTyped(c, 0);
             }
+        } else if (Screen.isSelectAll(keyCode)) {
+            this.setText("");
         }
         return false;
     }
@@ -84,6 +86,7 @@ public class SimpleCustomTextFieldWidget extends ClickableWidget implements Draw
 
     @Override
     public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        Atomic.client.keyboard.setRepeatEvents(true);
         cursorIndex = MathHelper.clamp(cursorIndex, 0, text.isEmpty() ? 0 : (text.length()));
         Renderer.fill(matrices, ClickGUI.currentActiveTheme.inactive(), x, y, x + width, y + height);
         while (rStartIndex > cursorIndex) {

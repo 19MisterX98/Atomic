@@ -22,7 +22,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 public class ClickGUI extends Screen {
@@ -37,6 +36,9 @@ public class ClickGUI extends Screen {
 
     int clicks = 0;
     int p = 0;
+
+    double trackedScroll = 0;
+    double actualScroll = 0;
 
     long lastRender = System.currentTimeMillis();
 
@@ -77,6 +79,7 @@ public class ClickGUI extends Screen {
             container.tick();
         }
         if (currentConfig != null) currentConfig.tick();
+        trackedScroll = Transitions.transition(trackedScroll, actualScroll, me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
     }
 
     @Override
@@ -100,7 +103,7 @@ public class ClickGUI extends Screen {
         currentSortMode %= 2;
         double offsetX = 20;
         double offsetY = me.zeroX150.atomic.feature.module.impl.render.ClickGUI.logoSize.getValue() * 130 + 20;
-        for (Draggable container : containers.stream().sorted(Comparator.comparingInt(value -> currentSortMode == 0 ? value.children.size() : -value.children.size())).collect(Collectors.toList())) {
+        for (Draggable container : containers.stream().sorted(Comparator.comparingInt(value -> -value.children.size())).collect(Collectors.toList())) {
             container.posX = offsetX;
             container.posY = offsetY;
             offsetX += 120;
@@ -177,6 +180,7 @@ public class ClickGUI extends Screen {
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        mouseY -= trackedScroll;
         if (aProg == 1 && closed) {
             Atomic.client.openScreen(null);
             return;
@@ -226,20 +230,26 @@ public class ClickGUI extends Screen {
             RenderSystem.blendFunc(770, 1);
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1F, 1F);
-            drawTexture(matrices, (int) (width / 2 - (504 * logoSize / 2)), 10, 0, 0, 0, (int) (504 * logoSize), (int) (130 * logoSize), (int) (130 * logoSize), (int) (504 * logoSize));
+            drawTexture(matrices, (int) (width / 2 - (504 * logoSize / 2)), (int) (10 + trackedScroll), 0, 0, 0, (int) (504 * logoSize), (int) (130 * logoSize), (int) (130 * logoSize), (int) (504 * logoSize));
             RenderSystem.defaultBlendFunc();
             RenderSystem.disableBlend();
         }
         matrices.translate(2 * aProgI * width, 0, 0);
-        if (currentConfig != null) currentConfig.render(matrices, mouseX, mouseY, delta);
+        matrices.translate(0, trackedScroll, 0);
+        if (currentConfig != null) currentConfig.render(matrices, mouseX, mouseY, delta, trackedScroll);
+        matrices.translate(0, -trackedScroll, 0);
         for (Draggable container : containers) {
             MatrixStack ms = new MatrixStack();
             ms.translate(aProgI * width, 0, 0);
-            container.render(ms, delta, aProgI);
+            ms.translate(0, trackedScroll, 0);
+            container.render(ms, delta, aProgI, trackedScroll);
         }
         Atomic.fontRenderer.drawCenteredString(matrices, desc, width / 2f, height - 70, Color.WHITE.getRGB());
         desc = "";
-        super.render(matrices, mouseX, mouseY, delta);
+        if (actualScroll != 0) {
+            Atomic.monoFontRenderer.drawString(new MatrixStack(), "Tip: Double right click to reset scroll", 2, 2, 0xFFFFFF);
+        }
+        super.render(matrices, mouseX, (int) (mouseY + trackedScroll), delta);
     }
 
     @Override
@@ -249,6 +259,7 @@ public class ClickGUI extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        mouseY -= trackedScroll;
         boolean flag = false;
         for (Draggable container : Lists.reverse(containers).toArray(new Draggable[0])) {
             if (container.mouseClicked(button == 0, mouseX, mouseY)) {
@@ -266,21 +277,17 @@ public class ClickGUI extends Screen {
         if (!flag & button == 1) {
             clicks++;
             if (clicks >= 2) {
-                for (Draggable container : containers) {
-                    container.posX = mouseX;
-                    container.posY = mouseY;
-                }
+                actualScroll = 0;
             }
             if (clicks >= 3) {
-                Random r = new Random();
                 for (Draggable container : containers) {
-                    container.posX = r.nextInt(width);
-                    container.posY = r.nextInt(height);
+                    container.expanded = true;
+                    //showModuleConfig(null);
                 }
 
             }
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(mouseX, mouseY + trackedScroll, button);
     }
 
     @Override
@@ -288,7 +295,7 @@ public class ClickGUI extends Screen {
         for (Draggable container : containers) {
             container.mouseReleased();
         }
-        if (currentConfig != null) currentConfig.mouseReleased(mouseX, mouseY, button);
+        if (currentConfig != null) currentConfig.mouseReleased(mouseX, mouseY - trackedScroll, button);
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
@@ -297,13 +304,13 @@ public class ClickGUI extends Screen {
         for (Draggable container : containers) {
             container.mouseMove(deltaX, deltaY);
         }
-        if (currentConfig != null) currentConfig.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+        if (currentConfig != null) currentConfig.mouseDragged(mouseX, mouseY - trackedScroll, button, deltaX, deltaY);
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 
     @Override
     public void mouseMoved(double mouseX, double mouseY) {
-        if (currentConfig != null) currentConfig.mouseMoved(mouseX, mouseY);
+        if (currentConfig != null) currentConfig.mouseMoved(mouseX, mouseY - trackedScroll);
         super.mouseMoved(mouseX, mouseY);
     }
 
@@ -329,6 +336,13 @@ public class ClickGUI extends Screen {
     public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
         if (currentConfig != null) currentConfig.keyReleased(keyCode, scanCode, modifiers);
         return super.keyReleased(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+        actualScroll += amount * 30;
+        if (actualScroll > 0) actualScroll = 0;
+        return super.mouseScrolled(mouseX, mouseY, amount);
     }
 }
 

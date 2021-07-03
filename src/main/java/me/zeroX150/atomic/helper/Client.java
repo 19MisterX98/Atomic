@@ -80,10 +80,10 @@ public class Client {
     }
 
     public static double getMouseX() {
-        return Atomic.client.mouse.getX() / Atomic.client.options.guiScale;
+        return Atomic.client.mouse.getX() / Atomic.client.getWindow().getScaleFactor();
     }
 
     public static double getMouseY() {
-        return Atomic.client.mouse.getY() / Atomic.client.options.guiScale;
+        return Atomic.client.mouse.getY() / Atomic.client.getWindow().getScaleFactor();
     }
 }

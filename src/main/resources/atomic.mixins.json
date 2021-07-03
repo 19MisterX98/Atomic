@@ -8,6 +8,7 @@
     "game.ClientPlayerEntityMixin",
     "game.IdentifierMixin",
     "game.IMinecraftClientAccessor",
+    "game.KeyboardMixin",
     "game.MinecraftClientMixin",
     "game.entity.ClientPlayerEntityMixin",
     "game.entity.ILivingEntityAccessor",
