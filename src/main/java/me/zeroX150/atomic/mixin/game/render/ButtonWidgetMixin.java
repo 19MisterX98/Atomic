@@ -1,5 +1,6 @@
 package me.zeroX150.atomic.mixin.game.render;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.helper.Renderer;
 import net.minecraft.client.gui.DrawableHelper;
@@ -59,6 +60,7 @@ public abstract class ButtonWidgetMixin {
             dxStart = (int) (x + (prog * (width - 4))); // wtf why
             dyStart = y;
         } else return;
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         ci.cancel();
         long current = System.currentTimeMillis();
         if (current - lastCache > 3) {
