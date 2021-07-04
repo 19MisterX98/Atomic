@@ -7,7 +7,7 @@ import net.minecraft.client.util.math.MatrixStack;
 
 public class Sprint extends Module {
     public Sprint() {
-        super("Sprint", "just makes you sprint all the time", ModuleType.MOVEMENT);
+        super("Sprint", "togglesprint for jewish people", ModuleType.MOVEMENT);
     }
 
     @Override

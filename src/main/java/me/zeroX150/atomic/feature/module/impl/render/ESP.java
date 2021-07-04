@@ -20,7 +20,7 @@ public class ESP extends Module {
     BooleanValue players = (BooleanValue) this.config.create("Show Players", true).description("Whether or not to show players");
 
     public ESP() {
-        super("ESP", "the", ModuleType.RENDER);
+        super("ESP", "shows where shit is but its the walmart version", ModuleType.RENDER);
     }
 
     @Override

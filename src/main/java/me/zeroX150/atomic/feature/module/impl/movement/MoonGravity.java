@@ -7,7 +7,7 @@ import net.minecraft.client.util.math.MatrixStack;
 
 public class MoonGravity extends Module {
     public MoonGravity() {
-        super("MoonGravity", "weee 3", ModuleType.MOVEMENT);
+        super("MoonGravity", "what would you do if you'd be on the moon?", ModuleType.MOVEMENT);
     }
 
     @Override

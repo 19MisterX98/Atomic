@@ -27,7 +27,7 @@ public class Tracers extends Module {
     BooleanValue players = (BooleanValue) this.config.create("Show Players", true).description("Whether or not to show players");
 
     public Tracers() {
-        super("Tracers", "hehe tracer", ModuleType.RENDER);
+        super("Tracers", "shows where shit is", ModuleType.RENDER);
     }
 
     @Override

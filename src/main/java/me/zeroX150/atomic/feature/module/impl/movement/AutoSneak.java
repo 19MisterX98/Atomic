@@ -12,7 +12,7 @@ import net.minecraft.util.math.Vec3d;
 
 public class AutoSneak extends Module {
     public AutoSneak() {
-        super("AutoSneak", "Sneaks automatically", ModuleType.MOVEMENT);
+        super("AutoSneak", "Sneaks automatically at the edges of blocks", ModuleType.MOVEMENT);
     }
 
     @Override

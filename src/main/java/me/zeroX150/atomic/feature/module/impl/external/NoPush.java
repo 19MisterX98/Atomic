@@ -6,7 +6,7 @@ import net.minecraft.client.util.math.MatrixStack;
 
 public class NoPush extends Module {
     public NoPush() {
-        super("NoPush", "no pushing", ModuleType.MOVEMENT);
+        super("NoPush", "be a rock", ModuleType.MOVEMENT);
     }
 
     @Override

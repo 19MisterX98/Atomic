@@ -20,7 +20,7 @@ public class Bunker extends Module {
     double yP = 0;
 
     public Bunker() {
-        super("Bunker", "bunker", ModuleType.WORLD);
+        super("Bunker", "makes a bunker", ModuleType.WORLD);
     }
 
     @Override

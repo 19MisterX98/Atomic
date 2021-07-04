@@ -17,7 +17,7 @@ public class XRAY extends Module {
     public static List<Block> blocks = Lists.newArrayList();
 
     public XRAY() {
-        super("XRAY", "me when the when the me", ModuleType.WORLD);
+        super("XRAY", "\"yea hold on im going mining rq\"", ModuleType.WORLD);
         Registry.BLOCK.forEach(block -> {
             if (block instanceof OreBlock || block instanceof RedstoneOreBlock || block == Blocks.CHEST
                     || block == Blocks.FURNACE || block == Blocks.END_GATEWAY || block == Blocks.COMMAND_BLOCK)

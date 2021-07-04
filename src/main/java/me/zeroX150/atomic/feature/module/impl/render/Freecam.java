@@ -22,7 +22,7 @@ public class Freecam extends Module {
     float yaw = 0f;
 
     public Freecam() {
-        super("Freecam", "p", ModuleType.RENDER);
+        super("Freecam", "leave your body behind. it is a husk of what was once a great spirit", ModuleType.RENDER);
         Events.Packets.registerEventHandler(PacketEvents.PACKET_SEND, event -> {
             if (!this.isEnabled()) return;
             if (event.getPacket() instanceof PlayerMoveC2SPacket) event.setCancelled(true);

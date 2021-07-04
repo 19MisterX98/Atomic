@@ -17,7 +17,7 @@ public class Jesus extends Module {
     SliderValue velStrength = this.config.create("Velocity strength", 0.1, 0.001, 0.3, 3);
 
     public Jesus() {
-        super("Jesus", "No description", ModuleType.MOVEMENT);
+        super("Jesus", "water is no enemy anymore", ModuleType.MOVEMENT);
         mode = this.config.create("Mode", "solid", "jump", "velocity", "solid", "legit");
         mode.description("The mode of the module");
         velStrength.showOnlyIf(() -> Jesus.mode.getValue().equalsIgnoreCase("velocity"));

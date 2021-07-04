@@ -27,7 +27,7 @@ public class Nuker extends Module {
     int delayPassed = 0;
 
     public Nuker() {
-        super("Nuker", "nukes the place", ModuleType.WORLD);
+        super("Nuker", "breaking block", ModuleType.WORLD);
     }
 
     @Override

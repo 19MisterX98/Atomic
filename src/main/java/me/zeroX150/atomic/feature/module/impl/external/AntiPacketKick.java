@@ -6,7 +6,7 @@ import net.minecraft.client.util.math.MatrixStack;
 
 public class AntiPacketKick extends Module {
     public AntiPacketKick() {
-        super("AntiPacketKick", "prevents you from getting kicked by packet exploits", ModuleType.EXPLOIT);
+        super("AntiPacketKick", "remember the \"internal exception\" moments? say goodbye to these", ModuleType.EXPLOIT);
     }
 
     @Override

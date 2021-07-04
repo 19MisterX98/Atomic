@@ -9,7 +9,7 @@ public class ClientConfig extends Module {
     public static DynamicValue<String> chatPrefix;
 
     public ClientConfig() {
-        super("ClientConfig", "No description", ModuleType.MISC);
+        super("ClientConfig", "config for da client", ModuleType.MISC);
         chatPrefix = this.config.create("Chat prefix", ".").description("The prefix used in chat to issue commands");
     }
 

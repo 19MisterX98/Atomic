@@ -22,7 +22,7 @@ public class Flight extends Module {
     int bypassTimer = 0;
 
     public Flight() {
-        super("Flight", "weee 2", ModuleType.MOVEMENT);
+        super("Flight", "i think this explains itself", ModuleType.MOVEMENT);
     }
 
     @Override

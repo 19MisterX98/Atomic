@@ -18,7 +18,7 @@ public class EntityFly extends Module {
     Keybind down = new Keybind(GLFW.GLFW_KEY_LEFT_ALT);
 
     public EntityFly() {
-        super("EntityFly", "flies using entities", ModuleType.MOVEMENT);
+        super("EntityFly", "boatfly but yes", ModuleType.MOVEMENT);
     }
 
     @Override

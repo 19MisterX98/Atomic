@@ -15,7 +15,7 @@ public class Criticals extends Module {
     MultiValue mode = (MultiValue) this.config.create("Mode", "packet", "packet", "tphop").description("The mode");
 
     public Criticals() {
-        super("Criticals", "more damage", ModuleType.COMBAT);
+        super("Criticals", "dont enable this on hypixel", ModuleType.COMBAT);
         Events.Packets.registerEventHandler(PacketEvents.PACKET_SEND, event -> {
             if (Atomic.client.player == null || Atomic.client.getNetworkHandler() == null) return;
             if (event.getPacket() instanceof PlayerInteractEntityC2SPacket && this.isEnabled()) {

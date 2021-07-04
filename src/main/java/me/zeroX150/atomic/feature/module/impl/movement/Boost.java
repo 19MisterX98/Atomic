@@ -13,7 +13,7 @@ public class Boost extends Module {
     MultiValue mode = (MultiValue) this.config.create("Mode", "add", "add", "overwrite").description("The mode of which to affect your velocity by");
 
     public Boost() {
-        super("Boost", "weee", ModuleType.MOVEMENT);
+        super("Boost", "rocket", ModuleType.MOVEMENT);
     }
 
     @Override

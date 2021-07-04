@@ -43,7 +43,7 @@ public class ModuleRegistry {
         modules.add(new MoonGravity());
         modules.add(new NoFall());
         modules.add(new NoJumpCooldown());
-        modules.add(new ClickTP());
+        modules.add(new ClickFly());
         modules.add(new Speed());
         modules.add(new Sprint());
         modules.add(new Step());

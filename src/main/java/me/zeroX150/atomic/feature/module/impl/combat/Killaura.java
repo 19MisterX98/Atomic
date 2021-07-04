@@ -34,7 +34,7 @@ public class Killaura extends Module {
     int delayPassed = 0;
 
     public Killaura() {
-        super("Killaura", "No description", ModuleType.COMBAT);
+        super("Killaura", "anime", ModuleType.COMBAT);
         range.showOnlyIf(() -> !capRangeAtMax.getValue());
         delay.showOnlyIf(() -> !automaticalDelay.getValue());
     }

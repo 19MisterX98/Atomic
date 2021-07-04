@@ -10,7 +10,7 @@ public class Step extends Module {
     SliderValue height = (SliderValue) this.config.create("Step height", 3, 1, 50, 0).description("How high to step");
 
     public Step() {
-        super("Step", "spider but fast", ModuleType.MOVEMENT);
+        super("Step", "spiders would like to learn this power", ModuleType.MOVEMENT);
     }
 
     @Override

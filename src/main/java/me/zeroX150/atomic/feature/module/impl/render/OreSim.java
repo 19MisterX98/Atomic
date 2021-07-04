@@ -48,7 +48,7 @@ public class OreSim extends Module {
     private ChunkPos prevOffset = new ChunkPos(0, 0);
 
     public OreSim() {
-        super("OreSim", "Worldseed + Math = Ores", ModuleType.RENDER);
+        super("OreSim", "xray on crack", ModuleType.RENDER);
 
         gold = (BooleanValue) this.config.create("Gold", false).description("Whether or not to simulate gold");
         coal = (BooleanValue) this.config.create("Coal", false).description("Whether or not to simulate coal");

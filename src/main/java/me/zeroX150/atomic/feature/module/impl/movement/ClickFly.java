@@ -16,7 +16,7 @@ import net.minecraft.util.math.Vec3d;
 
 import java.awt.*;
 
-public class ClickTP extends Module {
+public class ClickFly extends Module {
     BooleanValue autoDisable = (BooleanValue) this.config.create("Auto disable", false).description("Automatically disable when the goal is reached");
     BooleanValue smartTarget = (BooleanValue) this.config.create("Smart target", true).description("Whether or not to target the goal with some iq");
 
@@ -26,7 +26,7 @@ public class ClickTP extends Module {
     boolean flag = false;
     boolean tpInProgress = false;
 
-    public ClickTP() {
+    public ClickFly() {
         super("ClickFly", "Flies you to whereever you look at", ModuleType.MOVEMENT);
         this.config.getAll().add(color);
     }

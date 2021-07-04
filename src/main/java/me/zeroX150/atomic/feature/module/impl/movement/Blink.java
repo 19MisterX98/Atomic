@@ -18,7 +18,7 @@ public class Blink extends Module {
     List<Packet<?>> queue = new ArrayList<>();
 
     public Blink() {
-        super("Blink", "hehe blink go brrr", ModuleType.MOVEMENT);
+        super("Blink", "confuses chinese anticheats", ModuleType.MOVEMENT);
         Module parent = this;
         Events.Packets.registerEventHandler(PacketEvents.PACKET_SEND, event -> {
             if (!parent.isEnabled()) return;

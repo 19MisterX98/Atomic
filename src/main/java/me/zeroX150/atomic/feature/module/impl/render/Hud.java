@@ -43,7 +43,7 @@ public class Hud extends Module {
     DateFormat df = new SimpleDateFormat("h:mm aa");
 
     public Hud() {
-        super("Hud", "poggies", ModuleType.RENDER);
+        super("Hud", "shows info about shit", ModuleType.RENDER);
         lastTimePacketReceived = System.currentTimeMillis();
 
         Events.Packets.registerEventHandler(PacketEvents.PACKET_RECEIVE, event -> {
