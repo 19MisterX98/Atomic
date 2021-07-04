@@ -54,7 +54,6 @@ public class ConfigManager {
         }
         base.add("enabled", enabled);
         base.add("config", config);
-        System.out.println(base);
         try {
             FileUtils.writeStringToFile(CONFIG_FILE, base.toString(), Charsets.UTF_8, false);
         } catch (IOException e) {
@@ -117,7 +116,7 @@ public class ConfigManager {
         enabled = true;
         for (Module module : toBeEnabled) {
             module.setEnabled(true);
-            System.out.println("enabling " + module.getName());
+            System.out.println("Enabling " + module.getName()+" because config says so");
         }
     }
 }
