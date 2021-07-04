@@ -16,8 +16,8 @@ import net.minecraft.util.math.Vec3d;
 import java.awt.*;
 
 public class ESP extends Module {
-    BooleanValue entities = this.config.create("Show Entities", false);
-    BooleanValue players = this.config.create("Show Players", true);
+    BooleanValue entities = (BooleanValue) this.config.create("Show Entities", false).description("Whether or not to show entities");
+    BooleanValue players = (BooleanValue) this.config.create("Show Players", true).description("Whether or not to show players");
 
     public ESP() {
         super("ESP", "the", ModuleType.RENDER);

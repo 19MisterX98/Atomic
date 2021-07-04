@@ -50,20 +50,20 @@ public class OreSim extends Module {
     public OreSim() {
         super("OreSim", "Worldseed + Math = Ores", ModuleType.RENDER);
 
-        gold = this.config.create("Gold", false);
-        coal = this.config.create("Coal", false);
-        iron = this.config.create("Iron", false);
-        lapis = this.config.create("Lapis", false);
-        copper = this.config.create("Kappa", false);
-        quartz = this.config.create("Quartz", false);
-        diamond = this.config.create("Diamond", true);
-        emerald = this.config.create("Emerald", false);
-        redstone = this.config.create("Redstone", false);
-        ancientDebris = this.config.create("Ancient Debris", false);
+        gold = (BooleanValue) this.config.create("Gold", false).description("Whether or not to simulate gold");
+        coal = (BooleanValue) this.config.create("Coal", false).description("Whether or not to simulate coal");
+        iron = (BooleanValue) this.config.create("Iron", false).description("Whether or not to simulate iron");
+        lapis = (BooleanValue) this.config.create("Lapis", false).description("Whether or not to simulate lapis");
+        copper = (BooleanValue) this.config.create("Kappa", false).description("Whether or not to simulate copper");
+        quartz = (BooleanValue) this.config.create("Quartz", false).description("Whether or not to simulate quartz");
+        diamond = (BooleanValue) this.config.create("Diamond", true).description("Whether or not to simulate diamonds");
+        emerald = (BooleanValue) this.config.create("Emerald", false).description("Whether or not to simulate emeralds");
+        redstone = (BooleanValue) this.config.create("Redstone", false).description("Whether or not to simulate redstone");
+        ancientDebris = (BooleanValue) this.config.create("Ancient Debris", false).description("Whether or not to simulate netherite");
 
-        airCheck = this.config.create("Air-check mode", "Off", "Off", "On load", "Rescan");
-        seedInput = this.config.create("Seed", "Your Worldseed");
-        chunkRange = this.config.create("Chunk Range", 5, 0, 10, 10);
+        airCheck = (MultiValue) this.config.create("Air-check mode", "Off", "Off", "On load", "Rescan").description("The mode to check placements in the air by");
+        seedInput = this.config.create("Seed", "69420").description("The seed of the world used to simulate ore placements");
+        chunkRange = (SliderValue) this.config.create("Chunk Range", 5, 0, 10, 10).description("The range of chunks to simulate around the player");
 
         this.config.organizeClickGUIList = false;
     }

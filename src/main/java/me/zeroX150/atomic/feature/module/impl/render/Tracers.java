@@ -5,9 +5,11 @@ import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.feature.module.config.BooleanValue;
 import me.zeroX150.atomic.helper.Renderer;
+import net.minecraft.client.render.Camera;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.mob.EndermanEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
@@ -20,9 +22,9 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class Tracers extends Module {
-    BooleanValue fancy = this.config.create("Fancy tracers", false);
-    BooleanValue entities = this.config.create("Show Entities", false);
-    BooleanValue players = this.config.create("Show Players", true);
+    BooleanValue fancy = (BooleanValue) this.config.create("Fancy tracers", false).description("Whether or not to show fancy tracers");
+    BooleanValue entities = (BooleanValue) this.config.create("Show Entities", false).description("Whether or not to show entities");
+    BooleanValue players = (BooleanValue) this.config.create("Show Players", true).description("Whether or not to show players");
 
     public Tracers() {
         super("Tracers", "hehe tracer", ModuleType.RENDER);
@@ -50,8 +52,9 @@ public class Tracers extends Module {
     }
 
     Vec2f getPY(Vec3d target1) {
+        Camera c = Atomic.client.gameRenderer.getCamera();
         double vec = 57.2957763671875;
-        Vec3d target = target1.subtract(Renderer.getCrosshairVector());
+        Vec3d target = target1.subtract(c.getPos());
         double square = Math.sqrt(target.x * target.x + target.z * target.z);
         float pitch = MathHelper.wrapDegrees((float) (-(MathHelper.atan2(target.y, square) * vec)));
         float yaw = MathHelper.wrapDegrees((float) (MathHelper.atan2(target.z, target.x) * vec) - 90.0F);
@@ -70,7 +73,11 @@ public class Tracers extends Module {
             Color c;
             if (entity instanceof PlayerEntity) c = Color.RED;
             else if (entity instanceof ItemEntity) c = Color.CYAN;
-            else if (entity instanceof HostileEntity) c = Color.YELLOW;
+            else if (entity instanceof EndermanEntity enderman) {
+                if (enderman.isProvoked()) {
+                    c = Color.YELLOW;
+                } else c = Color.GREEN;
+            } else if (entity instanceof HostileEntity) c = Color.YELLOW;
             else c = Color.GREEN;
             c = Renderer.modify(c, -1, -1, -1, (int) Math.floor(dc * 255));
             if (isEntityApplicable(entity)) {

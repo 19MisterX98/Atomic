@@ -5,6 +5,7 @@ import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.gui.clickgui.ClickGUI;
 import me.zeroX150.atomic.feature.gui.overlay.WelcomeOverlay;
 import me.zeroX150.atomic.feature.gui.particles.ParticleManager;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
@@ -16,6 +17,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 public class HomeScreen extends Screen {
+    boolean isMeteorLoaded = false;
     static boolean shownWelcome = false;
     ParticleManager pm = new ParticleManager(200);
 
@@ -35,8 +37,8 @@ public class HomeScreen extends Screen {
         addDrawableChild(new ButtonWidget(width / 2 - 75, height / 2 + 25, 70, 20, Text.of("Options"), button -> Atomic.client.openScreen(new OptionsScreen(this, Atomic.client.options))));
         addDrawableChild(new ButtonWidget(width / 2 + 5, height / 2 + 25, 70, 20, Text.of("Quit"), button -> Atomic.client.stop()));
         addDrawableChild(new ButtonWidget(width / 2 - (150 / 2), height / 2 + 25 + 25, 150, 20, Text.of("Alts"), button -> Atomic.client.openScreen(new AltManager())));
-        addDrawableChild(new ButtonWidget(1, 1, 20, 20, Text.of("D"), button -> Atomic.client.openScreen(new TestScreen())));
         super.init();
+        isMeteorLoaded = FabricLoader.getInstance().isModLoaded("meteor-client");
     }
 
     @Override
@@ -59,6 +61,9 @@ public class HomeScreen extends Screen {
         drawTexture(matrices, (int) (width / 2 - (504 * logoSize / 2)), 10, 0, 0, 0, (int) (504 * logoSize), (int) (130 * logoSize), (int) (130 * logoSize), (int) (504 * logoSize));
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();
+        if (isMeteorLoaded) {
+            Atomic.fontRenderer.drawString(matrices,"Fuck meteor edition",1,1,0xFFFFFF);
+        }
         super.render(matrices, mouseX, mouseY, delta);
     }
 

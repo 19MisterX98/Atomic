@@ -17,8 +17,8 @@ import net.minecraft.util.math.Vec3d;
 import java.awt.*;
 
 public class ClickTP extends Module {
-    BooleanValue autoDisable = this.config.create("Auto disable", false);
-    BooleanValue smartTarget = this.config.create("Smart target", true);
+    BooleanValue autoDisable = (BooleanValue) this.config.create("Auto disable", false).description("Automatically disable when the goal is reached");
+    BooleanValue smartTarget = (BooleanValue) this.config.create("Smart target", true).description("Whether or not to target the goal with some iq");
 
     ColorValue color = new ColorValue("Color", Color.BLACK);
 

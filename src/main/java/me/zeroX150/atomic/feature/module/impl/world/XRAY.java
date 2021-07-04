@@ -5,7 +5,9 @@ import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleType;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.OreBlock;
+import net.minecraft.block.RedstoneOreBlock;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.registry.Registry;
 
@@ -17,7 +19,9 @@ public class XRAY extends Module {
     public XRAY() {
         super("XRAY", "me when the when the me", ModuleType.WORLD);
         Registry.BLOCK.forEach(block -> {
-            if (block instanceof OreBlock) blocks.add(block);
+            if (block instanceof OreBlock || block instanceof RedstoneOreBlock || block == Blocks.CHEST
+                    || block == Blocks.FURNACE || block == Blocks.END_GATEWAY || block == Blocks.COMMAND_BLOCK)
+                blocks.add(block);
         });
     }
 

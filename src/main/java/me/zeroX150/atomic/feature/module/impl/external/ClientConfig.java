@@ -10,7 +10,7 @@ public class ClientConfig extends Module {
 
     public ClientConfig() {
         super("ClientConfig", "No description", ModuleType.MISC);
-        chatPrefix = this.config.create("Chat prefix", ".");
+        chatPrefix = this.config.create("Chat prefix", ".").description("The prefix used in chat to issue commands");
     }
 
     @Override

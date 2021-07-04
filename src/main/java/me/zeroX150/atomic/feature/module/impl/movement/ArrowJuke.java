@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArrowJuke extends Module {
-    SliderValue predict = this.config.create("Prediction dist", 10, 5, 20, 1);
-    SliderValue accuracy = this.config.create("Laziness", 0.6, 0.1, 2, 2);
-    SliderValue expand = this.config.create("Hitbox expand", 0.3, 0, 1, 3);
+    SliderValue predict = (SliderValue) this.config.create("Prediction dist", 10, 5, 20, 1).description("The distance to extend the arrows trajectory by");
+    SliderValue accuracy = (SliderValue) this.config.create("Laziness", 0.6, 0.1, 2, 2).description("Laziness of the prediction (higher = lazier)");
+    SliderValue expand = (SliderValue) this.config.create("Hitbox expand", 0.3, 0, 1, 3).description("How much to expand the hitbox of player & arrow");
 
     List<Vec3d> bruhMoments = new ArrayList<>();
 

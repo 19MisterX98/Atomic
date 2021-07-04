@@ -12,6 +12,10 @@ import java.util.ArrayList;
 public class TestModule extends Module {
     public TestModule() {
         super("Test", "among", ModuleType.MISC);
+        this.config.create("test1", "stuff").description("test");
+        this.config.create("test2", 1, 1, 2, 0).description("test1");
+        this.config.create("test3", true).description("test2");
+        this.config.create("test 4", "e", "e", "a", "o").description("test3");
     }
 
     @Override

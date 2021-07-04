@@ -16,7 +16,7 @@ public abstract class Module {
         this.description = d;
         this.moduleType = type;
         this.config = new ModuleConfig();
-        this.config.create("Keybind", -1);
+        this.config.create("Keybind", -1).description("The keybind to toggle the module with");
     }
 
     public ModuleType getModuleType() {

@@ -16,11 +16,12 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
  */
 public class NoFall extends Module {
     public static MultiValue mode;
-    SliderValue fallDist = this.config.create("Fall distance", 3, 0, 10, 1);
+    SliderValue fallDist = (SliderValue) this.config.create("Fall distance", 3, 0, 10, 1).description("The distance to fall for to enable the module");
 
     public NoFall() {
         super("NoFall", "no fall damage", ModuleType.MOVEMENT);
         mode = this.config.create("Mode", "OnGround", "OnGround", "Packet", "BreakFall");
+        mode.description("The mode of the module");
         this.fallDist.showOnlyIf(() -> !mode.getValue().equalsIgnoreCase("onground"));
         Events.Packets.registerEventHandler(PacketEvents.PACKET_SEND, event -> {
             if (!this.isEnabled()) return;

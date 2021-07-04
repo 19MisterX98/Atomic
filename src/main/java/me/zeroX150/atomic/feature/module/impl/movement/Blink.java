@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Blink extends Module {
-    MultiValue mode = this.config.create("Mode", "delay", "delay", "drop");
+    MultiValue mode = (MultiValue) this.config.create("Mode", "delay", "delay", "drop").description("Whether or not to delay or drop the packets");
     List<Packet<?>> queue = new ArrayList<>();
 
     public Blink() {

@@ -15,9 +15,9 @@ import net.minecraft.util.math.Vec3d;
 import java.util.Random;
 
 public class Flight extends Module {
-    MultiValue mode = this.config.create("Mode", "Static", "Vanilla", "Static", "3D", "Jetpack");
-    BooleanValue bypassVanillaAc = this.config.create("Vanilla AC bypass", true);
-    SliderValue speed = this.config.create("Speed", 2, 0.1, 10, 1);
+    MultiValue mode = (MultiValue) this.config.create("Mode", "Static", "Vanilla", "Static", "3D", "Jetpack").description("Which type of fly to do");
+    BooleanValue bypassVanillaAc = (BooleanValue) this.config.create("Vanilla AC bypass", true).description("Whether or not to bypass the vanilla Anticheat (Flying is not enabled on this server)");
+    SliderValue speed = (SliderValue) this.config.create("Speed", 2, 0.1, 10, 1).description("The speed of the flight (does not affect vanilla)");
 
     int bypassTimer = 0;
 

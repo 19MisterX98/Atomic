@@ -12,7 +12,7 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.Vec3d;
 
 public class Criticals extends Module {
-    MultiValue mode = this.config.create("Mode", "packet", "packet", "tphop");
+    MultiValue mode = (MultiValue) this.config.create("Mode", "packet", "packet", "tphop").description("The mode");
 
     public Criticals() {
         super("Criticals", "more damage", ModuleType.COMBAT);

@@ -1,6 +1,5 @@
 package me.zeroX150.atomic.feature.gui.clickgui;
 
-import com.google.common.collect.Lists;
 import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.gui.widget.SimpleCustomTextFieldWidget;
 import me.zeroX150.atomic.feature.module.Module;
@@ -40,18 +39,51 @@ public class ConfigWidget {
         }
 
         for (DynamicValue<?> dynamicValue : v) {
+            List<ClickableWidget> cw = new ArrayList<>();
             if (dynamicValue.getKey().equalsIgnoreCase("Keybind")) {
-                KeyListenerBtn t = new KeyListenerBtn(1, yOffset, 100, parent);
-                children.put(dynamicValue, Lists.asList(t, new ClickableWidget[0]));
+                KeyListenerBtn t = new KeyListenerBtn(1, yOffset, 100, parent) {
+                    @Override
+                    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+                        if (isHovered()) {
+                            ClickGUI.INSTANCE.renderDescription(dynamicValue.getDescription());
+                        }
+                        super.render(matrices, mouseX, mouseY, delta);
+                    }
+                };
+                cw.add(t);
             } else if (dynamicValue instanceof BooleanValue) {
-                Toggleable t = new Toggleable(1, yOffset, 100, (BooleanValue) dynamicValue);
-                children.put(dynamicValue, Lists.asList(t, new ClickableWidget[0]));
+                Toggleable t = new Toggleable(1, yOffset, 100, (BooleanValue) dynamicValue) {
+                    @Override
+                    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+                        if (isHovered()) {
+                            ClickGUI.INSTANCE.renderDescription(dynamicValue.getDescription());
+                        }
+                        super.render(matrices, mouseX, mouseY, delta);
+                    }
+                };
+                cw.add(t);
             } else if (dynamicValue instanceof SliderValue) {
-                Slider t = new Slider(1, yOffset, 99, (SliderValue) dynamicValue);
-                children.put(dynamicValue, Lists.asList(t, new ClickableWidget[0]));
+                Slider t = new Slider(1, yOffset, 99, (SliderValue) dynamicValue) {
+                    @Override
+                    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+                        if (isHovered()) {
+                            ClickGUI.INSTANCE.renderDescription(dynamicValue.getDescription());
+                        }
+                        super.render(matrices, mouseX, mouseY, delta);
+                    }
+                };
+                cw.add(t);
             } else if (dynamicValue instanceof MultiValue) {
-                ButtonMultiSelectable t = new ButtonMultiSelectable(1, yOffset, 100, (MultiValue) dynamicValue);
-                children.put(dynamicValue, Lists.asList(t, new ClickableWidget[0]));
+                ButtonMultiSelectable t = new ButtonMultiSelectable(1, yOffset, 100, (MultiValue) dynamicValue) {
+                    @Override
+                    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+                        if (isHovered()) {
+                            ClickGUI.INSTANCE.renderDescription(dynamicValue.getDescription());
+                        }
+                        super.render(matrices, mouseX, mouseY, delta);
+                    }
+                };
+                cw.add(t);
             } else if (dynamicValue instanceof ColorValue orig) {
                 Slider red = new Slider(1, yOffset, 99, new SliderValue("0", orig.getColor().getRed(), 0, 255, 0) {
                     @Override
@@ -111,7 +143,11 @@ public class ConfigWidget {
                         blue.value = orig.getColor().getBlue();
                     }
                 });
-                children.put(dynamicValue, Lists.asList(red, new ClickableWidget[]{green, blue, isRGB}));
+                cw.add(red);
+                cw.add(green);
+                cw.add(blue);
+                cw.add(isRGB);
+                //children.put(dynamicValue, Lists.asList(red, new ClickableWidget[]{green, blue, isRGB}));
 
             } else {
                 SimpleCustomTextFieldWidget w = new SimpleCustomTextFieldWidget(1, yOffset, 100, 12, Text.of(dynamicValue.getKey())) {
@@ -119,10 +155,19 @@ public class ConfigWidget {
                     public void event_onTextChange() {
                         dynamicValue.setValue(this.getText());
                     }
+
+                    @Override
+                    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+                        if (isHovered()) {
+                            ClickGUI.INSTANCE.renderDescription(dynamicValue.getDescription());
+                        }
+                        super.render(matrices, mouseX, mouseY, delta);
+                    }
                 };
                 w.setText(dynamicValue.getValue().toString());
-                children.put(dynamicValue, Lists.asList(w, new ClickableWidget[0]));
+                cw.add(w);
             }
+            children.put(dynamicValue, cw);
             yOffset += 12;
         }
     }

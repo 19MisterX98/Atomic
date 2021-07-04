@@ -37,6 +37,11 @@ public class SimpleCustomTextFieldWidget extends ClickableWidget implements Draw
     }
 
     @Override
+    public void mouseMoved(double mouseX, double mouseY) {
+        hovered = mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height;
+    }
+
+    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         selected = mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height;
         return super.mouseClicked(mouseX, mouseY, button);

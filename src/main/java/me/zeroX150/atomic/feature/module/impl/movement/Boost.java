@@ -9,8 +9,8 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Vec3d;
 
 public class Boost extends Module {
-    SliderValue strength = this.config.create("Strength", 3, 0.1, 10, 1);
-    MultiValue mode = this.config.create("Mode", "add", "add", "overwrite");
+    SliderValue strength = (SliderValue) this.config.create("Strength", 3, 0.1, 10, 1).description("The strength to boost you by");
+    MultiValue mode = (MultiValue) this.config.create("Mode", "add", "add", "overwrite").description("The mode of which to affect your velocity by");
 
     public Boost() {
         super("Boost", "weee", ModuleType.MOVEMENT);

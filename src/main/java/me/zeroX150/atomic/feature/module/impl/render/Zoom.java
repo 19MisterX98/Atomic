@@ -17,11 +17,11 @@ public class Zoom extends Module {
     static SliderValue finalFov;
     Keybind kb;
     double msens = 0.5d;
-    BooleanValue hold = this.config.create("Hold", true);
+    BooleanValue hold = (BooleanValue) this.config.create("Hold", true).description("Whether or not to disable the module when the keybind is unpressed");
 
     public Zoom() {
         super("Zoom", "ok zoomer", ModuleType.RENDER);
-        finalFov = this.config.create("Fov", 30, 1, 180, 0);
+        finalFov = (SliderValue) this.config.create("Fov", 30, 1, 180, 0).description("The FOV to zoom into");
     }
 
     public static double getZoomValue(double vanilla) {

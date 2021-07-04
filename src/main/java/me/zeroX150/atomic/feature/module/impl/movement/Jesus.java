@@ -19,6 +19,7 @@ public class Jesus extends Module {
     public Jesus() {
         super("Jesus", "No description", ModuleType.MOVEMENT);
         mode = this.config.create("Mode", "solid", "jump", "velocity", "solid", "legit");
+        mode.description("The mode of the module");
         velStrength.showOnlyIf(() -> Jesus.mode.getValue().equalsIgnoreCase("velocity"));
     }
 

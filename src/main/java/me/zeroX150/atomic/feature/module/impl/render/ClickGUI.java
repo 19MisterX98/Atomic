@@ -19,12 +19,12 @@ public class ClickGUI extends Module {
 
     public ClickGUI() {
         super("ClickGUI", "Opens the click gui", ModuleType.RENDER);
-        logoSize = this.config.create("Logo size", 0.28, 0, 1, 2);
-        smooth = this.config.create("Movement smooth", 20, 10, 30, 1);
-        dragFactor = this.config.create("Drag factor", 1.5, 0, 3, 1);
-        enableTails = this.config.create("Enable tails", true);
-        tailSize = this.config.create("Tail size", 50, 10, 200, 0);
-        theme = this.config.create("Theme", "Atomic", "Atomic", "Walmart Sigma");
+        logoSize = (SliderValue) this.config.create("Logo size", 0.28, 0, 1, 2).description("The size of the logo at the top (0 to disable)");
+        smooth = (SliderValue) this.config.create("Movement smooth", 20, 10, 30, 1).description("The factor to smooth movements of the tabs by");
+        dragFactor = (SliderValue) this.config.create("Drag factor", 1.5, 0, 3, 1).description("The factor to rotate the tab by when you move it (0 to disable)");
+        enableTails = (BooleanValue) this.config.create("Enable tails", true).description("Whether or not to enable tails");
+        tailSize = (SliderValue) this.config.create("Tail size", 50, 10, 200, 0).description("The length of the tails");
+        theme = (MultiValue) this.config.create("Theme", "Atomic", "Atomic", "Walmart Sigma").description("The theme of the clickgui");
         tailSize.showOnlyIf(() -> enableTails.getValue());
         this.config.get("Keybind").setValue(344);
     }

@@ -7,6 +7,7 @@ public class DynamicValue<T> {
     private final String key;
     public List<SelectorRunnable> selectors = new ArrayList<>();
     protected T value;
+    private String description = "";
 
     public DynamicValue(String key, T value) {
         this.key = key;
@@ -36,6 +37,15 @@ public class DynamicValue<T> {
             if (!selector.shouldShow()) return false;
         }
         return true;
+    }
+
+    public DynamicValue<T> description(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void showOnlyIf(SelectorRunnable runnable) {

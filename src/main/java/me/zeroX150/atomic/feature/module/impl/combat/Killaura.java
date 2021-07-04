@@ -21,15 +21,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Killaura extends Module {
-    BooleanValue capRangeAtMax = this.config.create("Max range", true);
-    SliderValue range = this.config.create("Range", 3.2, 0.1, 7, 2);
-    SliderValue delay = this.config.create("Delay", 0, 0, 20, 0);
-    BooleanValue automaticalDelay = this.config.create("Auto delay", true);
+    BooleanValue capRangeAtMax = (BooleanValue) this.config.create("Max range", true).description("Whether or not to set the range to the max");
+    SliderValue range = (SliderValue) this.config.create("Range", 3.2, 0.1, 7, 2).description("The range to select entities by");
+    SliderValue delay = (SliderValue) this.config.create("Delay", 0, 0, 20, 0).description("The delay before attacking");
+    BooleanValue automaticalDelay = (BooleanValue) this.config.create("Auto delay", true).description("Whether or not to automatically pick a delay based on your weapon");
 
-    MultiValue mode = this.config.create("Mode", "Single", "Single", "Multi");
+    MultiValue mode = (MultiValue) this.config.create("Mode", "Single", "Single", "Multi").description("The mode");
 
-    BooleanValue attackMobs = this.config.create("Attack mobs", true);
-    BooleanValue attackPlayers = this.config.create("Attack players", true);
+    BooleanValue attackMobs = (BooleanValue) this.config.create("Attack mobs", true).description("Whether or not to attack mobs");
+    BooleanValue attackPlayers = (BooleanValue) this.config.create("Attack players", true).description("Whether or not to attack players");
 
     int delayPassed = 0;
 

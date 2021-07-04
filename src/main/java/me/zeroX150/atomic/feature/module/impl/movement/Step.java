@@ -7,7 +7,7 @@ import me.zeroX150.atomic.feature.module.config.SliderValue;
 import net.minecraft.client.util.math.MatrixStack;
 
 public class Step extends Module {
-    SliderValue height = this.config.create("Step height", 3, 1, 50, 0);
+    SliderValue height = (SliderValue) this.config.create("Step height", 3, 1, 50, 0).description("How high to step");
 
     public Step() {
         super("Step", "spider but fast", ModuleType.MOVEMENT);
