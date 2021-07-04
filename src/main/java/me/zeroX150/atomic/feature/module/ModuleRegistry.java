@@ -27,7 +27,6 @@ public class ModuleRegistry {
          * antilevitate
          * hitboxes
          * shulkerpeek
-         * inventory walk
          * */
 
         modules.add(new TestModule());
@@ -79,6 +78,7 @@ public class ModuleRegistry {
         modules.add(new AutoEndermanAngry());
         modules.add(new MidAirPlace());
         modules.add(new Dupe());
+        modules.add(new InventoryWalk());
     }
 
     public static List<Module> getModules() {
