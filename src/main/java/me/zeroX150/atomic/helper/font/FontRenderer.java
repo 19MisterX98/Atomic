@@ -193,6 +193,10 @@ public class FontRenderer {
         drawString(matrixStack, text, (x - getStringWidth(text) / 2), y - ((getStringHeight(text) - 2) / 2f), FontType.SHADOW_THIN, color);
     }
 
+    public void drawCenteredString(MatrixStack matrixStack, String text, float x, float y, FontType type, int color) {
+        drawString(matrixStack, text, (x - getStringWidth(text) / 2), y - ((getStringHeight(text) - 2) / 2f), type, color);
+    }
+
     public final void drawString(MatrixStack matrixStack, String text, float x, float y, FontType fontType, int color) {
         Color c = new Color(color);
         if (c.getRed() < 50 && c.getGreen() < 50 && c.getBlue() < 50) fontType = FontType.NORMAL;
@@ -434,6 +438,10 @@ public class FontRenderer {
 
     public void drawString(MatrixStack ms, String title, double x, double y, int color) {
         drawString(ms, title, (float) x, (float) y - (getStringHeight(title) - 2) / 2f, FontType.SHADOW_THIN, color);
+    }
+
+    public void drawString(MatrixStack ms, String title, double x, double y, FontType type, int color) {
+        drawString(ms, title, (float) x, (float) y - (getStringHeight(title) - 2) / 2f, type, color);
     }
 
     public enum FontType {

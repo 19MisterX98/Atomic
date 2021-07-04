@@ -195,9 +195,11 @@ public class ClickGUI extends Screen {
         Color newRet = Transitions.transition(cTheme.h_ret(), aTheme.p.h_ret(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
         Color newExp = Transitions.transition(cTheme.h_exp(), aTheme.p.h_exp(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
         Color newFCol = Transitions.transition(cTheme.fontColor(), aTheme.p.fontColor(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
+        Color newTCol = Transitions.transition(cTheme.titleColor(), aTheme.p.titleColor(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
         double newMargin = Transitions.transition(cTheme.h_margin(), aTheme.p.h_margin(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
         double newPadding = Transitions.transition(cTheme.h_paddingX(), aTheme.p.h_paddingX(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
-        currentActiveTheme = new Themes.Palette(newInactive, newActive, newHiglight, newRet, newExp, newFCol, newMargin, newPadding, aTheme.p.centerText());
+        double newDHeight = Transitions.transition(cTheme.titleHeight(), aTheme.p.titleHeight(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
+        currentActiveTheme = new Themes.Palette(newInactive, newActive, newHiglight, newRet, newExp, newFCol, newTCol, newMargin, newPadding, aTheme.p.centerText(), newDHeight);
         double aProgI = easeOutBounce(aProg);
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableBlend();

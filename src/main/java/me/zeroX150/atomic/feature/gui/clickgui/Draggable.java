@@ -2,6 +2,7 @@ package me.zeroX150.atomic.feature.gui.clickgui;
 
 import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.helper.Renderer;
+import me.zeroX150.atomic.helper.font.FontRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
@@ -124,7 +125,7 @@ public class Draggable {
                 val += incr;
             }
         if (this.animProg != 0) {
-            double yOffset = 9 + getMargin() * 2;
+            double yOffset = ClickGUI.currentActiveTheme.titleHeight() + getMargin() * 2;
             for (Clickable child : children) {
                 double px = this.dragged || animProgInter != 1 ? -1 : lastRenderX;
                 double py = this.dragged || animProgInter != 1 ? -1 : lastRenderY + (yOffset * animProgInter);
@@ -132,11 +133,13 @@ public class Draggable {
                 yOffset += 9 + getMargin() * 2;
             }
         }
-        DrawableHelper.fill(stack, (int) -(getPaddingX() * 2), 0, (int) (width + getMargin() + 4 + getPaddingX() * 2), (int) (9 + getMargin() * 2), Renderer.lerp(ClickGUI.currentActiveTheme.h_exp(), ClickGUI.currentActiveTheme.h_ret(), animProgInter).getRGB());
+        DrawableHelper.fill(stack, (int) -(getPaddingX() * 2), 0, (int) (width + getMargin() + 4 + getPaddingX() * 2), (int) (ClickGUI.currentActiveTheme.titleHeight() + getMargin() * 2), Renderer.lerp(ClickGUI.currentActiveTheme.h_exp(), ClickGUI.currentActiveTheme.h_ret(), animProgInter).getRGB());
+        FontRenderer.FontType ft = FontRenderer.FontType.SHADOW_THIN;
+        if (me.zeroX150.atomic.feature.module.impl.render.ClickGUI.theme.getValue().equalsIgnoreCase("walmart sigma")) ft = FontRenderer.FontType.NORMAL;
         if (!ClickGUI.currentActiveTheme.centerText())
-            Atomic.fontRenderer.drawString(stack, title, getMargin(), getMargin() + 1, ClickGUI.currentActiveTheme.fontColor().getRGB());
+            Atomic.fontRenderer.drawString(stack, title, getMargin(), getMargin() + (ClickGUI.currentActiveTheme.titleHeight()/2-9/2d), ft, ClickGUI.currentActiveTheme.titleColor().getRGB());
         else
-            Atomic.fontRenderer.drawCenteredString(stack, title, getMargin() + width / 2f, getMargin(), ClickGUI.currentActiveTheme.fontColor().getRGB());
+            Atomic.fontRenderer.drawCenteredString(stack, title, (float)(getMargin() + width / 2f), (float) getMargin(), ft, ClickGUI.currentActiveTheme.titleColor().getRGB());
         //DrawableHelper.drawCenteredText(stack, Atomic.client.textRenderer, title, (int) (getMargin() + (width / 2)), (int) margin, 0xFFFFFF);
         stack.translate(-(lastRenderX - getMargin() - getPaddingX()), -(lastRenderY - getMargin()), 0);
     }
