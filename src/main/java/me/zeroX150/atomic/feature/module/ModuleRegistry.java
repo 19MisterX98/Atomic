@@ -78,6 +78,7 @@ public class ModuleRegistry {
         modules.add(new Zoom());
         modules.add(new AutoEndermanAngry());
         modules.add(new MidAirPlace());
+        modules.add(new Dupe());
     }
 
     public static List<Module> getModules() {
