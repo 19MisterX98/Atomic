@@ -1,6 +1,6 @@
 package me.zeroX150.atomic.feature.module.impl.render;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleType;
@@ -10,6 +10,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -24,6 +25,9 @@ public class NameTags extends Module {
     }
 
     public void renderTag(Entity entity, MatrixStack matrices, EntityRenderDispatcher dispatcher) {
+        RenderSystem.enableDepthTest();
+        RenderSystem.disableBlend();
+        RenderSystem.depthFunc(GL11.GL_ALWAYS);
         if (Atomic.client.player == null) return;
         double d = dispatcher.getSquaredDistanceToCamera(entity);
         if (d > 4096) return;
@@ -35,10 +39,9 @@ public class NameTags extends Module {
         scale /= 50f;
         scale *= 0.55f;
         if (Atomic.client.player.distanceTo(entity) > 10) scale *= Atomic.client.player.distanceTo(entity) / 10;
-        matrices.translate(0, f + (scale * 6), 0);
+        matrices.translate(0, f + (scale * 6), 0f);
         matrices.multiply(dispatcher.getRotation());
         matrices.scale(-scale, -scale, scale);
-
         int health = (int) ((PlayerEntity) entity).getHealth();
         double hp = (((PlayerEntity) entity).getHealth() / ((PlayerEntity) entity).getMaxHealth());
         hp = MathHelper.clamp(hp, 0, 1);
@@ -49,22 +52,22 @@ public class NameTags extends Module {
         else if (hp > 0.25) t += "§c";
         else t += "§4";
         t += health;
-        float width = Atomic.fontRenderer.getStringWidth(t) / 2f;
+        float width = Atomic.client.textRenderer.getWidth(t) / 2f;
         double tp = trackedProgress.get(entity.getUuid());
         double trackDiff = hp - tp;
         trackDiff /= 10d;
         tp += trackDiff;
-        GlStateManager._enablePolygonOffset();
-        GlStateManager._polygonOffset(1f, -1500000);
+        RenderSystem.polygonOffset(1, -15000000);
+        RenderSystem.enablePolygonOffset();
         Renderer.fill(matrices, new Color(20, 20, 20, 220), -width - 4, 8 + 2, width + 4, 1);
-        //DrawableHelper.fill(matrices,-width-4,tr.fontHeight+2,width+4,1,new Color(20, 20, 20, 220).getRGB());
         Renderer.fill(matrices, new Color(0, 194, 111, 255), -width - 4, 8 + 2, (width + 4) * (tp * 2 - 1), 8 + 1);
         trackedProgress.put(entity.getUuid(), tp);
-        //DrawableHelper.fill(matrices,-width-4,tr.fontHeight+2,(int)((width+4)*(trackedProgress*2-1)),tr.fontHeight+1,new Color(0, 194, 111, 255).getRGB());
-        Atomic.fontRenderer.drawString(matrices, t, -Atomic.fontRenderer.getStringWidth(t) / 2f, f, 0xFFFFFF);
-        GlStateManager._disablePolygonOffset();
-        GlStateManager._polygonOffset(1f, 1500000);
+        Atomic.client.textRenderer.draw(matrices, t, -Atomic.client.textRenderer.getWidth(t) / 2f, f - 0.75f, 0xFFFFFF);
         matrices.pop();
+        RenderSystem.disableDepthTest();
+        RenderSystem.enableBlend();
+        RenderSystem.polygonOffset(1, 15000000);
+        RenderSystem.disablePolygonOffset();
     }
 
     @Override

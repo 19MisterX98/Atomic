@@ -64,6 +64,7 @@ public class ModuleRegistry {
         modules.add(new NameTags());
         modules.add(new ClientConfig());
         modules.add(new Tracers());
+        modules.add(new ESP());
         modules.add(new Alts());
         modules.add(new HologramAura());
         modules.add(new TexPackSpoof());

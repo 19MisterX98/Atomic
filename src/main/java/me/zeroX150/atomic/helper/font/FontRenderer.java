@@ -147,7 +147,7 @@ public class FontRenderer {
 
     public final void drawString(MatrixStack matrixStack, String text, float x, float y, FontType fontType, int color, int color2) {
         matrixStack.push();
-        matrixStack.translate(0, 0, 999f);
+        //matrixStack.translate(0, 0, 0f);
         text = stripUnsupported(text);
 
         //Render2DHelper.INSTANCE.setup2DRender(false);
