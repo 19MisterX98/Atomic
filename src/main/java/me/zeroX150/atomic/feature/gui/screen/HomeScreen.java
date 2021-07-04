@@ -17,8 +17,8 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 public class HomeScreen extends Screen {
-    boolean isMeteorLoaded = false;
     static boolean shownWelcome = false;
+    boolean isMeteorLoaded = false;
     ParticleManager pm = new ParticleManager(200);
 
     public HomeScreen() {
@@ -62,7 +62,7 @@ public class HomeScreen extends Screen {
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();
         if (isMeteorLoaded) {
-            Atomic.fontRenderer.drawString(matrices,"Fuck meteor edition",1,1,0xFFFFFF);
+            Atomic.fontRenderer.drawString(matrices, "Fuck meteor edition", 1, 1, 0xFFFFFF);
         }
         super.render(matrices, mouseX, mouseY, delta);
     }

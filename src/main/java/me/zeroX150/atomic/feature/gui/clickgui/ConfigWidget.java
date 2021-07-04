@@ -246,12 +246,16 @@ public class ConfigWidget {
         }
     }
 
-    public void charTyped(char c, int mod) {
+    public boolean charTyped(char c, int mod) {
+        boolean v = false;
         for (List<ClickableWidget> children : this.children.values()) {
             for (ClickableWidget child : children) {
-                if (child instanceof SimpleCustomTextFieldWidget) child.charTyped(c, mod);
+                if (child instanceof SimpleCustomTextFieldWidget) {
+                    if (child.charTyped(c, mod)) v = true;
+                }
             }
         }
+        return v;
     }
 
     public void mouseMoved(double x, double y) {
@@ -262,13 +266,15 @@ public class ConfigWidget {
         }
     }
 
-    public void keyPressed(int kc, int sc, int m) {
+    public boolean keyPressed(int kc, int sc, int m) {
+        boolean v = false;
         for (List<ClickableWidget> children : this.children.values()) {
             for (ClickableWidget child : children) {
                 if (child instanceof SimpleCustomTextFieldWidget || child instanceof KeyListenerBtn)
-                    child.keyPressed(kc, sc, m);
+                    if (child.keyPressed(kc, sc, m)) v = true;
             }
         }
+        return v;
     }
 
     public void keyReleased(int kc, int sc, int m) {

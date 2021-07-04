@@ -42,7 +42,7 @@ public class KeyListenerBtn extends ButtonWidget {
         parent.config.get("Keybind").setValue(kc);
         KeybindManager.reload();
         this.setMessage(Text.of(String.valueOf(bruh)));
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return true;
     }
 
     @Override

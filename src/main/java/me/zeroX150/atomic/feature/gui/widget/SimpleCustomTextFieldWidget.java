@@ -70,7 +70,7 @@ public class SimpleCustomTextFieldWidget extends ClickableWidget implements Draw
         } else if (Screen.isSelectAll(keyCode)) {
             this.setText("");
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class SimpleCustomTextFieldWidget extends ClickableWidget implements Draw
             cursorIndex++;
             event_onTextChange();
         }
-        return false;
+        return selected;
     }
 
     @Override

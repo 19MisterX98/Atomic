@@ -3,9 +3,12 @@ package me.zeroX150.atomic.feature.gui.clickgui;
 import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.helper.Client;
+import me.zeroX150.atomic.helper.Renderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
+
+import java.awt.*;
 
 public class Clickable {
     Module parent;
@@ -19,7 +22,21 @@ public class Clickable {
     }
 
     public void render(double x, double y, MatrixStack stack, double animProgress, double actualX, double actualY, float delta) {
-        //Atomic.client.textRenderer.draw(new MatrixStack(),parent.getName(),(float)x,(float)y,0xFFFFFF);
+        Color fillColor = ClickGUI.currentActiveTheme.inactive();
+        Color fontColor = ClickGUI.currentActiveTheme.fontColor();
+        if (!ClickGUI.INSTANCE.searchTerm.isEmpty()) {
+            boolean isGood = true;
+            for (char c : ClickGUI.INSTANCE.searchTerm.toLowerCase().toCharArray()) {
+                if (!parent.getName().toLowerCase().contains(c + "")) {
+                    isGood = false;
+                    break;
+                }
+            }
+            if (!isGood) {
+                //fillColor = fillColor.darker().darker();
+                fontColor = Renderer.modify(fontColor, -1, -1, -1, 60);
+            }
+        }
         boolean isHovered = (actualX != -1 && actualY != -1 && isHovered(actualX, actualY));
         if (isHovered) {
             ClickGUI.INSTANCE.renderDescription(parent.getDescription());
@@ -32,13 +49,14 @@ public class Clickable {
         animProg = MathHelper.clamp(animProg, 0, 1);
         double animProg1Inter = easeOutBounce(animProg1);
         double animProgInter = easeOutBounce(animProg);
-        DrawableHelper.fill(stack, (int) (x - margin), (int) Math.floor(y - margin), (int) (x + width + margin), (int) Math.floor(y + (margin + 9) * animProgress), ClickGUI.currentActiveTheme.inactive().getRGB());
+        DrawableHelper.fill(stack, (int) (x - margin), (int) Math.floor(y - margin), (int) (x + width + margin), (int) Math.floor(y + (margin + 9) * animProgress), fillColor.getRGB());
         DrawableHelper.fill(stack, (int) (x - margin), (int) Math.floor(y - margin), (int) (x - margin + (width + margin * 2) * animProgInter), (int) Math.floor(y + (margin + 9) * animProgress), ClickGUI.currentActiveTheme.active().getRGB());
-        DrawableHelper.fill(stack, (int) (x - margin), (int) Math.floor(y - margin), (int) (x - margin + 1), (int) Math.floor(y - margin + ((margin * 2 + 9) * animProg1Inter) * animProgress), ClickGUI.currentActiveTheme.l_highlight().getRGB());
+        //DrawableHelper.fill(stack, (int) (x - margin), (int) Math.floor(y - margin), (int) (x - margin + 1.5), (int) Math.floor(y - margin + ((margin * 2 + 9) * animProg1Inter) * animProgress), ClickGUI.currentActiveTheme.l_highlight().getRGB());
+        Renderer.fill(stack, ClickGUI.currentActiveTheme.l_highlight(), x - margin, y - margin, x - margin + 1.5, y - margin + ((margin * 2 + 9) * animProg1Inter) * animProgress);
         if (ClickGUI.currentActiveTheme.centerText())
-            Atomic.fontRenderer.drawCenteredString(stack, parent.getName(), (float) (x + (width / 2f)), (float) y, ClickGUI.currentActiveTheme.fontColor().getRGB());
+            Atomic.fontRenderer.drawCenteredString(stack, parent.getName(), (float) (x + (width / 2f)), (float) y, fontColor.getRGB());
         else
-            Atomic.fontRenderer.drawString(stack, parent.getName(), (float) (x), (float) y, ClickGUI.currentActiveTheme.fontColor().getRGB());
+            Atomic.fontRenderer.drawString(stack, parent.getName(), (float) (x), (float) y, fontColor.getRGB());
     }
 
     double easeOutBounce(double x) {

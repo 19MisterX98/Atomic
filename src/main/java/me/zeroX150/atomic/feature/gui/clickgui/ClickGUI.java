@@ -7,6 +7,7 @@ import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.helper.Transitions;
+import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -30,16 +31,13 @@ public class ClickGUI extends Screen {
     public static Themes.Palette currentActiveTheme = Themes.Theme.ATOMIC.getPalette();
 
     public static Identifier LOGO = new Identifier("atomic", "logo.png");
-
+    public String searchTerm = "";
     ConfigWidget currentConfig = null;
     double aProg = 2.0;
-
     int clicks = 0;
     int p = 0;
-
     double trackedScroll = 0;
     double actualScroll = 0;
-
     long lastRender = System.currentTimeMillis();
 
     List<Draggable> containers = new ArrayList<>();
@@ -116,6 +114,10 @@ public class ClickGUI extends Screen {
 
     @Override
     public void onClose() {
+        if (!searchTerm.isEmpty()) {
+            searchTerm = "";
+            return;
+        }
         closed = true;
         alreadyInitialized = false;
     }
@@ -249,6 +251,8 @@ public class ClickGUI extends Screen {
         if (actualScroll != 0) {
             Atomic.monoFontRenderer.drawString(new MatrixStack(), "Tip: Double right click to reset scroll", 2, 2, 0xFFFFFF);
         }
+        if (!searchTerm.isEmpty())
+            Atomic.monoFontRenderer.drawCenteredString(new MatrixStack(), "Search: " + searchTerm, width / 2f, height - 11, 0xFFFFFF);
         super.render(matrices, mouseX, (int) (mouseY + trackedScroll), delta);
     }
 
@@ -316,7 +320,11 @@ public class ClickGUI extends Screen {
 
     @Override
     public boolean charTyped(char chr, int modifiers) {
-        if (currentConfig != null) currentConfig.charTyped(chr, modifiers);
+        boolean shouldContinue = true;
+        if (currentConfig != null) if (currentConfig.charTyped(chr, modifiers)) shouldContinue = false;
+        if (shouldContinue) {
+            if (SharedConstants.isValidChar(chr)) searchTerm += chr;
+        }
         return true;
     }
 
@@ -328,7 +336,13 @@ public class ClickGUI extends Screen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (currentConfig != null) currentConfig.keyPressed(keyCode, scanCode, modifiers);
+        boolean shouldContinue = true;
+        if (currentConfig != null) if (currentConfig.keyPressed(keyCode, scanCode, modifiers)) shouldContinue = false;
+        if (shouldContinue) {
+            if (keyCode == 259) {
+                searchTerm = "";
+            }
+        }
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
@@ -345,5 +359,3 @@ public class ClickGUI extends Screen {
         return super.mouseScrolled(mouseX, mouseY, amount);
     }
 }
-
-
