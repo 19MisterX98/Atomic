@@ -80,6 +80,7 @@ public class ModuleRegistry {
         modules.add(new Dupe());
         modules.add(new InventoryWalk());
         modules.add(new TargetHud());
+        modules.add(new FarmingAura());
     }
 
     public static List<Module> getModules() {
