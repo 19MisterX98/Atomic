@@ -8,7 +8,6 @@ import me.zeroX150.atomic.helper.Client;
 import me.zeroX150.atomic.helper.Renderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.BookEditScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.option.GameOptions;
@@ -23,14 +22,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(HandledScreen.class)
 public abstract class GenericContainerScreenMixin<T extends ScreenHandler> extends Screen {
-    List<String> pressedKeys = new ArrayList<>(); // we gotta do this so the fucking list wont break
     @Shadow
     @Final
     protected T handler;
@@ -38,6 +35,7 @@ public abstract class GenericContainerScreenMixin<T extends ScreenHandler> exten
     protected int x;
     @Shadow
     protected int y;
+    List<String> pressedKeys = new ArrayList<>(); // we gotta do this so the fucking list wont break
     boolean isSelecting = false;
     ButtonWidget bw;
 
@@ -59,7 +57,7 @@ public abstract class GenericContainerScreenMixin<T extends ScreenHandler> exten
         this.addDrawableChild(bw);
     }
 
-    @Inject(method="tick",at=@At("HEAD"))
+    @Inject(method = "tick", at = @At("HEAD"))
     public void tick(CallbackInfo ci) {
         for (String pressedKey1 : pressedKeys.toArray(new String[0])) {
             int pk = Integer.parseInt(pressedKey1);
@@ -71,8 +69,8 @@ public abstract class GenericContainerScreenMixin<T extends ScreenHandler> exten
                 case 264 -> pitchOffset += 5f; // up
                 case 265 -> pitchOffset -= 5f; // down
             }
-            Atomic.client.player.setYaw(Atomic.client.player.getYaw()+yawOffset);
-            Atomic.client.player.setPitch(Atomic.client.player.getPitch()+pitchOffset);
+            Atomic.client.player.setYaw(Atomic.client.player.getYaw() + yawOffset);
+            Atomic.client.player.setPitch(Atomic.client.player.getPitch() + pitchOffset);
         }
     }
 
@@ -112,7 +110,7 @@ public abstract class GenericContainerScreenMixin<T extends ScreenHandler> exten
         }
     }
 
-    @Inject(method="keyPressed",at=@At("HEAD"))
+    @Inject(method = "keyPressed", at = @At("HEAD"))
     public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (!ModuleRegistry.getByClass(InventoryWalk.class).isEnabled()) return;
         GameOptions go = Atomic.client.options;
@@ -134,7 +132,7 @@ public abstract class GenericContainerScreenMixin<T extends ScreenHandler> exten
         if (keyCode == go.keySprint.getDefaultKey().getCode()) {
             go.keySprint.setPressed(true);
         }
-        if (!pressedKeys.contains(keyCode+"")) pressedKeys.add(keyCode+"");
+        if (!pressedKeys.contains(keyCode + "")) pressedKeys.add(keyCode + "");
     }
 
     @Override
@@ -159,7 +157,7 @@ public abstract class GenericContainerScreenMixin<T extends ScreenHandler> exten
         if (keyCode == go.keySprint.getDefaultKey().getCode()) {
             go.keySprint.setPressed(false);
         }
-        pressedKeys.remove(keyCode+"");
+        pressedKeys.remove(keyCode + "");
 
         return super.keyReleased(keyCode, scanCode, modifiers);
     }

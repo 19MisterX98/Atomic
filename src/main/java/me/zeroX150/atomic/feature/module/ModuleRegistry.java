@@ -79,6 +79,7 @@ public class ModuleRegistry {
         modules.add(new MidAirPlace());
         modules.add(new Dupe());
         modules.add(new InventoryWalk());
+        modules.add(new TargetHud());
     }
 
     public static List<Module> getModules() {

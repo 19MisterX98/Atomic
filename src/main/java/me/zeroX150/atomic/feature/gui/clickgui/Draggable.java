@@ -135,11 +135,12 @@ public class Draggable {
         }
         DrawableHelper.fill(stack, (int) -(getPaddingX() * 2), 0, (int) (width + getMargin() + 4 + getPaddingX() * 2), (int) (ClickGUI.currentActiveTheme.titleHeight() + getMargin() * 2), Renderer.lerp(ClickGUI.currentActiveTheme.h_exp(), ClickGUI.currentActiveTheme.h_ret(), animProgInter).getRGB());
         FontRenderer.FontType ft = FontRenderer.FontType.SHADOW_THIN;
-        if (me.zeroX150.atomic.feature.module.impl.render.ClickGUI.theme.getValue().equalsIgnoreCase("walmart sigma")) ft = FontRenderer.FontType.NORMAL;
+        if (me.zeroX150.atomic.feature.module.impl.render.ClickGUI.theme.getValue().equalsIgnoreCase("walmart sigma"))
+            ft = FontRenderer.FontType.NORMAL;
         if (!ClickGUI.currentActiveTheme.centerText())
-            Atomic.fontRenderer.drawString(stack, title, getMargin(), getMargin() + (ClickGUI.currentActiveTheme.titleHeight()/2-9/2d), ft, ClickGUI.currentActiveTheme.titleColor().getRGB());
+            Atomic.fontRenderer.drawString(stack, title, getMargin(), getMargin() + (ClickGUI.currentActiveTheme.titleHeight() / 2 - 9 / 2d), ft, ClickGUI.currentActiveTheme.titleColor().getRGB());
         else
-            Atomic.fontRenderer.drawCenteredString(stack, title, (float)(getMargin() + width / 2f), (float) getMargin(), ft, ClickGUI.currentActiveTheme.titleColor().getRGB());
+            Atomic.fontRenderer.drawCenteredString(stack, title, (float) (getMargin() + width / 2f), (float) getMargin(), ft, ClickGUI.currentActiveTheme.titleColor().getRGB());
         //DrawableHelper.drawCenteredText(stack, Atomic.client.textRenderer, title, (int) (getMargin() + (width / 2)), (int) margin, 0xFFFFFF);
         stack.translate(-(lastRenderX - getMargin() - getPaddingX()), -(lastRenderY - getMargin()), 0);
     }

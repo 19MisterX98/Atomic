@@ -2,6 +2,7 @@ package me.zeroX150.atomic.feature.module.impl.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.zeroX150.atomic.Atomic;
+import me.zeroX150.atomic.feature.gui.clickgui.Themes;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.helper.Renderer;
@@ -12,7 +13,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -59,8 +59,8 @@ public class NameTags extends Module {
         tp += trackDiff;
         RenderSystem.polygonOffset(1, -15000000);
         RenderSystem.enablePolygonOffset();
-        Renderer.fill(matrices, new Color(20, 20, 20, 220), -width - 4, 8 + 2, width + 4, 1);
-        Renderer.fill(matrices, new Color(0, 194, 111, 255), -width - 4, 8 + 2, (width + 4) * (tp * 2 - 1), 8 + 1);
+        Renderer.fill(matrices, Themes.Theme.ATOMIC.getPalette().active(), -width - 4, 8 + 2, width + 4, 1);
+        Renderer.fill(matrices, Themes.Theme.ATOMIC.getPalette().l_highlight(), -width - 4, 8 + 2, (width + 4) * (tp * 2 - 1), 8 + 1);
         trackedProgress.put(entity.getUuid(), tp);
         Atomic.client.textRenderer.draw(matrices, t, -Atomic.client.textRenderer.getWidth(t) / 2f, f - 0.75f, 0xFFFFFF);
         matrices.pop();

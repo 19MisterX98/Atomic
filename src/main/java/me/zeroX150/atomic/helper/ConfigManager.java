@@ -116,7 +116,7 @@ public class ConfigManager {
         enabled = true;
         for (Module module : toBeEnabled) {
             module.setEnabled(true);
-            System.out.println("Enabling " + module.getName()+" because config says so");
+            System.out.println("Enabling " + module.getName() + " because config says so");
         }
     }
 }

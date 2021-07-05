@@ -34,7 +34,8 @@ public class Themes {
     }
 
     public static record Palette(Color inactive, Color active, Color l_highlight, Color h_ret, Color h_exp,
-                                 Color fontColor, Color titleColor, double h_margin, double h_paddingX, boolean centerText, double titleHeight) {
+                                 Color fontColor, Color titleColor, double h_margin, double h_paddingX,
+                                 boolean centerText, double titleHeight) {
 
     }
 }
