@@ -253,8 +253,8 @@ public class ClickGUI extends Screen {
         if (actualScroll != 0) {
             Atomic.monoFontRenderer.drawString(new MatrixStack(), "Tip: Double right click to reset scroll", 2, 2, 0xFFFFFF);
         }
-        if (!searchTerm.isEmpty())
-            Atomic.monoFontRenderer.drawCenteredString(new MatrixStack(), "Search: " + searchTerm, width / 2f, height - 11, 0xFFFFFF);
+        Atomic.monoFontRenderer.drawCenteredString(new MatrixStack(), searchTerm.isEmpty() ? "Click any key to search" : ("Search (esc to clear): " + searchTerm), width / 2f, height - 11, 0xFFFFFF);
+
         super.render(matrices, mouseX, (int) (mouseY + trackedScroll), delta);
     }
 
@@ -322,7 +322,7 @@ public class ClickGUI extends Screen {
 
     @Override
     public boolean charTyped(char chr, int modifiers) {
-        boolean shouldContinue = true;
+        boolean shouldContinue = aProg == 0;
         if (currentConfig != null) if (currentConfig.charTyped(chr, modifiers)) shouldContinue = false;
         if (shouldContinue) {
             if (SharedConstants.isValidChar(chr)) searchTerm += chr;

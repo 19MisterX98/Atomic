@@ -19,7 +19,6 @@ import net.minecraft.util.math.MathHelper;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -38,10 +37,10 @@ public class TargetHud extends Module {
         if (check == Atomic.client.player) return false;
         if (check.distanceTo(Atomic.client.player) > 64) return false;
         int l = check.getEntityName().length();
-        if(l < 3 || l > 16) return false;
+        if (l < 3 || l > 16) return false;
         boolean isValidEntityName = true;
         for (char c : check.getEntityName().toLowerCase().toCharArray()) {
-            if (!valid.contains(c+"")) {
+            if (!valid.contains(c + "")) {
                 isValidEntityName = false;
                 break;
             }
@@ -113,13 +112,13 @@ public class TargetHud extends Module {
             else t += "§4";
             t += Client.roundToN(entity.getHealth(), 1);
             String n = re.getEntityName();
-            float wm = Atomic.monoFontRenderer.getStringWidth(n)+1;
-            Atomic.monoFontRenderer.drawString(stack,n,modalWidth-wm,1,0xFFFFFF);
+            float wm = Atomic.monoFontRenderer.getStringWidth(n) + 1;
+            Atomic.monoFontRenderer.drawString(stack, n, modalWidth - wm, 1, 0xFFFFFF);
             //Atomic.monoFontRenderer.drawCenteredString(stack, re.getEntityName(), modalWidth / 2f, 1, 0xFFFFFF);
             Atomic.fontRenderer.drawString(stack, "Health: " + t + "§r / " + Client.roundToN(entity.getMaxHealth(), 1), hh * 2.5 + 6, 10, 0xFFFFFF);
             Atomic.fontRenderer.drawString(stack, "Distance: " + Client.roundToN(entity.getPos().distanceTo(Atomic.client.player.getPos()), 1), hh * 2.5 + 6, 19, 0xFFFFFF);
             String tv;
-            if(entity.getHealth() > Atomic.client.player.getHealth()) tv = "§cThreat";
+            if (entity.getHealth() > Atomic.client.player.getHealth()) tv = "§cThreat";
             else if (entity.getHealth() == Atomic.client.player.getHealth()) tv = "Neutral";
             else tv = "§aNo threat";
             Atomic.fontRenderer.drawString(stack, tv, hh * 2.5 + 6, 28, 0xFFFFFF);

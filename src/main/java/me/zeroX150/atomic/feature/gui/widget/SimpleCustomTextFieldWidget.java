@@ -70,6 +70,7 @@ public class SimpleCustomTextFieldWidget extends ClickableWidget implements Draw
         } else if (Screen.isSelectAll(keyCode)) {
             this.setText("");
         }
+        event_onTextChange();
         return true;
     }
 

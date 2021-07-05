@@ -24,24 +24,24 @@ public class KeyListenerBtn extends ButtonWidget {
         listening = true;
     }
 
+    // this code is incredibly chinese
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    public boolean charTyped(char chr, int modifiers) {
         if (!this.listening) return false;
-        String v = ((char) (keyCode)) + "";
-        if (keyCode == 47 || v.charAt(0) == '-') {
+        String v = chr + "";
+        if ((int) chr == 47 || chr == '-') {
             listening = false;
             kc = -1;
             parent.config.get("Keybind").setValue(kc);
             KeybindManager.reload();
-            return false;
+            return true;
         }
         v = v.toUpperCase();
-        char bruh = v.charAt(0);
-        kc = bruh;
+        kc = v.charAt(0);
         listening = false;
         parent.config.get("Keybind").setValue(kc);
         KeybindManager.reload();
-        this.setMessage(Text.of(String.valueOf(bruh)));
+        this.setMessage(Text.of(String.valueOf(chr)));
         return true;
     }
 
