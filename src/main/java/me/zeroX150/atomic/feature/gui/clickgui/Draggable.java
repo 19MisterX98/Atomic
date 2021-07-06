@@ -121,7 +121,7 @@ public class Draggable {
                 ms.translate(aProgI * Atomic.client.getWindow().getScaledWidth(), 0, 0);
                 ms.multiply(new Quaternion(new Vec3f(0, 0, 1), (float) (recordedPosition.rot()), true));
                 Color c = Renderer.modify(new Color(Color.HSBtoRGB((float) val, 0.6f, 0.6f)), -1, -1, -1, 30);
-                Renderer.fill(ms, c, -getPaddingX() * 2, 0, width + getMargin() + getPaddingX() * 2 + 4, 9 + getMargin() * 2);
+                Renderer.fill(ms, c, -getPaddingX() * 2, 0, width + getMargin() + getPaddingX() * 2 + 4, ClickGUI.currentActiveTheme.titleHeight() + getMargin() * 2);
                 val += incr;
             }
         if (this.animProg != 0) {
