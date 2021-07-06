@@ -5,6 +5,7 @@ import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.gui.screen.HomeScreen;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.multiplayer.SocialInteractionsScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
@@ -444,6 +445,7 @@ public class Renderer {
     }
 
     public static void renderBackgroundTexture() {
+        if (Atomic.client.currentScreen instanceof SocialInteractionsScreen) return;
         int width = Atomic.client.getWindow().getScaledWidth();
         int height = Atomic.client.getWindow().getScaledHeight();
         RenderSystem.setShaderColor(1, 1, 1, 1);

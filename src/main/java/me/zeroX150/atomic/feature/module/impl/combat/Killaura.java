@@ -16,6 +16,8 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket;
+import net.minecraft.util.Hand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +86,8 @@ public class Killaura extends Module {
         for (Entity attack : attacks) {
             Packets.sendServerSideLook(attack.getEyePos());
             Atomic.client.interactionManager.attackEntity(Atomic.client.player, attack);
+            HandSwingC2SPacket p = new HandSwingC2SPacket(Hand.MAIN_HAND);
+            Atomic.client.getNetworkHandler().sendPacket(p);
             if (mode.getValue().equalsIgnoreCase("single")) break;
         }
     }
