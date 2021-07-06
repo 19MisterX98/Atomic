@@ -1,6 +1,7 @@
 package me.zeroX150.atomic;
 
 import me.zeroX150.atomic.feature.gui.clickgui.ClickGUI;
+import me.zeroX150.atomic.feature.gui.screen.AltManager;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.helper.ConfigManager;
@@ -42,6 +43,9 @@ public class Atomic implements ModInitializer {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                if (client.currentScreen instanceof AltManager altManager) {
+                    altManager.fastTick();
+                }
                 if (Atomic.client.player == null || Atomic.client.world == null) continue;
                 for (Module module : ModuleRegistry.getModules()) {
                     try {
@@ -56,5 +60,6 @@ public class Atomic implements ModInitializer {
 
         //TODO: Initializer
     }
+
 
 }
