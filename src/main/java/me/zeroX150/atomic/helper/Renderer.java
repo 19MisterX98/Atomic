@@ -22,6 +22,47 @@ public class Renderer {
     public static Identifier OPTIONS_BACKGROUND_TEXTURE = new Identifier("atomic", "background.jpg");
 
 
+    public static void renderOutlineInternNoTranslate(Vec3d start, Vec3d dimensions, MatrixStack stack, BufferBuilder buffer) {
+        Vec3d end = start.add(dimensions);
+        Matrix4f matrix = stack.peek().getModel();
+        float x1 = (float) start.x;
+        float y1 = (float) start.y;
+        float z1 = (float) start.z;
+        float x2 = (float) end.x;
+        float y2 = (float) end.y;
+        float z2 = (float) end.z;
+
+        buffer.vertex(matrix, x1, y1, z1).next();
+        buffer.vertex(matrix, x1, y1, z2).next();
+        buffer.vertex(matrix, x1, y1, z2).next();
+        buffer.vertex(matrix, x2, y1, z2).next();
+        buffer.vertex(matrix, x2, y1, z2).next();
+        buffer.vertex(matrix, x2, y1, z1).next();
+        buffer.vertex(matrix, x2, y1, z1).next();
+        buffer.vertex(matrix, x1, y1, z1).next();
+
+        buffer.vertex(matrix, x1, y2, z1).next();
+        buffer.vertex(matrix, x1, y2, z2).next();
+        buffer.vertex(matrix, x1, y2, z2).next();
+        buffer.vertex(matrix, x2, y2, z2).next();
+        buffer.vertex(matrix, x2, y2, z2).next();
+        buffer.vertex(matrix, x2, y2, z1).next();
+        buffer.vertex(matrix, x2, y2, z1).next();
+        buffer.vertex(matrix, x1, y2, z1).next();
+
+        buffer.vertex(matrix, x1, y1, z1).next();
+        buffer.vertex(matrix, x1, y2, z1).next();
+
+        buffer.vertex(matrix, x2, y1, z1).next();
+        buffer.vertex(matrix, x2, y2, z1).next();
+
+        buffer.vertex(matrix, x2, y1, z2).next();
+        buffer.vertex(matrix, x2, y2, z2).next();
+
+        buffer.vertex(matrix, x1, y1, z2).next();
+        buffer.vertex(matrix, x1, y2, z2).next();
+    }
+
     public static void renderOutlineIntern(Vec3d start, Vec3d dimensions, MatrixStack stack, BufferBuilder buffer) {
         Camera c = Atomic.client.gameRenderer.getCamera();
         Vec3d camPos = c.getPos();
@@ -72,6 +113,18 @@ public class Renderer {
         BufferBuilder buffer = renderPrepare(color);
 
         renderOutlineIntern(start, dimensions, stack, buffer);
+
+        buffer.end();
+        BufferRenderer.draw(buffer);
+        GL11.glDepthFunc(GL11.GL_LEQUAL);
+        RenderSystem.disableBlend();
+    }
+
+    public static void renderOutlineNoTransform(Vec3d start, Vec3d dimensions, Color color, MatrixStack stack) {
+        RenderSystem.enableBlend();
+        BufferBuilder buffer = renderPrepare(color);
+
+        renderOutlineInternNoTranslate(start, dimensions, stack, buffer);
 
         buffer.end();
         BufferRenderer.draw(buffer);
@@ -175,6 +228,7 @@ public class Renderer {
         GL11.glDepthFunc(GL11.GL_ALWAYS);
         RenderSystem.setShaderColor(red, green, blue, alpha);
         RenderSystem.enableBlend();
+        RenderSystem.lineWidth(4f);
         buffer.begin(VertexFormat.DrawMode.DEBUG_LINES,
                 VertexFormats.POSITION);
 

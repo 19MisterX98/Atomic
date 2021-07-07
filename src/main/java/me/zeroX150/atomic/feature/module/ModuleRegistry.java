@@ -81,6 +81,7 @@ public class ModuleRegistry {
         modules.add(new InventoryWalk());
         modules.add(new TargetHud());
         modules.add(new FarmingAura());
+        modules.add(new BetterCrosshair());
     }
 
     public static List<Module> getModules() {
