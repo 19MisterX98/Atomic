@@ -35,7 +35,7 @@ public class AltEntryWidget extends ClickableWidget implements Drawable, Element
     protected String mail;
     protected String pw;
     Identifier skin = DefaultSkinHelper.getTexture();
-    double renderX;
+    public double renderX;
     boolean failedLogIn = false;
 
     public AltEntryWidget(int x, int y, int width, int height, String email, String password) {
@@ -69,7 +69,7 @@ public class AltEntryWidget extends ClickableWidget implements Drawable, Element
                     uname = gp.getName();
                     uuid = gp.getId();
                 } catch (Exception ignored) {
-                    uname = "Unknown username (" + mail + ")";
+                    uname = "Unknown username";
                     uuid = UUID.randomUUID();
                     failedLogIn = true;
                 }
@@ -105,14 +105,27 @@ public class AltEntryWidget extends ClickableWidget implements Drawable, Element
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         boolean done = false;
-        if (this.active && this.visible && button == 0 && this.clicked(mouseX, mouseY)) {
-            done = true;
-            event_mouseClicked();
+        if (this.active && this.visible && button == 0) {
+            if (mouseX >= (double)this.x && mouseY >= (double)this.y && mouseX < (double)(this.x + this.width - 20) && mouseY < (double)(this.y + this.height)) {
+                // normal click on alt
+                done = true;
+                event_mouseClicked();
+            }
+            if (mouseX >= (double)(this.x+this.width-20) && mouseY >= (double)this.y && mouseX < (double)(this.x + this.width) && mouseY < (double)(this.y + this.height)) {
+                // click on the X
+                done = true;
+                event_altDeleted();
+            }
+
         }
         return done;
     }
 
     public void event_mouseClicked() {
+
+    }
+
+    public void event_altDeleted() {
 
     }
 
@@ -127,21 +140,27 @@ public class AltEntryWidget extends ClickableWidget implements Drawable, Element
         Color c = Renderer.modify(Themes.Theme.ATOMIC.getPalette().h_exp().brighter(), -1, -1, -1, 100);
         float mid = y + (height / 2f - (9 / 2f));
         Renderer.fill(matrices, c, renderX, y, renderX + width, y + height);
+        Renderer.fill(matrices,c.brighter(),renderX+width-20,y,renderX+width,y+height);
         String uid = uuid.toString();
-        if (uid.length() > 23) {
-            uid = uid.substring(0, 20) + "...";
-        }
         RenderSystem.setShaderTexture(0, skin);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1F, 1F);
         int d = Math.min(width - 10, height - 10);
         drawTexture(matrices, (int) (renderX + 5), y + 5, d, d, 8.0F, 8, 8, 8, 64, 64);
+        boolean changed = false;
+        while(Atomic.fontRenderer.getStringWidth(uid) >= width-d-5-3) {
+            uid = uid.substring(0,uid.length()-1);
+            if (!changed) changed = true;
+        }
+        if (changed) {
+            uid = uid.substring(0,uid.length()-3)+"...";
+        }
         //drawTexture(matrices, (int) (renderX+5), y+5, 0, 0, 0, d,d,d,d);
         RenderSystem.defaultBlendFunc();
-        float w = Atomic.fontRenderer.getStringWidth(uname);
-        float w2 = Atomic.fontRenderer.getStringWidth(uid);
-        Atomic.fontRenderer.drawString(matrices, uname, renderX + 5 + d + 2, mid - 5, fontColor.getRGB());
-        Atomic.fontRenderer.drawString(matrices, uid, renderX + 5 + d + 2, mid + 5, fontColor.getRGB());
+        Atomic.fontRenderer.drawString(matrices, uname, renderX + 5 + d + 2, mid - 10, fontColor.getRGB());
+        Atomic.fontRenderer.drawString(matrices, mail, renderX+5+d+2,mid,fontColor.getRGB());
+        Atomic.fontRenderer.drawString(matrices, uid, renderX + 5 + d + 2, mid + 10, fontColor.getRGB());
+        Atomic.fontRenderer.drawCenteredString(matrices,"X",renderX+width-10,mid,0xFFFFFF);
     }
 
     @Override

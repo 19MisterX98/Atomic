@@ -8,6 +8,7 @@ import me.zeroX150.atomic.feature.module.impl.external.Alts;
 import me.zeroX150.atomic.helper.Client;
 import me.zeroX150.atomic.helper.Renderer;
 import me.zeroX150.atomic.helper.Transitions;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
@@ -31,6 +32,8 @@ public class AltManager extends Screen {
 
     double scroll = 0;
     double renderScroll = 0;
+
+    boolean alreadyInitialized = false;
 
     List<Runnable> r = new ArrayList<>();
 
@@ -105,11 +108,13 @@ public class AltManager extends Screen {
             List<AltEntryWidget> entries = new ArrayList<>();
             int index = 0;
             String[] l = Arrays.stream(Alts.alts.getValue().split("\n")).filter(s -> s.split("\002").length == 2).toArray(String[]::new);
+            List<String> seenEmails = new ArrayList<>();
             for (String s : l) {
                 String[] authPair = s.split("\002");
                 if (authPair.length != 2) continue;
                 String un = authPair[0];
                 String pw = authPair[1];
+                if (seenEmails.contains(un)) continue;
                 index++;
                 feedback = "Logging into alt " + index + " / " + l.length;
                 AltEntryWidget w = new AltEntryWidget(5, yOffset, width - maxW - 20, 40, un, pw) {
@@ -119,22 +124,50 @@ public class AltManager extends Screen {
                         String pw = this.pw.equals("\003") ? "" : this.pw;
                         AltManager.this.password.setText(pw);
                     }
+
+                    @Override
+                    public void event_altDeleted() {
+                        List<String> keep = new ArrayList<>();
+                        for (String s : Alts.alts.getValue().split("\n")) {
+                            String[] authPair = s.split("\002");
+                            if (authPair.length != 2) continue;
+                            String un = authPair[0];
+                            String pw = authPair[1];
+                            if (!un.equals(this.mail) || !pw.equals(this.pw)) {
+                                keep.add(s);
+                            }
+                        }
+                        Alts.alts.setValue(String.join("\n", keep));
+                        Atomic.client.openScreen(AltManager.this);
+                    }
                 };
                 entries.add(w);
                 yOffset += 45;
+                seenEmails.add(un);
             }
             feedback = "";
             for (AltEntryWidget entry : entries) {
+                if (alreadyInitialized) {
+                    entry.renderX = entry.x;
+                }
                 run(() -> addDrawableChild(entry));
                 savedHeight += 40 + 5;
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(alreadyInitialized?0:50);
                 } catch (InterruptedException e) {
                     break;
                 }
             }
+            alreadyInitialized = true;
         });
         updater.start();
+        if (alreadyInitialized) {
+            try {
+                updater.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     void run(Runnable r) {
@@ -164,6 +197,15 @@ public class AltManager extends Screen {
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        if (r.size() != 0) {
+            for (Runnable runnable : r) {
+                runnable.run();
+            }
+            r.clear();
+        }
+        if (savedHeight - scroll < height - 50) {
+            mouseScrolled(mouseX,mouseY,0);
+        }
         this.client.keyboard.setRepeatEvents(true);
         renderBackground(matrices);
 
@@ -192,12 +234,7 @@ public class AltManager extends Screen {
             }
         }
 
-        if (r.size() != 0) {
-            for (Runnable runnable : r) {
-                runnable.run();
-            }
-            r.clear();
-        }
+
     }
 
     @Override
