@@ -128,7 +128,7 @@ public class AltManager extends Screen {
                 run(() -> addDrawableChild(entry));
                 savedHeight += 40 + 5;
                 try {
-                    Thread.sleep(200);
+                    Thread.sleep(50);
                 } catch (InterruptedException e) {
                     break;
                 }
@@ -174,7 +174,7 @@ public class AltManager extends Screen {
         Atomic.fontRenderer.drawString(matrices, feedback, 5, 15, 0xFFFFFF);
 
         MatrixStack defaultStack = new MatrixStack();
-        matrices.translate(0, -renderScroll / 2, 0);
+        matrices.translate(0, -renderScroll, 0);
         RenderSystem.enableScissor(10, 10, (int) (width * Atomic.client.getWindow().getScaleFactor()), (int) (height * Atomic.client.getWindow().getScaleFactor() - 110));
         for (Element child : this.children()) {
             if (child instanceof Drawable d) {
@@ -184,7 +184,7 @@ public class AltManager extends Screen {
             }
         }
         RenderSystem.disableScissor();
-        matrices.translate(0, renderScroll / 2, 0);
+        matrices.translate(0, renderScroll, 0);
 
         for (Element child : this.children()) {
             if (!(child instanceof AltEntryWidget) && child instanceof Drawable d) {
@@ -203,11 +203,10 @@ public class AltManager extends Screen {
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
         scroll -= amount * 50;
-        double wSaved = savedHeight - height / 2d - 50;
-        if (wSaved < 0) wSaved = 0;
-        System.out.println(wSaved);
-        scroll = MathHelper.clamp(scroll, 0, wSaved);
-        System.out.println(scroll);
+        while (savedHeight - scroll < height - 50) {
+            scroll -= 1;
+        }
+        if (scroll < 0) scroll = 0;
         return super.mouseScrolled(mouseX, mouseY, amount);
     }
 }
