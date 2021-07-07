@@ -48,7 +48,7 @@ public class AltEntryWidget extends ClickableWidget implements Drawable, Element
             if (cache.containsKey(mail)) {
                 shouldContinue = false;
                 PlayerEntry pe = cache.get(mail);
-                if (System.currentTimeMillis() - pe.addTime > 300000) { // invalidate cached alt after 5 mins
+                if (System.currentTimeMillis() - pe.addTime > 1800000) { // invalidate cached alt after 30 mins
                     shouldContinue = true;
                     cache.remove(mail);
                 } else {
