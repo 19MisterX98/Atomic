@@ -37,6 +37,7 @@ public class AltEntryWidget extends ClickableWidget implements Drawable, Element
     Identifier skin = DefaultSkinHelper.getTexture();
     double renderX;
     boolean failedLogIn = false;
+
     public AltEntryWidget(int x, int y, int width, int height, String email, String password) {
         super(x, y, width, height, Text.of(""));
         renderX = -width - 1;
@@ -53,34 +54,33 @@ public class AltEntryWidget extends ClickableWidget implements Drawable, Element
                 } else {
                     uname = cache.get(mail).username;
                     uuid = cache.get(mail).uuid;
+                    failedLogIn = cache.get(mail).loginIssue;
                 }
             }
-            if (!shouldContinue) return;
-            YggdrasilUserAuthentication auth = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(
-                    Proxy.NO_PROXY, "").createUserAuthentication(Agent.MINECRAFT);
-            auth.setUsername(mail);
-            auth.setPassword(pw);
-            try {
-                if (!auth.canLogIn()) throw new Exception("cant log in");
-                auth.logIn();
-                GameProfile gp = auth.getSelectedProfile();
-                uname = gp.getName();
-                uuid = gp.getId();
-            } catch (Exception ignored) {
-                uname = mail;
-                uuid = UUID.randomUUID();
-                failedLogIn = true;
+            if (shouldContinue) {
+                YggdrasilUserAuthentication auth = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(
+                        Proxy.NO_PROXY, "").createUserAuthentication(Agent.MINECRAFT);
+                auth.setUsername(mail);
+                auth.setPassword(pw);
+                try {
+                    if (!auth.canLogIn()) throw new Exception("cant log in");
+                    auth.logIn();
+                    GameProfile gp = auth.getSelectedProfile();
+                    uname = gp.getName();
+                    uuid = gp.getId();
+                } catch (Exception ignored) {
+                    uname = "Unknown username (" + mail + ")";
+                    uuid = UUID.randomUUID();
+                    failedLogIn = true;
+                }
+                cache.put(mail, new PlayerEntry(uname, uuid, System.currentTimeMillis(), failedLogIn));
             }
-            cache.put(mail, new PlayerEntry(uname, uuid, System.currentTimeMillis()));
         } else {
             uname = mail;
             uuid = UUID.randomUUID();
         }
         if (!isCracked()) {
-
-            getSkinTexture(uuid, uname, skin1 -> {
-                this.skin = skin1;
-            });
+            getSkinTexture(uuid, uname, skin1 -> this.skin = skin1);
         }
     }
 
@@ -124,7 +124,7 @@ public class AltEntryWidget extends ClickableWidget implements Drawable, Element
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         Color fontColor = Color.WHITE;
         if (failedLogIn) fontColor = new Color(255, 255, 255, 100);
-        Color c = Renderer.modify(Themes.Theme.ATOMIC.getPalette().h_exp(), -1, -1, -1, 100);
+        Color c = Renderer.modify(Themes.Theme.ATOMIC.getPalette().h_exp().brighter(), -1, -1, -1, 100);
         float mid = y + (height / 2f - (9 / 2f));
         Renderer.fill(matrices, c, renderX, y, renderX + width, y + height);
         String uid = uuid.toString();
@@ -140,8 +140,8 @@ public class AltEntryWidget extends ClickableWidget implements Drawable, Element
         RenderSystem.defaultBlendFunc();
         float w = Atomic.fontRenderer.getStringWidth(uname);
         float w2 = Atomic.fontRenderer.getStringWidth(uid);
-        Atomic.fontRenderer.drawString(matrices, uname, renderX + width - 5 - w, mid - 5, fontColor.getRGB());
-        Atomic.fontRenderer.drawString(matrices, uid, renderX + width - 5 - w2, mid + 5, fontColor.getRGB());
+        Atomic.fontRenderer.drawString(matrices, uname, renderX + 5 + d + 2, mid - 5, fontColor.getRGB());
+        Atomic.fontRenderer.drawString(matrices, uid, renderX + 5 + d + 2, mid + 5, fontColor.getRGB());
     }
 
     @Override
@@ -153,6 +153,6 @@ public class AltEntryWidget extends ClickableWidget implements Drawable, Element
         void run(Identifier skin);
     }
 
-    record PlayerEntry(String username, UUID uuid, long addTime) {
+    record PlayerEntry(String username, UUID uuid, long addTime, boolean loginIssue) {
     }
 }

@@ -33,6 +33,7 @@ public class FontRenderer {
     private final float[] xPos;
     private final float[] yPos;
     private final Pattern patternControlCode = Pattern.compile("(?i)\\u00A7[0-9A-FK-OG]"), patternUnsupported = Pattern.compile("(?i)\\u00A7[L-O]");
+    boolean isBig = false;
     private Font font;
     private Graphics2D graphics;
     private FontMetrics metrics;
@@ -63,6 +64,10 @@ public class FontRenderer {
 
             return null;
         }
+    }
+
+    public void setBig(boolean big) {
+        isBig = big;
     }
 
     private void setupGraphics2D() {
@@ -200,10 +205,10 @@ public class FontRenderer {
     public final void drawString(MatrixStack matrixStack, String text, float x, float y, FontType fontType, int color) {
         Color c = new Color(color);
         if (c.getRed() < 50 && c.getGreen() < 50 && c.getBlue() < 50) fontType = FontType.NORMAL;
-        matrixStack.scale(0.5f, 0.5f, 1);
+        if (!isBig) matrixStack.scale(0.5f, 0.5f, 1);
         Color o = new Color(color);
         drawString(matrixStack, text, x, y, fontType, color, Renderer.modify(o, 0, 0, 0, Math.min(0xBB, o.getAlpha())).getRGB());
-        matrixStack.scale(2f, 2f, 1);
+        if (!isBig) matrixStack.scale(2f, 2f, 1);
     }
 
     private void drawer(MatrixStack matrixStack, String text, float x, float y, int color) {
