@@ -10,10 +10,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class ServerInfoScreen extends Screen {
@@ -32,26 +31,35 @@ public class ServerInfoScreen extends Screen {
     }
 
     @Override
+    public void tick() {
+        timer++;
+        boolean activeFrame = timer > 20;
+        float pSent = Atomic.client.getNetworkHandler().getConnection().getAveragePacketsSent();
+        float pRecv = Atomic.client.getNetworkHandler().getConnection().getAveragePacketsReceived();
+        if (activeFrame) {
+            timer = 0;
+            c2sLog.add((double) pSent);
+            s2cLog.add((double) pRecv);
+        }
+        while (c2sLog.size() > (width / 3) - 2) c2sLog.remove(0);
+        while (s2cLog.size() > (width / 3) - 2) s2cLog.remove(0);
+        super.tick();
+    }
+
+    @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         renderBackground(matrices);
 
         float pSent = Atomic.client.getNetworkHandler().getConnection().getAveragePacketsSent();
         float pRecv = Atomic.client.getNetworkHandler().getConnection().getAveragePacketsReceived();
 
-
-        timer++;
-        boolean activeFrame = timer > 50;
-        if (activeFrame) timer = 0;
         int h = 80;
         Color c = new Color(38, 83, 92, 70);
         // c2s traffic
         Renderer.fill(c, margin, margin, width - margin, h - (margin / 2d));
-        DrawableHelper.drawCenteredText(matrices, textRenderer, "Client -> Server traffic  " + Client.roundToN(pSent, 1) + " PPS", width / 2, margin + 2, 0xFFFFFF);
+        Atomic.fontRenderer.drawCenteredString(matrices,"Client -> Server traffic "+Client.roundToN(pSent,1),width/2f,margin+2,0xFFFFFF);
         double max = 10;
-        if (activeFrame) c2sLog.add((double) pSent);
-        if (activeFrame) s2cLog.add((double) pRecv);
-        while (c2sLog.size() > (width / 3) - 2) c2sLog.remove(0);
-        while (s2cLog.size() > (width / 3) - 2) s2cLog.remove(0);
+
         for (Double aDouble : c2sLog) {
             max = Math.max(max, aDouble);
         }
@@ -69,7 +77,7 @@ public class ServerInfoScreen extends Screen {
 
         // s2c traffic
         Renderer.fill(c, margin, h + (margin / 2d), width - margin, (h + (margin / 2d)) * 2);
-        DrawableHelper.drawCenteredText(matrices, textRenderer, "Server -> Client traffic  " + Client.roundToN(pRecv, 1) + " PPS", width / 2, (int) (h + (margin / 2d) + 2), 0xFFFFFF);
+        Atomic.fontRenderer.drawCenteredString(matrices,"Server -> Client traffic "+Client.roundToN(pRecv,1),width/2f,(h + (margin / 2f) + 2),0xFFFFFF);
         double max1 = 1;
         for (Double aDouble : s2cLog) {
             max1 = Math.max(max1, aDouble);
@@ -94,16 +102,16 @@ public class ServerInfoScreen extends Screen {
         contents.put("Players", Atomic.client.getNetworkHandler().getPlayerList().size() + "");
         contents.put("Players in render distance", StreamSupport.stream(Atomic.client.world.getEntities().spliterator(), false).filter(entity -> entity instanceof PlayerEntity).count() + "");
 
-        int maxWidth = 0;
+        double maxWidth = 0;
         for (String s : contents.keySet()) {
-            maxWidth = Math.max(textRenderer.getWidth(s), maxWidth);
+            maxWidth = Math.max(Atomic.fontRenderer.getStringWidth(s), maxWidth);
         }
-        maxWidth += textRenderer.getWidth("  ");
+        maxWidth += Atomic.fontRenderer.getStringWidth("    ");
         int yO = 0;
         float baseY2 = (float) (baseY1 + margin + 1);
-        for (String s : contents.keySet()) {
-            textRenderer.draw(matrices, s, margin, baseY2 + yO, 0xFFFFFF);
-            textRenderer.draw(matrices, contents.get(s), margin + maxWidth, baseY2 + yO, 0xAAFFAA);
+        for (String s : contents.keySet().stream().sorted(Comparator.comparingDouble(value -> -Atomic.fontRenderer.getStringWidth(value))).collect(Collectors.toList())) {
+            Atomic.fontRenderer.drawString(matrices,s,margin,baseY2+yO,0xFFFFFF);
+            Atomic.monoFontRenderer.drawString(matrices,contents.get(s),margin+maxWidth,baseY2+yO,0xAAFFAA);
             yO += 10;
         }
 
