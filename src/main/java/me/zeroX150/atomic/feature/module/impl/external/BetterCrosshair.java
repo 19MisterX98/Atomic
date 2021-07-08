@@ -16,12 +16,14 @@ import java.awt.*;
 public class BetterCrosshair extends Module {
     static MultiValue mode;
     static SliderValue speenSpeed;
+    static SliderValue size;
 
     public BetterCrosshair() {
         super("BetterCrosshair", "a better crosshair", ModuleType.RENDER);
-        mode = (MultiValue) this.config.create("Mode", "Cube PY", "Cube PY", "Cube SPEEN").description("What to render");
+        mode = (MultiValue) this.config.create("Mode", "Cube PY", "Cube PY", "Cube SPEEN", "Square").description("What to render");
         speenSpeed = (SliderValue) this.config.create("Speen duration", 2000, 100, 10000, 0).description("SPEEN");
         speenSpeed.showOnlyIf(() -> mode.getValue().equalsIgnoreCase("cube speen"));
+        size = this.config.create("Size", 10, 1, 20, 1);
     }
 
     public static void render() {
@@ -40,7 +42,17 @@ public class BetterCrosshair extends Module {
             s.multiply(new Quaternion(new Vec3f(0, 0, -1), pitch, true));
         }
 
-        Renderer.renderOutlineNoTransform(new Vec3d(-5, -5, -5), new Vec3d(10, 10, 10), Color.WHITE, s);
+        double si = size.getValue();
+        double siM = si / 2d;
+
+        if (!mode.getValue().equalsIgnoreCase("square"))
+            Renderer.renderOutlineNoTransform(new Vec3d(-siM, -siM, -siM), new Vec3d(si, si, si), Color.WHITE, s);
+        else {
+            Renderer.lineScreenD(Color.WHITE, w / 2d - siM, h / 2d - siM, w / 2d + siM, h / 2d - siM);
+            Renderer.lineScreenD(Color.WHITE, w / 2d + siM, h / 2d - siM, w / 2d + siM, h / 2d + siM);
+            Renderer.lineScreenD(Color.WHITE, w / 2d + siM, h / 2d + siM, w / 2d - siM, h / 2d + siM);
+            Renderer.lineScreenD(Color.WHITE, w / 2d - siM, h / 2d + siM, w / 2d - siM, h / 2d - siM);
+        }
     }
 
     @Override

@@ -12,6 +12,7 @@
     "game.MinecraftClientMixin",
     "game.SchemasMixin",
     "game.entity.ClientPlayerEntityMixin",
+    "game.entity.ClientPlayerInteractionManagerMixin",
     "game.entity.ILivingEntityAccessor",
     "game.entity.LivingEntityMixin",
     "game.render.AbstractBlockStateMixin",

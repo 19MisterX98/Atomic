@@ -82,6 +82,7 @@ public class ModuleRegistry {
         modules.add(new TargetHud());
         modules.add(new FarmingAura());
         modules.add(new BetterCrosshair());
+        modules.add(new NoBreakDelay());
     }
 
     public static List<Module> getModules() {

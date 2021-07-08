@@ -263,6 +263,7 @@ public class AltManager extends Screen {
             if (!(child instanceof AltEntryWidget) && child instanceof Drawable d) {
                 d.render(defaultStack, mouseX, mouseY, delta);
             }
+
         }
 
         RenderSystem.setShaderTexture(0, password.isShowText() ? EYEINVIS : EYE);
