@@ -27,7 +27,7 @@ public class Draggable {
     boolean expanded;
     boolean dragged = false;
     long lastRender = System.currentTimeMillis();
-    String title;
+    public String title;
     List<Clickable> children = new ArrayList<>();
     double lrXDiff = 0;
 

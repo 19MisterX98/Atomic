@@ -12,7 +12,9 @@ import me.zeroX150.atomic.feature.module.impl.testing.TestModule;
 import me.zeroX150.atomic.feature.module.impl.world.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ModuleRegistry {
     static List<Module> modules = new ArrayList<>();
@@ -83,10 +85,11 @@ public class ModuleRegistry {
         modules.add(new FarmingAura());
         modules.add(new BetterCrosshair());
         modules.add(new NoBreakDelay());
+        modules.add(new ClickGuiPositionCache());
     }
 
     public static List<Module> getModules() {
-        return modules;
+        return modules.stream().sorted(Comparator.comparingInt(value -> value.getName().length())).collect(Collectors.toList());
     }
 
     public static Module getByClass(Class<? extends Module> clazz) {
