@@ -62,7 +62,7 @@ public class AltManager extends Screen {
         username.setMaxLength(65535);
         password = new PasswordFieldWidget(Atomic.client.textRenderer, midpoint - widgetW / 2, 85, widgetW - 30, 20, Text.of("SPECIAL:Password"));
         password.setMaxLength(65535);
-        password.setShowText(false);
+        password.setShowText(true);
         username.setChangedListener(v -> {
             String s = username.getText();
             if (s.contains(":")) {
@@ -106,7 +106,7 @@ public class AltManager extends Screen {
                 if (pair.length == 1) {
                     un = pair[0];
                     pw = "";
-                } else if (pair.length == 2) {
+                } else if (pair.length >= 2) {
                     un = pair[0];
                     pw = pair[1];
                 }
@@ -272,7 +272,7 @@ public class AltManager extends Screen {
         RenderSystem.blendFunc(770, 1);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1F, 1F);
-        drawTexture(matrices, (int) ((width - 240 / 2 - 2.5) + 87.5), 87, 16, 16, 0, 0, 32, 32, 32, 32);
+        drawTexture(matrices, (int) ((width - 240 / 2 - 2.5) + 87), 87, 16, 16, 0, 0, 32, 32, 32, 32);
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();
 

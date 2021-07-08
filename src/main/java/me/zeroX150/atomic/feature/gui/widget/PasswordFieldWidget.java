@@ -7,7 +7,7 @@ import net.minecraft.text.Text;
 
 public class PasswordFieldWidget extends TextFieldWidget {
 
-    private boolean showText;
+    private boolean showText = true;
 
     public PasswordFieldWidget(TextRenderer textRenderer, int x, int y, int width, int height, Text text) {
         super(textRenderer, x, y, width, height, text);
