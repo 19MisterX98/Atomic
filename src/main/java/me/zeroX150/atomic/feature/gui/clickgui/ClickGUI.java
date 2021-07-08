@@ -6,7 +6,6 @@ import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.feature.module.ModuleType;
-import me.zeroX150.atomic.feature.module.impl.external.ClickGuiPositionCache;
 import me.zeroX150.atomic.helper.Transitions;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.Element;
@@ -67,30 +66,9 @@ public class ClickGUI extends Screen {
             }
             containers.add(d);
         }
-        sort();
+        sort(true);
         // example config:
         // exploit:0,0:1;movement:1,0:0;combat:5,2:1
-        try {
-            String posCache = ClickGuiPositionCache.positions.getValue();
-            if (posCache.isEmpty()) return;
-            String[] entries = posCache.split(";");
-            for (String pair : entries) {
-                if (pair.isEmpty()) continue;
-                String[] current = pair.split(":");
-                if (current.length != 3) continue;
-                String category = current[0];
-                String[] pos = current[1].split(",");
-                boolean expanded = current[2].equals("1");
-                double posX = Double.parseDouble(pos[0]);
-                double posY = Double.parseDouble(pos[1]);
-                Draggable d = containers.stream().filter(draggable -> draggable.title.equalsIgnoreCase(category)).collect(Collectors.toList()).get(0);
-                d.expanded = expanded;
-                d.posX = posX;
-                d.posY = posY;
-            }
-        } catch (Exception ignored) {
-            ClickGuiPositionCache.positions.setValue("");
-        }
     }
 
     public void onFastTick() {
@@ -120,7 +98,7 @@ public class ClickGUI extends Screen {
         return true;
     }
 
-    void sort() {
+    void sort(boolean overwrite) {
         currentSortMode++;
         currentSortMode %= 2;
         double offsetX = 20;
@@ -128,6 +106,10 @@ public class ClickGUI extends Screen {
         for (Draggable container : containers.stream().sorted(Comparator.comparingInt(value -> -value.children.size())).collect(Collectors.toList())) {
             container.posX = offsetX;
             container.posY = offsetY;
+            if (overwrite) {
+                container.lastRenderX = offsetX;
+                container.lastRenderY = offsetY;
+            }
             offsetX += 120;
             if (offsetX + 120 > Atomic.client.getWindow().getScaledWidth()) {
                 offsetX = 20;
@@ -154,7 +136,7 @@ public class ClickGUI extends Screen {
         closed = false;
         int off = 21;
         int offY = 70;
-        ButtonWidget sort = new ButtonWidget(width - offY, height - off, 20, 20, Text.of("S"), button -> sort());
+        ButtonWidget sort = new ButtonWidget(width - offY, height - off, 20, 20, Text.of("S"), button -> sort(false));
         ButtonWidget expand = new ButtonWidget(width - offY - 21, height - off, 20, 20, Text.of("E"), button -> {
             for (Draggable container : containers) {
                 container.expanded = true;
@@ -210,13 +192,6 @@ public class ClickGUI extends Screen {
         mouseY -= trackedScroll;
         if (aProg == 1 && closed) {
             Atomic.client.openScreen(null);
-            List<String> cache = new ArrayList<>();
-            for (Draggable container : containers) {
-                String v = container.title + ":" + container.posX + "," + container.posY + ":" + (container.expanded ? "1" : "0");
-                System.out.println(v);
-                cache.add(v);
-            }
-            ClickGuiPositionCache.positions.setValue(String.join(";", cache));
             return;
         }
         Themes.Palette cTheme = currentActiveTheme;

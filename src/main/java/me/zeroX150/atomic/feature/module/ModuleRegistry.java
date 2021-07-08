@@ -1,5 +1,6 @@
 package me.zeroX150.atomic.feature.module;
 
+import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.impl.combat.AutoEndermanAngry;
 import me.zeroX150.atomic.feature.module.impl.combat.AutoLog;
 import me.zeroX150.atomic.feature.module.impl.combat.Criticals;
@@ -85,11 +86,12 @@ public class ModuleRegistry {
         modules.add(new FarmingAura());
         modules.add(new BetterCrosshair());
         modules.add(new NoBreakDelay());
-        modules.add(new ClickGuiPositionCache());
+
+        modules = modules.stream().sorted(Comparator.comparingDouble(value -> -Atomic.fontRenderer.getStringWidth(value.getName()))).collect(Collectors.toList());
     }
 
     public static List<Module> getModules() {
-        return modules.stream().sorted(Comparator.comparingInt(value -> value.getName().length())).collect(Collectors.toList());
+        return modules;
     }
 
     public static Module getByClass(Class<? extends Module> clazz) {
