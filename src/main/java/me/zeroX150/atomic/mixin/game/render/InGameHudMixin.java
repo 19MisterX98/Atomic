@@ -5,13 +5,9 @@ import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.feature.module.impl.external.BetterCrosshair;
 import me.zeroX150.atomic.feature.module.impl.render.Hud;
-import me.zeroX150.atomic.helper.Renderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Quaternion;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -37,9 +33,9 @@ public abstract class InGameHudMixin extends DrawableHelper {
         }
     }
 
-    @Redirect(method="renderCrosshair",at=@At(
-            value="INVOKE",
-            target="Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"
+    @Redirect(method = "renderCrosshair", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"
     ))
     public void redirectRenderCrosshair(InGameHud inGameHud, MatrixStack matrices, int x, int y, int u, int v, int width, int height) {
         if (ModuleRegistry.getByClass(BetterCrosshair.class).isEnabled()) {

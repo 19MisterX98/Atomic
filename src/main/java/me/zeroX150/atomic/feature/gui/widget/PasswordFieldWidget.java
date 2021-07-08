@@ -4,7 +4,6 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import org.jetbrains.annotations.Nullable;
 
 public class PasswordFieldWidget extends TextFieldWidget {
 
@@ -14,12 +13,12 @@ public class PasswordFieldWidget extends TextFieldWidget {
         super(textRenderer, x, y, width, height, text);
     }
 
-    public void setShowText(boolean showText) {
-        this.showText = showText;
-    }
-
     public boolean isShowText() {
         return showText;
+    }
+
+    public void setShowText(boolean showText) {
+        this.showText = showText;
     }
 
     @Override

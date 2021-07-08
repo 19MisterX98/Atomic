@@ -2,7 +2,6 @@ package me.zeroX150.atomic.feature.gui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.zeroX150.atomic.Atomic;
-import me.zeroX150.atomic.feature.gui.clickgui.ClickGUI;
 import me.zeroX150.atomic.feature.gui.clickgui.Themes;
 import me.zeroX150.atomic.feature.gui.widget.AltEntryWidget;
 import me.zeroX150.atomic.feature.gui.widget.PasswordFieldWidget;
@@ -11,27 +10,23 @@ import me.zeroX150.atomic.helper.Client;
 import me.zeroX150.atomic.helper.Renderer;
 import me.zeroX150.atomic.helper.Transitions;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.MinecraftClientGame;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.Clipboard;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class AltManager extends Screen {
+    public static Identifier EYE = new Identifier("atomic", "eye.png");
+    public static Identifier EYEINVIS = new Identifier("atomic", "eyeinvis.png");
     TextFieldWidget username;
     PasswordFieldWidget password;
     ButtonWidget login;
@@ -40,18 +35,11 @@ public class AltManager extends Screen {
     ButtonWidget hidepass;
     String feedback = "";
     double savedHeight = 0;
-
     double scroll = 0;
     double renderScroll = 0;
-
     boolean alreadyInitialized = false;
-
     List<Runnable> r = new ArrayList<>();
-
     Thread updater = null;
-
-    public static Identifier EYE = new Identifier("atomic", "eye.png");
-    public static Identifier EYEINVIS = new Identifier("atomic", "eyeinvis.png");
 
     public AltManager() {
         super(Text.of(""));
@@ -74,6 +62,7 @@ public class AltManager extends Screen {
         username.setMaxLength(65535);
         password = new PasswordFieldWidget(Atomic.client.textRenderer, midpoint - widgetW / 2, 85, widgetW - 30, 20, Text.of("SPECIAL:Password"));
         password.setMaxLength(65535);
+        password.setShowText(false);
         username.setChangedListener(v -> {
             String s = username.getText();
             if (s.contains(":")) {
@@ -111,13 +100,29 @@ public class AltManager extends Screen {
         paste = new ButtonWidget(midpoint - widgetW / 2, 85 + 50, (widgetW / 2 - 5) * 2, 20, Text.of("Paste"), button -> {
             String clipboard = MinecraftClient.getInstance().keyboard.getClipboard();
             if (clipboard.contains(":")) {
-                username.setText(clipboard.split(":")[0]);
-                password.setText(clipboard.split(":")[1]);
+                String[] pair = clipboard.split(":");
+                String un = "";
+                String pw = "";
+                if (pair.length == 1) {
+                    un = pair[0];
+                    pw = "";
+                } else if (pair.length == 2) {
+                    un = pair[0];
+                    pw = pair[1];
+                }
+                password.setText(pw);
+                username.setText(un);
+                if (un.isEmpty()) {
+                    username.setTextFieldFocused(true);
+                    password.setTextFieldFocused(false);
+                } else if (pw.isEmpty()) {
+                    password.setTextFieldFocused(true);
+                    username.setTextFieldFocused(false);
+                }
+
             }
         });
-        hidepass = new ButtonWidget(midpoint + 85, 85, 20, 20, Text.of(""), button -> {
-            password.setShowText(!password.isShowText());
-        });
+        hidepass = new ButtonWidget(midpoint + 85, 85, 20, 20, Text.of(""), button -> password.setShowText(!password.isShowText()));
         ButtonWidget quit = new ButtonWidget(width - 10 - 100, height - 30, 100, 20, Text.of("Quit"), button -> Atomic.client.openScreen(null));
 
         addDrawableChild(login);
@@ -179,7 +184,7 @@ public class AltManager extends Screen {
                 run(() -> addDrawableChild(entry));
                 savedHeight += 40 + 5;
                 try {
-                    Thread.sleep(alreadyInitialized?0:50);
+                    Thread.sleep(alreadyInitialized ? 0 : 50);
                 } catch (InterruptedException e) {
                     break;
                 }
@@ -230,7 +235,7 @@ public class AltManager extends Screen {
             r.clear();
         }
         if (savedHeight - scroll < height - 50) {
-            mouseScrolled(mouseX,mouseY,0);
+            mouseScrolled(mouseX, mouseY, 0);
         }
         this.client.keyboard.setRepeatEvents(true);
         renderBackground(matrices);
@@ -266,7 +271,7 @@ public class AltManager extends Screen {
         RenderSystem.blendFunc(770, 1);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1F, 1F);
-        drawTexture(matrices, (int) ((width - 240 / 2 - 2.5) + 87.5), (int) 88, 15, 15, 0, 0, 32, 32, 32, 32);
+        drawTexture(matrices, (int) ((width - 240 / 2 - 2.5) + 87.5), 87, 16, 16, 0, 0, 32, 32, 32, 32);
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();
 
