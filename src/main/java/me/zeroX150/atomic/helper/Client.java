@@ -50,20 +50,23 @@ public class Client {
     public static void isClientOutdated(OutdatedCheckCallback callback) throws Exception {
         callback.log("Getting current mod file");
         File modFile = new File(Client.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-        callback.log("Detected mod file at "+modFile.getPath());
         if (modFile.isDirectory()) {
             callback.log("Detected development environment. Wont check for updates");
             Thread.sleep(500);
             callback.callback(false);
             return;
         }
-        File parent = new File(modFile.getParentFile().getParentFile().getAbsolutePath()+"/atomicTmp");
+        File parent = new File(modFile.getParentFile().getParentFile().getAbsolutePath() + "/atomicTmp");
+        if (!parent.isDirectory()) {
+            parent.delete();
+        }
         if (!parent.exists()) {
             parent.mkdir();
         }
-        parent = new File(parent.getAbsolutePath()+"/atomicLatest.jar");
+        parent = new File(parent.getAbsolutePath() + "/atomicLatest.jar");
         if (parent.exists()) {
-            parent.delete();
+            boolean deleted = parent.delete();
+            callback.log(deleted ? "Deleted old file" : "Failed to delete old file!");
         }
         callback.log("Downloading latest client jar");
         downloadFile("https://github.com/cornos/Atomic/raw/master/builds/latest.jar", parent.getAbsolutePath());
