@@ -7,6 +7,7 @@ import me.zeroX150.atomic.feature.module.impl.combat.Criticals;
 import me.zeroX150.atomic.feature.module.impl.combat.Killaura;
 import me.zeroX150.atomic.feature.module.impl.exploit.*;
 import me.zeroX150.atomic.feature.module.impl.external.*;
+import me.zeroX150.atomic.feature.module.impl.misc.AutoFish;
 import me.zeroX150.atomic.feature.module.impl.movement.*;
 import me.zeroX150.atomic.feature.module.impl.render.*;
 import me.zeroX150.atomic.feature.module.impl.testing.TestModule;
@@ -86,6 +87,8 @@ public class ModuleRegistry {
         modules.add(new FarmingAura());
         modules.add(new BetterCrosshair());
         modules.add(new NoBreakDelay());
+        modules.add(new AutoFish());
+        modules.add(new ChestESP());
 
         modules = modules.stream().sorted(Comparator.comparingDouble(value -> -Atomic.fontRenderer.getStringWidth(value.getName()))).collect(Collectors.toList());
     }

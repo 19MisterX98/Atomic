@@ -164,41 +164,41 @@ public class Renderer {
         float y2 = (float) end.y;
         float z2 = (float) end.z;
         BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-        RenderSystem.setShader(GameRenderer::getPositionShader);
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
         GL11.glDepthFunc(GL11.GL_ALWAYS);
-        RenderSystem.setShaderColor(red, green, blue, alpha);
+
         RenderSystem.enableBlend();
         buffer.begin(VertexFormat.DrawMode.QUADS,
-                VertexFormats.POSITION);
-        buffer.vertex(matrix, x1, y2, z1).next();
-        buffer.vertex(matrix, x1, y2, z2).next();
-        buffer.vertex(matrix, x2, y2, z2).next();
-        buffer.vertex(matrix, x2, y2, z1).next();
+                VertexFormats.POSITION_COLOR);
+        buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
+        buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
+        buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
+        buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
 
-        buffer.vertex(matrix, x1, y1, z2).next();
-        buffer.vertex(matrix, x2, y1, z2).next();
-        buffer.vertex(matrix, x2, y2, z2).next();
-        buffer.vertex(matrix, x1, y2, z2).next();
+        buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
+        buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
+        buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
+        buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
 
-        buffer.vertex(matrix, x2, y2, z2).next();
-        buffer.vertex(matrix, x2, y1, z2).next();
-        buffer.vertex(matrix, x2, y1, z1).next();
-        buffer.vertex(matrix, x2, y2, z1).next();
+        buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
+        buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
+        buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
+        buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
 
-        buffer.vertex(matrix, x2, y2, z1).next();
-        buffer.vertex(matrix, x2, y1, z1).next();
-        buffer.vertex(matrix, x1, y1, z1).next();
-        buffer.vertex(matrix, x1, y2, z1).next();
+        buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).next();
+        buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
+        buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
+        buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
 
-        buffer.vertex(matrix, x1, y2, z1).next();
-        buffer.vertex(matrix, x1, y1, z1).next();
-        buffer.vertex(matrix, x1, y1, z2).next();
-        buffer.vertex(matrix, x1, y2, z2).next();
+        buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).next();
+        buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
+        buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
+        buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).next();
 
-        buffer.vertex(matrix, x1, y1, z1).next();
-        buffer.vertex(matrix, x2, y1, z1).next();
-        buffer.vertex(matrix, x2, y1, z2).next();
-        buffer.vertex(matrix, x1, y1, z2).next();
+        buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
+        buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).next();
+        buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).next();
+        buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).next();
 
         buffer.end();
 
