@@ -1,5 +1,8 @@
 package me.zeroX150.atomic.helper;
 
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
+import com.google.common.io.Files;
 import com.mojang.authlib.Agent;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
@@ -11,7 +14,13 @@ import net.minecraft.text.Text;
 import org.apache.logging.log4j.Level;
 
 import java.awt.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.Proxy;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.UUID;
 
 public class Client {
@@ -23,6 +32,49 @@ public class Client {
         }
     };
     private static Input INPUT_NORMAL = null;
+
+    public static interface OutdatedCheckCallback {
+        void callback(boolean isOutdated);
+        void log(String message);
+    }
+
+    public static void downloadFile(String urlStr, String file) throws IOException {
+        URL url = new URL(urlStr);
+        ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+        fos.close();
+        rbc.close();
+    }
+
+    public static void isClientOutdated(OutdatedCheckCallback callback) throws Exception {
+        callback.log("Getting current mod file");
+        File modFile = new File(Client.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+        callback.log("Detected mod file at "+modFile.getPath());
+        if (modFile.isDirectory()) {
+            callback.log("Detected development environment. Wont check for updates");
+            Thread.sleep(500);
+            callback.callback(false);
+            return;
+        }
+        File parent = new File(modFile.getParentFile().getParentFile().getAbsolutePath()+"/atomicTmp");
+        if (!parent.exists()) {
+            parent.mkdir();
+        }
+        parent = new File(parent.getAbsolutePath()+"/atomicLatest.jar");
+        if (parent.exists()) {
+            parent.delete();
+        }
+        callback.log("Downloading latest client jar");
+        downloadFile("https://github.com/cornos/Atomic/raw/master/builds/latest.jar", parent.getAbsolutePath());
+        callback.log("Downloaded!");
+        HashCode hc = Files.asByteSource(modFile).hash(Hashing.crc32());
+        callback.log("Hash of current jarfile: "+hc);
+        HashCode hc1 = Files.asByteSource(parent).hash(Hashing.crc32());
+        callback.log("Hash of latest jarfile: "+hc1);
+        if (!hc.equals(hc1)) callback.log("Hash mismatch!");
+        callback.callback(!hc.equals(hc1));
+    }
 
     public static void startBlockingMovement() {
         INPUT_NORMAL = Atomic.client.player.input;
