@@ -96,8 +96,8 @@ public class TargetHud extends Module {
             if (!(re instanceof LivingEntity entity)) return;
             RenderSystem.enableScissor(w, 0, w, h); // cut off entire left part of screen
             MatrixStack stack = new MatrixStack();
-            stack.translate(renderWX, h / 4d - modalHeight / 2d, 0);
-            Renderer.fill(stack, Themes.Theme.ATOMIC.getPalette().active(), 0, 0, modalWidth, modalHeight);
+            stack.translate(renderWX, h / 4d + 10, 0);
+            Renderer.fill(stack, Renderer.modify(Themes.Theme.ATOMIC.getPalette().active(),-1,-1,-1,120), 0, 0, modalWidth, modalHeight);
             double r = Math.toRadians((System.currentTimeMillis() % 5000) / 5000d * 360d);
             double mxOffset = Math.sin(r) * 20;
             double myOffset = Math.cos(r) * 20;
@@ -131,7 +131,7 @@ public class TargetHud extends Module {
 
             Text cname = re.getCustomName();
             re.setCustomName(Text.of("DoNotRenderThisUsernamePlease"));
-            InventoryScreen.drawEntity((int) (renderWX + hh + 5), (int) (h / 4d - modalHeight / 2d + modalHeight - 3), (int) (hh * 2.5), (float) mxOffset, (float) myOffset, (LivingEntity) re);
+            InventoryScreen.drawEntity((int) (renderWX + hh + 5), (int) (h / 4d + 10 + modalHeight - 3), (int) (hh * 2.5), (float) mxOffset, (float) myOffset, (LivingEntity) re);
             re.setCustomName(cname);
         }
 

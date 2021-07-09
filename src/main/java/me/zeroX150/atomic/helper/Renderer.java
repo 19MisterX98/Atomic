@@ -168,6 +168,7 @@ public class Renderer {
         BufferBuilder buffer = Tessellator.getInstance().getBuffer();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         GL11.glDepthFunc(GL11.GL_ALWAYS);
+        RenderSystem.setShaderColor(1f,1f,1f,1f);
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableBlend();
         buffer.begin(VertexFormat.DrawMode.QUADS,
@@ -226,17 +227,16 @@ public class Renderer {
         float y2 = (float) end.y;
         float z2 = (float) end.z;
         BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-        RenderSystem.setShader(GameRenderer::getPositionShader);
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
         GL11.glDepthFunc(GL11.GL_ALWAYS);
-        RenderSystem.setShaderColor(red, green, blue, alpha);
+        RenderSystem.setShaderColor(1f,1f,1f,1f);
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableBlend();
-        RenderSystem.lineWidth(4f);
         buffer.begin(VertexFormat.DrawMode.DEBUG_LINES,
-                VertexFormats.POSITION);
+                VertexFormats.POSITION_COLOR);
 
-        buffer.vertex(matrix, x1, y1, z1).next();
-        buffer.vertex(matrix, x2, y2, z2).next();
+        buffer.vertex(matrix, x1, y1, z1).color(red,green,blue,alpha).next();
+        buffer.vertex(matrix, x2, y2, z2).color(red,green,blue,alpha).next();
 
         buffer.end();
 
