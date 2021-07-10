@@ -10,6 +10,7 @@ import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.mixin.game.IMinecraftClientAccessor;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.util.Session;
+import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
 import org.apache.logging.log4j.Level;
 
@@ -32,6 +33,14 @@ public class Client {
         }
     };
     private static Input INPUT_NORMAL = null;
+
+    public static void drop(int index) {
+        int translatedSlotId;
+        if (index >= 0 && index < 9) translatedSlotId = 36 + index;
+        else translatedSlotId = index;
+        //ItemStack stack = Atomic.client.player.getInventory().getStack(index);
+        Atomic.client.interactionManager.clickSlot(Atomic.client.player.currentScreenHandler.syncId, translatedSlotId, 1, SlotActionType.THROW, Atomic.client.player);
+    }
 
     public static boolean isPlayerNameValid(String name) {
         String valid = "abcdefghijklmnopqrstuvwxyz0123456789_";

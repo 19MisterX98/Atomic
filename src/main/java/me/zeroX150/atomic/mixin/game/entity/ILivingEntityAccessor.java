@@ -6,8 +6,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(LivingEntity.class)
 public interface ILivingEntityAccessor {
-    @Accessor("jumpingCooldown")
-    int getJumpingCooldown();
 
     @Accessor("jumpingCooldown")
     void setJumpingCooldown(int v);
