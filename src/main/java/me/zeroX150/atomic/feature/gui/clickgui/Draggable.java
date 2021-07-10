@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Draggable {
+    public String title;
     List<PositionD> recordedPositions = new ArrayList<>();
     double animProg = 0;
     double width = 100;
@@ -27,7 +28,6 @@ public class Draggable {
     boolean expanded;
     boolean dragged = false;
     long lastRender = System.currentTimeMillis();
-    public String title;
     List<Clickable> children = new ArrayList<>();
     double lrXDiff = 0;
 

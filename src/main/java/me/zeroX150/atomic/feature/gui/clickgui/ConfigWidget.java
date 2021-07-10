@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.*;
 
 public class ConfigWidget {
+    public Module parent;
     double margin = 4;
     double posX;
     double posY;
@@ -21,7 +22,6 @@ public class ConfigWidget {
     double lastRenderY;
     double width = 200;
     boolean dragged = false;
-    public Module parent;
     Map<DynamicValue<?>, List<ClickableWidget>> children = new LinkedHashMap<>();
     double lastScrollOffset = 0;
 

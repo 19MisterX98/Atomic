@@ -56,7 +56,7 @@ public class ServerInfoScreen extends Screen {
         Color c = new Color(38, 83, 92, 70);
         // c2s traffic
         Renderer.fill(c, margin, margin, width - margin, h - (margin / 2d));
-        Atomic.fontRenderer.drawCenteredString(matrices,"Client -> Server traffic "+Client.roundToN(pSent,1),width/2f,margin+2,0xFFFFFF);
+        Atomic.fontRenderer.drawCenteredString(matrices, "Client -> Server traffic " + Client.roundToN(pSent, 1), width / 2f, margin + 2, 0xFFFFFF);
         double max = 10;
 
         for (Double aDouble : c2sLog) {
@@ -76,7 +76,7 @@ public class ServerInfoScreen extends Screen {
 
         // s2c traffic
         Renderer.fill(c, margin, h + (margin / 2d), width - margin, (h + (margin / 2d)) * 2);
-        Atomic.fontRenderer.drawCenteredString(matrices,"Server -> Client traffic "+Client.roundToN(pRecv,1),width/2f,(h + (margin / 2f) + 2),0xFFFFFF);
+        Atomic.fontRenderer.drawCenteredString(matrices, "Server -> Client traffic " + Client.roundToN(pRecv, 1), width / 2f, (h + (margin / 2f) + 2), 0xFFFFFF);
         double max1 = 1;
         for (Double aDouble : s2cLog) {
             max1 = Math.max(max1, aDouble);
@@ -109,8 +109,8 @@ public class ServerInfoScreen extends Screen {
         int yO = 0;
         float baseY2 = (float) (baseY1 + margin + 1);
         for (String s : contents.keySet().stream().sorted(Comparator.comparingDouble(value -> -Atomic.fontRenderer.getStringWidth(value))).collect(Collectors.toList())) {
-            Atomic.fontRenderer.drawString(matrices,s,margin,baseY2+yO,0xFFFFFF);
-            Atomic.monoFontRenderer.drawString(matrices,contents.get(s),margin+maxWidth,baseY2+yO,0xAAFFAA);
+            Atomic.fontRenderer.drawString(matrices, s, margin, baseY2 + yO, 0xFFFFFF);
+            Atomic.monoFontRenderer.drawString(matrices, contents.get(s), margin + maxWidth, baseY2 + yO, 0xAAFFAA);
             yO += 10;
         }
 

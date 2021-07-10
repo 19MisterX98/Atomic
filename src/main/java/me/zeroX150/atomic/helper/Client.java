@@ -54,12 +54,6 @@ public class Client {
         return isValidEntityName;
     }
 
-    public interface OutdatedCheckCallback {
-        void callback(boolean isOutdated);
-
-        void log(String message);
-    }
-
     public static void downloadFile(String urlStr, String file) throws IOException {
         URL url = new URL(urlStr);
         ReadableByteChannel rbc = Channels.newChannel(url.openStream());
@@ -94,9 +88,9 @@ public class Client {
         downloadFile("https://github.com/cornos/Atomic/raw/master/builds/latest.jar", parent.getAbsolutePath());
         callback.log("Downloaded!");
         HashCode hc = Files.asByteSource(modFile).hash(Hashing.crc32());
-        callback.log("Hash of current jarfile: "+hc);
+        callback.log("Hash of current jarfile: " + hc);
         HashCode hc1 = Files.asByteSource(parent).hash(Hashing.crc32());
-        callback.log("Hash of latest jarfile: "+hc1);
+        callback.log("Hash of latest jarfile: " + hc1);
         if (!hc.equals(hc1)) callback.log("Hash mismatch!");
         callback.callback(!hc.equals(hc1));
     }
@@ -162,5 +156,11 @@ public class Client {
 
     public static double getMouseY() {
         return Atomic.client.mouse.getY() / Atomic.client.getWindow().getScaleFactor();
+    }
+
+    public interface OutdatedCheckCallback {
+        void callback(boolean isOutdated);
+
+        void log(String message);
     }
 }

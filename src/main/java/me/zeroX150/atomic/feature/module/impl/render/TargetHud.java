@@ -90,7 +90,7 @@ public class TargetHud extends Module {
             RenderSystem.enableScissor(w, 0, w, h); // cut off entire left part of screen
             MatrixStack stack = new MatrixStack();
             stack.translate(renderWX, h / 4d + 10, 0);
-            Renderer.fill(stack, Renderer.modify(Themes.Theme.ATOMIC.getPalette().active(),-1,-1,-1,120), 0, 0, modalWidth, modalHeight);
+            Renderer.fill(stack, Renderer.modify(Themes.Theme.ATOMIC.getPalette().active(), -1, -1, -1, 120), 0, 0, modalWidth, modalHeight);
             double r = Math.toRadians((System.currentTimeMillis() % 5000) / 5000d * 360d);
             double mxOffset = Math.sin(r) * 20;
             double myOffset = Math.cos(r) * 20;

@@ -24,17 +24,17 @@ public class ForEach extends Command {
             Client.notifyUser("Example: .foreach 1000 /msg %s Hi %s! I think you're fucking retarded");
             return;
         }
-        int delay = Client.tryParseInt(args[0],-1);
+        int delay = Client.tryParseInt(args[0], -1);
         if (delay < 0) {
             Client.notifyUser("I need a valid int above 0 please");
             return;
         }
-        Client.notifyUser("Sending the message for every person in the player list, with "+delay+"ms delay");
+        Client.notifyUser("Sending the message for every person in the player list, with " + delay + "ms delay");
         for (PlayerListEntry playerListEntry : Atomic.client.getNetworkHandler().getPlayerList()) {
             if (Client.isPlayerNameValid(playerListEntry.getProfile().getName()) && !playerListEntry.getProfile().getId().equals(Atomic.client.player.getUuid())) {
                 runner.execute(() -> {
                     if (Atomic.client.player == null) return;
-                    Atomic.client.player.sendChatMessage(String.join(" ", Arrays.copyOfRange(args,1,args.length)).replaceAll("%s", playerListEntry.getProfile().getName()));
+                    Atomic.client.player.sendChatMessage(String.join(" ", Arrays.copyOfRange(args, 1, args.length)).replaceAll("%s", playerListEntry.getProfile().getName()));
                     try {
                         Thread.sleep(delay);
                     } catch (InterruptedException e) {

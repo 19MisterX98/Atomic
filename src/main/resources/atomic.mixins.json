@@ -27,6 +27,7 @@
     "game.render.ISliderWidgetAccessor",
     "game.render.TextFieldWidgetMixin",
     "game.screen.CreativeInventoryScreenMixin",
+    "game.screen.DisconnectedScreenMixin",
     "game.screen.GameMenuScreenMixin",
     "game.screen.GenericContainerScreenMixin",
     "game.screen.MultiplayerScreenMixin",

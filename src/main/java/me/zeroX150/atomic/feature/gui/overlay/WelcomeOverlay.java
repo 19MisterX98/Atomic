@@ -38,10 +38,10 @@ public class WelcomeOverlay extends Overlay {
     void load() {
         if (isLoading) return;
         isLoading = true;
-        loader = new Thread(()->{
+        loader = new Thread(() -> {
             try {
                 for (Module module : ModuleRegistry.getModules().stream().sorted(Comparator.comparingDouble(value -> -Atomic.monoFontRenderer.getStringWidth(value.getName()))).collect(Collectors.toList())) {
-                    log("Loaded module "+module.getName());
+                    log("Loaded module " + module.getName());
                     Thread.sleep(20);
                 }
                 Thread.sleep(1000);
@@ -50,7 +50,7 @@ public class WelcomeOverlay extends Overlay {
                     @Override
                     public void callback(boolean isOutdated) {
                         log("Checked for updates!");
-                        log(isOutdated?"§cClient is outdated!":"§aClient is up to date!");
+                        log(isOutdated ? "§cClient is outdated!" : "§aClient is up to date!");
                         try {
                             Thread.sleep(3000);
                         } catch (InterruptedException e) {
@@ -100,7 +100,7 @@ public class WelcomeOverlay extends Overlay {
                 if (Atomic.client.currentScreen == null) Atomic.client.openScreen(new HomeScreen());
                 Atomic.client.currentScreen.render(matrices, mouseX, mouseY, delta);
                 c1 = BackgroundHelper.ColorMixer.getArgb((int) (c * 255), 0, 0, 0);
-                a = (int) (c*255);
+                a = (int) (c * 255);
             }
             prevVal = c;
         }
@@ -117,14 +117,14 @@ public class WelcomeOverlay extends Overlay {
             //DrawableHelper.drawCenteredText(matrices, Atomic.client.textRenderer, texts[index], (int) ((w / 2) / m), (int) ((h / 2 - (9 / 2)) / m), BackgroundHelper.ColorMixer.getArgb((int) (c * 255), 255, 255, 255));
         }
         float scale = 1f;
-        while(logs.size() > (Atomic.client.getWindow().getScaledHeight()-1)/(10*scale)) {
+        while (logs.size() > (Atomic.client.getWindow().getScaledHeight() - 1) / (10 * scale)) {
             logs.remove(0);
         }
         int yOffset = 1;
         for (String log : logs.toArray(new String[0])) {
             matrices.push();
-            matrices.scale(scale,scale,1);
-            Atomic.monoFontRenderer.drawString(matrices,log,1,yOffset, BackgroundHelper.ColorMixer.getArgb(MathHelper.clamp(a,1,255),255,255,255));
+            matrices.scale(scale, scale, 1);
+            Atomic.monoFontRenderer.drawString(matrices, log, 1, yOffset, BackgroundHelper.ColorMixer.getArgb(MathHelper.clamp(a, 1, 255), 255, 255, 255));
             yOffset += 10;
             matrices.pop();
         }
