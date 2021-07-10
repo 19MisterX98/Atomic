@@ -32,7 +32,7 @@ public class ClickGUI extends Screen {
 
     public static Identifier LOGO = new Identifier("atomic", "logo.png");
     public String searchTerm = "";
-    ConfigWidget currentConfig = null;
+    public ConfigWidget currentConfig = null;
     double aProg = 2.0;
     int clicks = 0;
     int p = 0;

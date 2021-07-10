@@ -21,7 +21,7 @@ public class ConfigWidget {
     double lastRenderY;
     double width = 200;
     boolean dragged = false;
-    Module parent;
+    public Module parent;
     Map<DynamicValue<?>, List<ClickableWidget>> children = new LinkedHashMap<>();
     double lastScrollOffset = 0;
 

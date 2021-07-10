@@ -90,6 +90,7 @@ public class ModuleRegistry {
         modules.add(new ChestESP());
         modules.add(new InventoryCleaner());
         modules.add(new OffhandCrash());
+        modules.add(new BlockSpammer());
 
         modules = modules.stream().sorted(Comparator.comparingDouble(value -> -Atomic.fontRenderer.getStringWidth(value.getName()))).collect(Collectors.toList());
     }

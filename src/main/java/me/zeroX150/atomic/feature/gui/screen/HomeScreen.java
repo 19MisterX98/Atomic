@@ -5,6 +5,7 @@ import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.gui.clickgui.ClickGUI;
 import me.zeroX150.atomic.feature.gui.overlay.WelcomeOverlay;
 import me.zeroX150.atomic.feature.gui.particles.ParticleManager;
+import me.zeroX150.atomic.feature.module.impl.external.ClientConfig;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
@@ -37,6 +38,10 @@ public class HomeScreen extends Screen {
         addDrawableChild(new ButtonWidget(width / 2 - 75, height / 2 + 25, 70, 20, Text.of("Options"), button -> Atomic.client.openScreen(new OptionsScreen(this, Atomic.client.options))));
         addDrawableChild(new ButtonWidget(width / 2 + 5, height / 2 + 25, 70, 20, Text.of("Quit"), button -> Atomic.client.stop()));
         addDrawableChild(new ButtonWidget(width / 2 - (150 / 2), height / 2 + 25 + 25, 150, 20, Text.of("Alts"), button -> Atomic.client.openScreen(new AltManager())));
+        addDrawableChild(new ButtonWidget(1, 1, 130, 20, Text.of("Vanilla home screen"), button -> {
+            ClientConfig.customMainMenu.setValue(false);
+            Atomic.client.openScreen(null);
+        }));
         super.init();
         isMeteorLoaded = FabricLoader.getInstance().isModLoaded("meteor-client");
     }
