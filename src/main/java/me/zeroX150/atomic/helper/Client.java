@@ -33,8 +33,21 @@ public class Client {
     };
     private static Input INPUT_NORMAL = null;
 
-    public static interface OutdatedCheckCallback {
+    public static boolean isPlayerNameValid(String name) {
+        String valid = "abcdefghijklmnopqrstuvwxyz0123456789_";
+        boolean isValidEntityName = true;
+        for (char c : name.toLowerCase().toCharArray()) {
+            if (!valid.contains(c + "")) {
+                isValidEntityName = false;
+                break;
+            }
+        }
+        return isValidEntityName;
+    }
+
+    public interface OutdatedCheckCallback {
         void callback(boolean isOutdated);
+
         void log(String message);
     }
 

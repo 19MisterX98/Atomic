@@ -27,7 +27,6 @@ public class TargetHud extends Module {
     double renderWX = 0;
     Entity e = null;
     Entity re = null;
-    String valid = "abcdefghijklmnopqrstuvwxyz0123456789_";
 
     public TargetHud() {
         super("TargetHud", "the bruh", ModuleType.RENDER);
@@ -38,13 +37,7 @@ public class TargetHud extends Module {
         if (check.distanceTo(Atomic.client.player) > 64) return false;
         int l = check.getEntityName().length();
         if (l < 3 || l > 16) return false;
-        boolean isValidEntityName = true;
-        for (char c : check.getEntityName().toLowerCase().toCharArray()) {
-            if (!valid.contains(c + "")) {
-                isValidEntityName = false;
-                break;
-            }
-        }
+        boolean isValidEntityName = Client.isPlayerNameValid(check.getEntityName());
         if (!isValidEntityName) return false;
         return check instanceof PlayerEntity;
     }
@@ -127,8 +120,6 @@ public class TargetHud extends Module {
                 int ping = ple.getLatency();
                 Atomic.fontRenderer.drawString(stack, ping + " ms ping", hh * 2.5 + 6, 37, 0xFFFFFF);
             }
-            //Atomic.fontRenderer.drawString(stack,"The sus",hh*2.5+6,10,0xFFFFFF);
-
             Text cname = re.getCustomName();
             re.setCustomName(Text.of("DoNotRenderThisUsernamePlease"));
             InventoryScreen.drawEntity((int) (renderWX + hh + 5), (int) (h / 4d + 10 + modalHeight - 3), (int) (hh * 2.5), (float) mxOffset, (float) myOffset, (LivingEntity) re);

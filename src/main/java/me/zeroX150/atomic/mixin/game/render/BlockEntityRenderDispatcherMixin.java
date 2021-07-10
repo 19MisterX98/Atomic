@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class BlockEntityRenderDispatcherMixin {
     @Inject(method = "render(Lnet/minecraft/block/entity/BlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;)V", at = @At("HEAD"), cancellable = true)
     public <E extends BlockEntity> void render(E blockEntity, float tickDelta, MatrixStack matrix, VertexConsumerProvider vertexConsumerProvider, CallbackInfo ci) {
-        if (Events.Rendering.fireEvent(RenderingEvents.BLOCK_ENTITY_RENDER, new RenderingEvent(null, null, blockEntity, matrix)))
+        if (Events.Rendering.fireEvent(RenderingEvents.BLOCK_ENTITY_RENDER, new RenderingEvent(null, blockEntity, matrix)))
             ci.cancel();
     }
 }
