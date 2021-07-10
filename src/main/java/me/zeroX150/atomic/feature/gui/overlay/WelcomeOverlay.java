@@ -13,7 +13,9 @@ import net.minecraft.util.math.MathHelper;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class WelcomeOverlay extends Overlay {
     String[] texts = new String[]{
@@ -38,7 +40,7 @@ public class WelcomeOverlay extends Overlay {
         isLoading = true;
         loader = new Thread(()->{
             try {
-                for (Module module : ModuleRegistry.getModules()) {
+                for (Module module : ModuleRegistry.getModules().stream().sorted(Comparator.comparingDouble(value -> -Atomic.monoFontRenderer.getStringWidth(value.getName()))).collect(Collectors.toList())) {
                     log("Loaded module "+module.getName());
                     Thread.sleep(20);
                 }

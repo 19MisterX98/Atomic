@@ -27,8 +27,6 @@ public class ModuleRegistry {
          *
          * elytrafly
          * autototem
-         * (seedcrackerx)
-         * nobreakdelay
          * antilevitate
          * hitboxes
          * shulkerpeek
@@ -91,6 +89,7 @@ public class ModuleRegistry {
         modules.add(new AutoFish());
         modules.add(new ChestESP());
         modules.add(new InventoryCleaner());
+        modules.add(new OffhandCrash());
 
         modules = modules.stream().sorted(Comparator.comparingDouble(value -> -Atomic.fontRenderer.getStringWidth(value.getName()))).collect(Collectors.toList());
     }
