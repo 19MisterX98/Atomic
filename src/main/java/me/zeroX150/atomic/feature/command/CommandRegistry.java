@@ -17,6 +17,7 @@ public class CommandRegistry {
         commands.add(new Hologram());
         commands.add(new Help());
         commands.add(new ForEach());
+        commands.add(new Drop());
     }
 
     public static List<Command> getCommands() {
