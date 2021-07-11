@@ -92,6 +92,7 @@ public class ModuleRegistry {
         modules.add(new OffhandCrash());
         modules.add(new BlockSpammer());
         modules.add(new NoRender());
+        modules.add(new VanillaSpoof());
 
         modules = modules.stream().sorted(Comparator.comparingDouble(value -> -Atomic.fontRenderer.getStringWidth(value.getName()))).collect(Collectors.toList());
     }

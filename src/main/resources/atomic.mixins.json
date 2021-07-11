@@ -36,7 +36,7 @@
     "game.screen.TitleScreenMixin",
     "network.ClientConnectionMixin",
     "network.ClientPlayNetworkHandlerMixin",
-    "network.IPlayerInteractBlockC2SPacket",
+    "network.ICustomPayloadC2SPacketAccessor",
     "network.IPlayerMoveC2SPacketAccessor"
   ],
   "client": [],
