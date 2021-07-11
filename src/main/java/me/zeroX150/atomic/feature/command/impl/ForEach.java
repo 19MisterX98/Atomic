@@ -33,13 +33,10 @@ public class ForEach extends Command {
         for (PlayerListEntry playerListEntry : Atomic.client.getNetworkHandler().getPlayerList()) {
             if (Client.isPlayerNameValid(playerListEntry.getProfile().getName()) && !playerListEntry.getProfile().getId().equals(Atomic.client.player.getUuid())) {
                 runner.execute(() -> {
-                    if (Atomic.client.player == null) return;
-                    Atomic.client.player.sendChatMessage(String.join(" ", Arrays.copyOfRange(args, 1, args.length)).replaceAll("%s", playerListEntry.getProfile().getName()));
                     try {
+                        Atomic.client.player.sendChatMessage(String.join(" ", Arrays.copyOfRange(args, 1, args.length)).replaceAll("%s", playerListEntry.getProfile().getName()));
                         Thread.sleep(delay);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    } catch (Exception ignored) {}
                 });
             }
         }
