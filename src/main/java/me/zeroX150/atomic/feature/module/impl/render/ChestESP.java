@@ -31,6 +31,27 @@ public class ChestESP extends Module {
         renders.put(Blocks.HOPPER, new Color(47, 66, 62));
         renders.put(Blocks.DROPPER, new Color(52, 52, 52));
         renders.put(Blocks.DISPENSER, new Color(52, 52, 52));
+        Color shulker = new Color(0, 130, 76);
+        for (Block b : new Block[]{ // jesus fuck
+                Blocks.SHULKER_BOX,
+                Blocks.WHITE_SHULKER_BOX,
+                Blocks.ORANGE_SHULKER_BOX,
+                Blocks.MAGENTA_SHULKER_BOX,
+                Blocks.LIGHT_BLUE_SHULKER_BOX,
+                Blocks.YELLOW_SHULKER_BOX,
+                Blocks.LIME_SHULKER_BOX,
+                Blocks.PINK_SHULKER_BOX,
+                Blocks.GRAY_SHULKER_BOX,
+                Blocks.LIGHT_GRAY_SHULKER_BOX,
+                Blocks.CYAN_SHULKER_BOX,
+                Blocks.PURPLE_SHULKER_BOX,
+                Blocks.BLUE_SHULKER_BOX,
+                Blocks.BROWN_SHULKER_BOX,
+                Blocks.GREEN_SHULKER_BOX,
+                Blocks.RED_SHULKER_BOX,
+                Blocks.BLACK_SHULKER_BOX
+        })
+            renders.put(b, shulker);
     }
 
     Color getBlock(Block b) {

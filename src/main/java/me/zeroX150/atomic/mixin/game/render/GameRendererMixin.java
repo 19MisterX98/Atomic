@@ -3,6 +3,7 @@ package me.zeroX150.atomic.mixin.game.render;
 import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
+import me.zeroX150.atomic.feature.module.impl.external.NoRender;
 import me.zeroX150.atomic.feature.module.impl.render.Zoom;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
@@ -16,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
-
+    Module noRender = ModuleRegistry.getByClass(NoRender.class);
     private boolean vb;
     private boolean dis;
 
@@ -35,6 +36,11 @@ public class GameRendererMixin {
         for (Module module : ModuleRegistry.getModules()) {
             if (module.isEnabled()) module.onWorldRender(matrix);
         }
+    }
+
+    @Inject(method = "bobViewWhenHurt", at = @At("HEAD"), cancellable = true)
+    public void hurtCam(MatrixStack matrices, float f, CallbackInfo ci) {
+        if (noRender.isEnabled() && NoRender.hurtAnimation.getValue()) ci.cancel();
     }
 
     @Inject(method = "getFov", at = @At("RETURN"), cancellable = true)
