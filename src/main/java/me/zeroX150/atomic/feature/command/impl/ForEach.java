@@ -36,7 +36,8 @@ public class ForEach extends Command {
                     try {
                         Atomic.client.player.sendChatMessage(String.join(" ", Arrays.copyOfRange(args, 1, args.length)).replaceAll("%s", playerListEntry.getProfile().getName()));
                         Thread.sleep(delay);
-                    } catch (Exception ignored) {}
+                    } catch (Exception ignored) {
+                    }
                 });
             }
         }

@@ -26,8 +26,6 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.UUID;
 
 public class Client {
-    public static ServerInfo latestServerInfo;
-
     private static final Input INPUT_BLOCK = new Input() {
         @Override
         public void tick(boolean slowDown) {
@@ -35,6 +33,7 @@ public class Client {
             this.movementForward = 0f;
         }
     };
+    public static ServerInfo latestServerInfo;
     private static Input INPUT_NORMAL = null;
 
     public static void drop(int index) {

@@ -1,17 +1,14 @@
 package me.zeroX150.atomic.mixin.network;
 
 import io.netty.channel.ChannelHandlerContext;
-import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.feature.module.impl.external.AntiPacketKick;
-import me.zeroX150.atomic.helper.Client;
 import me.zeroX150.atomic.helper.event.Events;
 import me.zeroX150.atomic.helper.event.PacketEvent;
 import me.zeroX150.atomic.helper.event.PacketEvents;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
 import net.minecraft.network.listener.PacketListener;
-import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
