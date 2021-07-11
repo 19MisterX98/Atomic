@@ -9,6 +9,7 @@ import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.mixin.game.IMinecraftClientAccessor;
 import net.minecraft.client.input.Input;
+import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.util.Session;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
@@ -25,6 +26,8 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.UUID;
 
 public class Client {
+    public static ServerInfo latestServerInfo;
+
     private static final Input INPUT_BLOCK = new Input() {
         @Override
         public void tick(boolean slowDown) {
