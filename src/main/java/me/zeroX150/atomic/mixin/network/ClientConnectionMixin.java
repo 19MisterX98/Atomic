@@ -21,7 +21,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ClientConnectionMixin {
     @Inject(method = "handlePacket", at = @At("HEAD"), cancellable = true)
     private static <T extends PacketListener> void packetReceive(Packet<T> packet, PacketListener listener, CallbackInfo ci) {
-        if (packet instanceof DisconnectS2CPacket) Client.latestServerInfo = Atomic.client.getCurrentServerEntry();
         if (Events.Packets.fireEvent(PacketEvents.PACKET_RECEIVE, new PacketEvent(packet))) ci.cancel();
     }
 
