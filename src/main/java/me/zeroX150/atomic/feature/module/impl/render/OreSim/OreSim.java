@@ -1,12 +1,10 @@
-package me.zeroX150.atomic.feature.module.impl.render;
+package me.zeroX150.atomic.feature.module.impl.render.OreSim;
 
 import me.zeroX150.atomic.Atomic;
+import me.zeroX150.atomic.feature.gui.clickgui.ClickGUI;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleType;
-import me.zeroX150.atomic.feature.module.config.BooleanValue;
-import me.zeroX150.atomic.feature.module.config.DynamicValue;
-import me.zeroX150.atomic.feature.module.config.MultiValue;
-import me.zeroX150.atomic.feature.module.config.SliderValue;
+import me.zeroX150.atomic.feature.module.config.*;
 import me.zeroX150.atomic.helper.Client;
 import me.zeroX150.atomic.helper.Renderer;
 import net.minecraft.client.MinecraftClient;
@@ -25,45 +23,32 @@ import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.ChunkRandom;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
 import java.util.*;
 
 public class OreSim extends Module {
 
-    private static BooleanValue diamond;
-    private static BooleanValue redstone;
-    private static BooleanValue gold;
-    private static BooleanValue ancientDebris;
-    private static BooleanValue iron;
-    private static BooleanValue emerald;
-    private static BooleanValue lapis;
-    private static BooleanValue coal;
-    private static BooleanValue copper;
-    private static BooleanValue quartz;
-    private final HashMap<Long, HashMap<OreType, HashSet<Vec3d>>> chunkRenderers = new HashMap<>();
+    List<Ore> oreConfig;
+    private final HashMap<Long, HashMap<Ore.Type, HashSet<Vec3d>>> chunkRenderers = new HashMap<>();
     SliderValue chunkRange;
     DynamicValue<String> seedInput;
     MultiValue airCheck;
+    MultiValue version;
+    String versionString;
     private Long worldSeed = null;
     private ChunkPos prevOffset = new ChunkPos(0, 0);
 
     public OreSim() {
         super("OreSim", "xray on crack", ModuleType.RENDER);
-
-        gold = (BooleanValue) this.config.create("Gold", false).description("Whether or not to simulate gold");
-        coal = (BooleanValue) this.config.create("Coal", false).description("Whether or not to simulate coal");
-        iron = (BooleanValue) this.config.create("Iron", false).description("Whether or not to simulate iron");
-        lapis = (BooleanValue) this.config.create("Lapis", false).description("Whether or not to simulate lapis");
-        copper = (BooleanValue) this.config.create("Kappa", false).description("Whether or not to simulate copper");
-        quartz = (BooleanValue) this.config.create("Quartz", false).description("Whether or not to simulate quartz");
-        diamond = (BooleanValue) this.config.create("Diamond", true).description("Whether or not to simulate diamonds");
-        emerald = (BooleanValue) this.config.create("Emerald", false).description("Whether or not to simulate emeralds");
-        redstone = (BooleanValue) this.config.create("Redstone", false).description("Whether or not to simulate redstone");
-        ancientDebris = (BooleanValue) this.config.create("Ancient Debris", false).description("Whether or not to simulate netherite");
-
+        version = (MultiValue) this.config.create("Version", "1.17.1", "1.14", "1.15", "1.16", "1.17.0", "1.17.1").description("Minecraft version of the world");
+        versionString = version.getValue();
+        oreConfig = Ore.getConfig(versionString);
         airCheck = (MultiValue) this.config.create("Air-check mode", "Off", "Off", "On load", "Rescan").description("The mode to check placements in the air by");
         seedInput = this.config.create("Seed", "69420").description("The seed of the world used to simulate ore placements");
         chunkRange = (SliderValue) this.config.create("Chunk Range", 5, 0, 10, 10).description("The range of chunks to simulate around the player");
+
+        oreConfig.stream().map(ore -> ore.enabled).distinct().sorted(Comparator.comparingDouble(value ->
+                Atomic.fontRenderer.getStringWidth(value.getKey()))).forEach(ore -> this.config.getAll().add(ore.description("Whether or not to simulate " + ore.getKey().toLowerCase())
+        ));
 
         this.config.organizeClickGUIList = false;
     }
@@ -97,11 +82,11 @@ public class OreSim extends Module {
         long chunkKey = (long) x + ((long) z << 32);
 
         if (chunkRenderers.containsKey(chunkKey)) {
-            for (Ore ore : Ore.ORES) {
-                if (ore.active.getValue()) {
-                    if (!chunkRenderers.get(chunkKey).containsKey(ore.name)) continue;
+            for (Ore ore : oreConfig) {
+                if (ore.enabled.getValue()) {
+                    if (!chunkRenderers.get(chunkKey).containsKey(ore.type)) continue;
                     BufferBuilder buffer = Renderer.renderPrepare(ore.color);
-                    for (Vec3d pos : chunkRenderers.get(chunkKey).get(ore.name)) {
+                    for (Vec3d pos : chunkRenderers.get(chunkKey).get(ore.type)) {
                         Renderer.renderOutlineIntern(pos, new Vec3d(1, 1, 1), ms, buffer);
                     }
                     buffer.end();
@@ -114,7 +99,7 @@ public class OreSim extends Module {
 
     @Override
     public void tick() {
-        if (hasSeedChanged()) {
+        if (hasSeedChanged() || hasVersionChanged()) {
             loadVisibleChunks();
         } else if (airCheck.getValue().equals("Rescan")) {
             if (Atomic.client.player == null || Atomic.client.world == null) return;
@@ -171,16 +156,31 @@ public class OreSim extends Module {
     }
 
     private boolean hasSeedChanged() {
-        Long tempSeed = null;
+        Long tempSeed;
         try {
             tempSeed = Long.parseLong(seedInput.getValue());
         } catch (Exception e) {
-            if (!seedInput.getValue().equals("Your Worldseed")) {
-                tempSeed = (long) seedInput.getValue().hashCode();
-            }
+            tempSeed = (long) seedInput.getValue().hashCode();
         }
-        if (tempSeed != null && !tempSeed.equals(this.worldSeed)) {
+        if (tempSeed != 69420 && !tempSeed.equals(this.worldSeed)) {
             this.worldSeed = tempSeed;
+            chunkRenderers.clear();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean hasVersionChanged() {
+        if (!versionString.equals(version.getValue())) {
+            versionString = version.getValue();
+            this.oreConfig = Ore.getConfig(versionString);
+            this.config.getAll().removeIf(dynamicValue -> dynamicValue instanceof BooleanValue);
+            oreConfig.stream().map(ore -> ore.enabled).distinct().sorted(Comparator.comparingDouble(value ->
+                    Atomic.fontRenderer.getStringWidth(value.getKey()))).forEach(ore -> this.config.getAll().add(ore.description("Whether or not to simulate " + ore.getKey().toLowerCase())
+            ));
+            //update ores in gui. fix this not being called when module is off
+            if (ClickGUI.INSTANCE != null)
+                ClickGUI.INSTANCE.showModuleConfig(this);
             chunkRenderers.clear();
             return true;
         }
@@ -224,7 +224,7 @@ public class OreSim extends Module {
         chunkZ = chunkZ << 4;
 
         ChunkRandom random = new ChunkRandom();
-        HashMap<OreType, HashSet<Vec3d>> h = new HashMap<>();
+        HashMap<Ore.Type, HashSet<Vec3d>> h = new HashMap<>();
 
         long populationSeed = random.setPopulationSeed(worldSeed, chunkX, chunkZ);
 
@@ -236,61 +236,57 @@ public class OreSim extends Module {
             return;
         }
         String biomeName = id.getPath();
+        String dimensionName = world.getRegistryKey().getValue().getPath();
 
-        for (Ore ore : Ore.ORES) {
+        for (Ore ore : oreConfig) {
 
-            if (!world.getRegistryKey().getValue().getPath().equalsIgnoreCase(ore.dimension)) continue;
+            if (!dimensionName.equalsIgnoreCase(ore.dimension)) continue;
 
             HashSet<Vec3d> ores = new HashSet<>();
 
-            int repeat = ore.repeat;
-            int index = ore.index;
-
-            if (ore.step == 7) {
-                if (biomeName.equals("warped_forest")) {
-                    index = ore.index - 2;
-                } else if (biomeName.equals("crimson_forest")) {
-                    index = ore.index - 3;
-                }
-                if (biomeName.equals("basalt_deltas") && (ore.name == OreType.GOLD_NETHER || ore.name == OreType.QUARTZ)) {
-                    repeat *= 2;
-                }
+            int index;
+            if (ore.index.containsKey(biomeName)) {
+                index = ore.index.get(biomeName);
+            } else {
+                index = ore.index.get("default");
             }
+            if (index < 0)
+                continue;
 
             random.setDecoratorSeed(populationSeed, index, ore.step);
 
-            if (ore.generatorType == Generator.EMERALD) {
-                if (!biomeName.equals("mountains") && !biomeName.equals("mountain_edge") && !biomeName.equals("wooded_mountains") && !biomeName.equals("gravelly_mountains") && !biomeName.equals("modified_gravelly_mountains")) {
-                    h.put(ore.name, ores);
-                    continue;
-                }
-                repeat = random.nextInt(3) + 6;
+            int repeat = ore.count.get(random);
+
+            if (biomeName.equals("basalt_deltas") && (ore.type == Ore.Type.GOLD_NETHER || ore.type == Ore.Type.QUARTZ)) {
+                repeat *= 2;
             }
 
             for (int i = 0; i < repeat; i++) {
 
                 int x = random.nextInt(16) + chunkX;
-                int z = random.nextInt(16) + chunkZ;
+                int z;
                 int y;
-
-                if (ore.isDepthAverage) {
-                    // DepthAverage: maxY is spread and minY is baseline
-                    y = random.nextInt(ore.maxY) + random.nextInt(ore.maxY) - ore.maxY + ore.minY;
+                if (versionString.equals("1.14")) {
+                    y = ore.depthAverage ? random.nextInt(ore.maxY) + random.nextInt(ore.maxY) - ore.maxY : random.nextInt(ore.maxY - ore.minY);
+                    z = random.nextInt(16) + chunkZ;
                 } else {
-                    y = random.nextInt(ore.maxY - ore.minY) + ore.minY;
+                    z = random.nextInt(16) + chunkZ;
+                    y = ore.depthAverage ? random.nextInt(ore.maxY) + random.nextInt(ore.maxY) - ore.maxY : random.nextInt(ore.maxY - ore.minY);
                 }
+                y += ore.minY;
 
-                switch (ore.generatorType) {
+                switch (ore.generator) {
                     case DEFAULT -> ores.addAll(generateNormal(world, random, new BlockPos(x, y, z), ore.size));
                     case EMERALD -> {
                         if (airCheck.getValue().equals("Off") || world.getBlockState(new BlockPos(x, y, z)).isOpaque())
                             ores.add(new Vec3d(x, y, z));
                     }
                     case NO_SURFACE -> ores.addAll(generateHidden(world, random, new BlockPos(x, y, z), ore.size));
-                    default -> System.out.println(ore.name + " has some unknown generator. Fix it!");
+                    default -> System.out.println(ore.type + " has some unknown generator. Fix it!");
                 }
             }
-            h.put(ore.name, ores);
+            if (!ores.isEmpty())
+                h.put(ore.type, ores);
         }
         chunkRenderers.put(chunkKey, h);
     }
@@ -435,45 +431,5 @@ public class OreSim extends Module {
 
     private int randomCoord(Random random, int size) {
         return Math.round((random.nextFloat() - random.nextFloat()) * (float) size);
-    }
-
-    private enum OreType {
-        DIAMOND, REDSTONE, GOLD, IRON, COAL, EMERALD, SDEBRIS, LDEBRIS, LAPIS, COPPER, QUARTZ, GOLD_NETHER
-    }
-
-    private enum Generator {
-        DEFAULT, EMERALD, NO_SURFACE
-    }
-
-    private record Ore(OreType name, int index, int step, int minY,
-                       int maxY, int size, int repeat,
-                       boolean isDepthAverage,
-                       Generator generatorType, String dimension,
-                       BooleanValue active, Color color) {
-        public static final ArrayList<Ore> ORES = new ArrayList<>(Arrays.asList(
-                new Ore(OreType.COAL, 7, 6, 0, 128, 17, 20, false,
-                        Generator.DEFAULT, "overworld", coal, new Color(47, 44, 54)),
-                new Ore(OreType.IRON, 8, 6, 0, 64, 9, 20, false,
-                        Generator.DEFAULT, "overworld", iron, new Color(236, 173, 119)),
-                new Ore(OreType.GOLD, 9, 6, 0, 32, 9, 2, false,
-                        Generator.DEFAULT, "overworld", gold, new Color(247, 229, 30)),
-                new Ore(OreType.REDSTONE, 10, 6, 0, 16, 8, 8, false,
-                        Generator.DEFAULT, "overworld", redstone, new Color(245, 7, 23)),
-                new Ore(OreType.DIAMOND, 11, 6, 0, 16, 8, 1, false,
-                        Generator.DEFAULT, "overworld", diamond, new Color(33, 244, 255)),
-                new Ore(OreType.LAPIS, 12, 6, 16, 16, 7, 1, true,
-                        Generator.DEFAULT, "overworld", lapis, new Color(8, 26, 189)),
-                new Ore(OreType.COPPER, 13, 6, 49, 49, 10, 6, true,
-                        Generator.DEFAULT, "overworld", copper, new Color(239, 151, 0)),
-                new Ore(OreType.EMERALD, 17, 6, 4, 32, 1, 6 - 8, false,
-                        Generator.EMERALD, "overworld", emerald, new Color(27, 209, 45)),
-                new Ore(OreType.GOLD_NETHER, 13, 7, 10, 118, 10, 10, false,
-                        Generator.DEFAULT, "the_nether", gold, new Color(247, 229, 30)),
-                new Ore(OreType.QUARTZ, 14, 7, 10, 118, 14, 16, false,
-                        Generator.DEFAULT, "the_nether", quartz, new Color(205, 205, 205)),
-                new Ore(OreType.LDEBRIS, 15, 7, 17, 9, 3, 1, true,
-                        Generator.NO_SURFACE, "the_nether", ancientDebris, new Color(209, 27, 245)),
-                new Ore(OreType.SDEBRIS, 16, 7, 8, 120, 2, 1, false,
-                        Generator.NO_SURFACE, "the_nether", ancientDebris, new Color(209, 27, 245))));
     }
 }

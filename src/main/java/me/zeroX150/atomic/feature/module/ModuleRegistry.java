@@ -11,6 +11,7 @@ import me.zeroX150.atomic.feature.module.impl.misc.AutoFish;
 import me.zeroX150.atomic.feature.module.impl.misc.InventoryCleaner;
 import me.zeroX150.atomic.feature.module.impl.movement.*;
 import me.zeroX150.atomic.feature.module.impl.render.*;
+import me.zeroX150.atomic.feature.module.impl.render.OreSim.OreSim;
 import me.zeroX150.atomic.feature.module.impl.testing.TestModule;
 import me.zeroX150.atomic.feature.module.impl.world.*;
 

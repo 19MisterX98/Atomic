@@ -1,7 +1,7 @@
 package me.zeroX150.atomic.mixin.network;
 
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
-import me.zeroX150.atomic.feature.module.impl.render.OreSim;
+import me.zeroX150.atomic.feature.module.impl.render.OreSim.OreSim;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.packet.s2c.play.ChunkDataS2CPacket;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
