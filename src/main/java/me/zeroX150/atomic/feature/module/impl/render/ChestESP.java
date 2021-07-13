@@ -22,6 +22,7 @@ public class ChestESP extends Module {
     SliderValue range = (SliderValue) this.config.create("Range", 30, 10, 100, 0).description("The range to scan for chests in");
     List<RenderBlock> blocksToRender = new ArrayList<>();
     Map<Block, Color> renders = new HashMap<>();
+    Thread updater;
     int t = 0;
 
     public ChestESP() {
@@ -52,19 +53,26 @@ public class ChestESP extends Module {
                 Blocks.BLACK_SHULKER_BOX
         })
             renders.put(b, shulker);
+        updater = new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(50);
+                    if (!this.isEnabled()) continue;
+                    if (Atomic.client.player == null || Atomic.client.world == null) continue;
+                    t++;
+                    if (t > 40) { // scan every 2 secs on another thread to avoid lag
+                        scan();
+                        t = 0;
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+        }, "chestesp-updater");
+        updater.start();
     }
 
-    Color getBlock(Block b) {
-        return renders.get(b);
-    }
-
-    @Override
-    public void tick() {
-        t++;
-        if (t > 80) {
-            t = 0;
-        } else return;
-        blocksToRender.clear();
+    void scan() {
+        List<RenderBlock> cache = new ArrayList<>();
         double rangeMid = range.getValue() / 2;
         for (double y = -rangeMid; y < rangeMid; y++) {
             for (double x = -rangeMid; x < rangeMid; x++) {
@@ -75,12 +83,22 @@ public class ChestESP extends Module {
                     if (bp1.getY() < 0 || bp1.getY() > 255) break;
                     BlockState state = Atomic.client.world.getBlockState(bp1);
                     if (getBlock(state.getBlock()) != null) {
-                        System.out.println(bp1);
-                        blocksToRender.add(new RenderBlock(bp1, state.getBlock()));
+                        cache.add(new RenderBlock(bp1, state.getBlock()));
                     }
                 }
             }
         }
+        blocksToRender.clear();
+        blocksToRender.addAll(cache);
+        cache.clear();
+    }
+
+    Color getBlock(Block b) {
+        return renders.get(b);
+    }
+
+    @Override
+    public void tick() {
     }
 
     @Override

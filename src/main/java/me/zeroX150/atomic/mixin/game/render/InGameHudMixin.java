@@ -21,6 +21,7 @@ import java.awt.*;
 public abstract class InGameHudMixin extends DrawableHelper {
 
     double interpolatedSlotValue = 0;
+    Hud c = (Hud) ModuleRegistry.getByClass(Hud.class);
     @Shadow
     private int scaledHeight;
     @Shadow
@@ -47,8 +48,8 @@ public abstract class InGameHudMixin extends DrawableHelper {
 
     @Inject(method = "renderHotbar", at = @At("HEAD"))
     public void renderHotbarBackground(float tickDelta, MatrixStack matrices, CallbackInfo ci) {
-        Hud c = (Hud) ModuleRegistry.getByClass(Hud.class);
         if (!c.isEnabled()) return;
+        if (!c.betterHotbar.getValue()) return;
         int i = this.scaledWidth / 2;
         double slotDiff = Atomic.client.player.getInventory().selectedSlot - interpolatedSlotValue;
         slotDiff = Math.abs(slotDiff) < 0.07 ? (slotDiff * c.smoothSelectTransition.getValue()) : slotDiff;
@@ -59,13 +60,13 @@ public abstract class InGameHudMixin extends DrawableHelper {
 
     @Redirect(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V", ordinal = 0))
     private void blockCall1(InGameHud inGameHud, MatrixStack matrices, int x, int y, int u, int v, int width, int height) {
-        if (!ModuleRegistry.getByClass(Hud.class).isEnabled())
-            drawTexture(matrices, x, y, this.getZOffset(), (float) u, (float) v, width, height, 256, 256);
+        if (c.isEnabled() && c.betterHotbar.getValue()) return;
+        drawTexture(matrices, x, y, this.getZOffset(), (float) u, (float) v, width, height, 256, 256);
     }
 
     @Redirect(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V", ordinal = 1))
     private void blockCall2(InGameHud inGameHud, MatrixStack matrices, int x, int y, int u, int v, int width, int height) {
-        if (!ModuleRegistry.getByClass(Hud.class).isEnabled())
-            drawTexture(matrices, x, y, this.getZOffset(), (float) u, (float) v, width, height, 256, 256);
+        if (c.isEnabled() && c.betterHotbar.getValue()) return;
+        drawTexture(matrices, x, y, this.getZOffset(), (float) u, (float) v, width, height, 256, 256);
     }
 }

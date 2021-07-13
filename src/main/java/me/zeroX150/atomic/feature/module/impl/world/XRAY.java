@@ -19,10 +19,14 @@ public class XRAY extends Module {
     public XRAY() {
         super("XRAY", "\"yea hold on im going mining rq\"", ModuleType.WORLD);
         Registry.BLOCK.forEach(block -> {
-            if (block instanceof OreBlock || block instanceof RedstoneOreBlock || block == Blocks.CHEST
-                    || block == Blocks.FURNACE || block == Blocks.END_GATEWAY || block == Blocks.COMMAND_BLOCK)
-                blocks.add(block);
+            if (blockApplicable(block)) blocks.add(block);
         });
+    }
+
+    boolean blockApplicable(Block block) {
+        boolean c1 = block == Blocks.CHEST || block == Blocks.FURNACE || block == Blocks.END_GATEWAY || block == Blocks.COMMAND_BLOCK || block == Blocks.ANCIENT_DEBRIS;
+        boolean c2 = block instanceof OreBlock || block instanceof RedstoneOreBlock;
+        return c1 || c2;
     }
 
     @Override

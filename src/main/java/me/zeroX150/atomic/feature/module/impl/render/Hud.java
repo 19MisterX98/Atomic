@@ -28,7 +28,7 @@ import java.util.List;
 
 public class Hud extends Module {
     public SliderValue smoothSelectTransition = config.create("Selection smooth", 10, 1, 30, 1);
-
+    public BooleanValue betterHotbar = (BooleanValue) config.create("Better hotbar", true).description("Makes the hotbar sexier");
     BooleanValue fps = (BooleanValue) config.create("FPS", true).description("Whether or not to show FPS");
     BooleanValue tps = (BooleanValue) config.create("TPS", true).description("Whether or not to show TPS");
     BooleanValue coords = (BooleanValue) config.create("Coordinates", true).description("Whether or not to show coordinates");
@@ -36,7 +36,6 @@ public class Hud extends Module {
     BooleanValue ping = (BooleanValue) config.create("Ping", true).description("Whether or not to show your ping");
     BooleanValue bps = (BooleanValue) config.create("Speed", true).description("Whether or not to show your speed in blocks per second");
     BooleanValue modules = (BooleanValue) config.create("Modules", true).description("Whether or not to show the enabled modules");
-
     long lastTimePacketReceived;
     double currentTps = 0;
 
@@ -115,7 +114,7 @@ public class Hud extends Module {
         }
         //entries.sort(Comparator.comparingInt(entry -> Atomic.client.textRenderer.getWidth((entry.t.isEmpty()?"":entry.t+" ")+entry.v)));
         int yOffset = 23 / 2 + 9;
-        int changedYOffset = -3;
+        int changedYOffset = -2;
         int xOffset = 2;
         for (HudEntry entry : entries) {
             String t = (entry.t.isEmpty() ? "" : entry.t + " ") + entry.v;
