@@ -161,7 +161,7 @@ public class ClickGUI extends Screen {
         if (currentConfig == null) {
             ConfigWidget currentConfig1 = new ConfigWidget(m);
             currentConfig1.posX = width / 2d - (210 / 2d);
-            currentConfig1.posY = height / 2d;
+            currentConfig1.posY = height / 1.5d;
             currentConfig1.lastRenderX = currentConfig1.posX;
             currentConfig1.lastRenderY = height;
             currentConfig = currentConfig1;

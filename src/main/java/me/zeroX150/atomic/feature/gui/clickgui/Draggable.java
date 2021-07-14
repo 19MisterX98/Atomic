@@ -49,13 +49,13 @@ public class Draggable {
     }
 
     public boolean mouseClicked(boolean isLeft, double x, double y) {
-        if (lastRenderX + width + getMargin() > x && lastRenderX - getMargin() < x && lastRenderY + 9 + getMargin() > y && lastRenderY - getMargin() < y) {
+        if (lastRenderX + width + getMargin() > x && lastRenderX - getMargin() < x && lastRenderY + ClickGUI.currentActiveTheme.titleHeight() + getMargin() > y && lastRenderY - getMargin() < y) {
             if (isLeft) {
                 this.dragged = true;
             } else this.expanded = !this.expanded;
             return true;
         } else if (this.expanded) {
-            double yOffset = 9 + getMargin() * 2;
+            double yOffset = ClickGUI.currentActiveTheme.titleHeight() + getMargin() * 2;
             for (Clickable child : children) {
                 double childPosY = lastRenderY + yOffset;
                 double childPosX = lastRenderX;
