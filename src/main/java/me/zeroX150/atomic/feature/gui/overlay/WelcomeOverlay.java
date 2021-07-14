@@ -50,9 +50,9 @@ public class WelcomeOverlay extends Overlay {
                     @Override
                     public void callback(boolean isOutdated) {
                         log("Checked for updates!");
-                        log(isOutdated ? "§cClient is outdated!" : "§aClient is up to date!");
+                        log(isOutdated ? "§cClient build is desynced!" : "§aClient is up to date!");
                         try {
-                            Thread.sleep(3000);
+                            Thread.sleep(2000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -111,7 +111,7 @@ public class WelcomeOverlay extends Overlay {
         }
         if (c > 0.07) {
             if (index == 1) {
-                logs.clear();
+                if (logs.size() > 0) logs.remove(0);
             }
             Atomic.fontRenderer.drawCenteredString(matrices, texts[index], w / 2f, h / 2f, BackgroundHelper.ColorMixer.getArgb((int) (c * 255), 255, 255, 255));
             //DrawableHelper.drawCenteredText(matrices, Atomic.client.textRenderer, texts[index], (int) ((w / 2) / m), (int) ((h / 2 - (9 / 2)) / m), BackgroundHelper.ColorMixer.getArgb((int) (c * 255), 255, 255, 255));

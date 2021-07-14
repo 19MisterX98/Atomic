@@ -1,6 +1,7 @@
 package me.zeroX150.atomic.feature.gui.particles;
 
 import me.zeroX150.atomic.Atomic;
+import me.zeroX150.atomic.helper.Client;
 import me.zeroX150.atomic.helper.Renderer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec2f;
@@ -29,18 +30,30 @@ public class ParticleManager {
     public void render() {
         int w = Atomic.client.getWindow().getScaledWidth();
         int h = Atomic.client.getWindow().getScaledHeight();
+
+        double renderX = Client.getMouseX();
+        double renderY = Client.getMouseY();
+
+        Vec2f mouse = new Vec2f((float) renderX, (float) renderY);
+        double md = 3 * (w + h);
+
         for (Particle particle : particles) {
             Renderer.fill(Renderer.modify(particle.color, -1, -1, -1, (int) MathHelper.clamp(particle.brightness * 255, 0, 255)), particle.x - 0.5, particle.y - 0.5, particle.x + .5, particle.y + .5);
+            Vec2f v1 = new Vec2f((float) particle.x, (float) particle.y);
             for (Particle particle1 : particles) {
                 Vec2f v = new Vec2f((float) particle1.x, (float) particle1.y);
-                Vec2f v1 = new Vec2f((float) particle.x, (float) particle.y);
                 double dist = v1.distanceSquared(v);
-                double md = 3 * (w + h);
                 if (dist < md) {
                     double dCalc = dist / md;
                     double dCalcR = Math.abs(1 - dCalc);
                     Renderer.gradientLineScreen(Renderer.modify(particle.color, -1, -1, -1, (int) MathHelper.clamp(particle.brightness * 255 * dCalcR, 0, 255)), Renderer.modify(particle1.color, -1, -1, -1, (int) MathHelper.clamp(particle1.brightness * 255 * dCalcR, 0, 255)), particle.x, particle.y, particle1.x, particle1.y);
                 }
+            }
+            double mdist = mouse.distanceSquared(v1);
+            if (mdist < md * 5) {
+                double dCalc = mdist / (md * 5);
+                double dCalcR = Math.abs(1 - dCalc);
+                Renderer.gradientLineScreen(Renderer.modify(particle.color, -1, -1, -1, (int) MathHelper.clamp(particle.brightness * 255 * dCalcR, 0, 255)), Renderer.modify(Client.getCurrentRGB(), -1, -1, -1, (int) (255 * dCalcR)), particle.x, particle.y, renderX, renderY);
             }
         }
     }
