@@ -29,6 +29,7 @@
     "game.render.WorldRendererMixin",
     "game.screen.ConnectScreenMixin",
     "game.screen.CreativeInventoryScreenMixin",
+    "game.screen.CreditsScreenMixin",
     "game.screen.DisconnectedScreenMixin",
     "game.screen.GameMenuScreenMixin",
     "game.screen.GenericContainerScreenMixin",

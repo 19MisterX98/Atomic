@@ -32,6 +32,10 @@ public class IdentifierMixin {
 
     @Inject(method = "getPath", at = @At("HEAD"), cancellable = true)
     public void gp(CallbackInfoReturnable<String> cir) {
+        if (this.path.startsWith("nomod.")) {
+            cir.setReturnValue(this.path.replaceAll("nomod.",""));
+            return;
+        }
         if (this.path.equals("textures/gui/options_background.png")) {
             cir.setReturnValue("background.jpg");
         }
@@ -39,6 +43,10 @@ public class IdentifierMixin {
 
     @Inject(method = "getNamespace", at = @At("HEAD"), cancellable = true)
     public void gn(CallbackInfoReturnable<String> cir) {
+        if (this.path.startsWith("nomod.")) {
+            cir.setReturnValue(this.namespace);
+            return;
+        }
         if (this.path.equals("textures/gui/options_background.png")) cir.setReturnValue("atomic");
     }
 }
