@@ -272,6 +272,7 @@ public class ClickGUI extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (aProg != 0) return true;
         mouseY -= trackedScroll;
         boolean flag = false;
         for (Draggable container : Lists.reverse(containers).toArray(new Draggable[0])) {
