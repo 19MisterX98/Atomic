@@ -23,7 +23,7 @@ public class ParticleManager {
     }
 
     public void tick() {
-        particles.forEach(Particle::move);
+        particles.forEach(particle -> particle.move(particles));
     }
 
     public void render() {

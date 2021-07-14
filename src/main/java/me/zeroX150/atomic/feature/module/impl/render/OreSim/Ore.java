@@ -11,6 +11,16 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Ore {
+    private static final BooleanValue coal = new BooleanValue("Coal", false);
+    private static final BooleanValue iron = new BooleanValue("Iron", false);
+    private static final BooleanValue gold = new BooleanValue("Gold", false);
+    private static final BooleanValue redstone = new BooleanValue("Redstone", false);
+    private static final BooleanValue diamond = new BooleanValue("Diamond", true);
+    private static final BooleanValue lapis = new BooleanValue("Lapis", false);
+    private static final BooleanValue copper = new BooleanValue("Kappa", false);
+    private static final BooleanValue emerald = new BooleanValue("Emerald", false);
+    private static final BooleanValue quartz = new BooleanValue("Quartz", false);
+    private static final BooleanValue debris = new BooleanValue("Ancient Debris", false);
     public Type type;
     public String dimension;
     public HashMap<String, Integer> index;
@@ -37,7 +47,6 @@ public class Ore {
         this.enabled = enabled;
         this.color = color;
     }
-
     Ore(Type type, String dimension, int index, int step, IntProvider count, boolean depthAverage, int minY, int maxY, Generator generator, int size, BooleanValue enabled, Color color) {
         this(type, dimension, indexToMap(index), step, count, depthAverage, minY, maxY, generator, size, enabled, color);
     }
@@ -48,22 +57,11 @@ public class Ore {
         return map;
     }
 
-    private static final BooleanValue coal = new BooleanValue("Coal", false);
-    private static final BooleanValue iron = new BooleanValue("Iron", false);
-    private static final BooleanValue gold = new BooleanValue("Gold", false);
-    private static final BooleanValue redstone = new BooleanValue("Redstone", false);
-    private static final BooleanValue diamond = new BooleanValue("Diamond", true);
-    private static final BooleanValue lapis = new BooleanValue("Lapis", false);
-    private static final BooleanValue copper = new BooleanValue("Kappa", false);
-    private static final BooleanValue emerald = new BooleanValue("Emerald", false);
-    private static final BooleanValue quartz = new BooleanValue("Quartz", false);
-    private static final BooleanValue debris = new BooleanValue("Ancient Debris", false);
-
     private static List<Ore> baseConfig() {
         List<Ore> ores = new ArrayList<>();
         HashMap<String, Integer> emeraldIndexes = new HashMap<>();
         emeraldIndexes.put("default", -1);
-        String[] emeraldBiomes = new String[] {"mountains", "mountain_edge", "wooded_mountains", "gravelly_mountains", "modified_gravelly_mountains"};
+        String[] emeraldBiomes = new String[]{"mountains", "mountain_edge", "wooded_mountains", "gravelly_mountains", "modified_gravelly_mountains"};
         for (String emeraldBiome : emeraldBiomes) {
             emeraldIndexes.put(emeraldBiome, 17);
         }
@@ -75,7 +73,7 @@ public class Ore {
         LDebrisIndexes.forEach((biome, index) -> SDebrisIndexes.put(biome, index + 1));
         HashMap<String, Integer> extraGoldIndexes = new HashMap<>();
         extraGoldIndexes.put("default", -1);
-        String[] extraGoldBiomes = new String[] {"badlands", "badlands_plateau", "modified_badlands_plateau", "wooded_badlands_plateau", "modified_wooded_badlands_plateau", "eroded_badlands"};
+        String[] extraGoldBiomes = new String[]{"badlands", "badlands_plateau", "modified_badlands_plateau", "wooded_badlands_plateau", "modified_wooded_badlands_plateau", "eroded_badlands"};
         for (String extraGoldBiome : extraGoldBiomes) {
             extraGoldIndexes.put(extraGoldBiome, 14);
         }
@@ -101,10 +99,10 @@ public class Ore {
 
     private static List<Ore> V1_17() {
         List<Ore> ores = baseConfig();
-        for(Ore ore:ores) {
-            if(ore.type.equals(Type.DIAMOND))
+        for (Ore ore : ores) {
+            if (ore.type.equals(Type.DIAMOND))
                 ore.maxY = 17;
-            if(ore.type.equals(Type.EMERALD))
+            if (ore.type.equals(Type.EMERALD))
                 ore.count = UniformIntProvider.create(6, 24);
         }
         return ores;
@@ -113,7 +111,7 @@ public class Ore {
     private static List<Ore> V1_16() {
         List<Ore> ores = baseConfig();
         ores.removeIf(ore -> ore.type.equals(Type.COPPER));
-        for(Ore ore:ores) {
+        for (Ore ore : ores) {
             if (ore.type == Type.EMERALD || ore.type == Type.GOLD_EXTRA) {
                 ore.index.keySet().forEach(key -> ore.index.put(key, ore.index.get(key) - 3));
             } else if (ore.dimension.equals("overworld")) {
@@ -126,7 +124,7 @@ public class Ore {
     private static List<Ore> V1_15() {
         List<Ore> ores = V1_16();
         ores.removeIf(ore -> ore.type == Type.SDEBRIS || ore.type == Type.LDEBRIS || ore.type == Type.GOLD_NETHER);
-        for(Ore ore:ores) {
+        for (Ore ore : ores) {
             ore.step -= 2;
         }
         return ores;

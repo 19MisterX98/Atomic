@@ -16,7 +16,6 @@ import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.Random;
 
 public class Renderer {
     public static Identifier OPTIONS_BACKGROUND_TEXTURE = new Identifier("atomic", "background.jpg");
@@ -287,76 +286,6 @@ public class Renderer {
         return new Vec3d(f2 * f3, f4, f1 * f3).add(camera.getPos());
     }
 
-    public static void mesh(MatrixStack matrices, Color color, Vec3d[] vertecies) {
-        float red = color.getRed() / 255f;
-        float green = color.getGreen() / 255f;
-        float blue = color.getBlue() / 255f;
-        float alpha = color.getAlpha() / 255f;
-        Camera c = Atomic.client.gameRenderer.getCamera();
-        Vec3d camPos = c.getPos();
-        Matrix4f matrix = matrices.peek().getModel();
-        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        GL11.glDepthFunc(GL11.GL_ALWAYS);
-        RenderSystem.setShaderColor(1, 1, 1, 1);
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.enableBlend();
-        buffer.begin(VertexFormat.DrawMode.DEBUG_LINES,
-                VertexFormats.POSITION_COLOR);
-        boolean defineTwice = false;
-        Random r = new Random();
-        for (Vec3d vertex : vertecies) {
-            Color cc = new Color(r.nextInt(255), r.nextInt(255), r.nextInt(255), 255);
-            Vec3d actualV = vertex.subtract(camPos);
-            for (int i = 0; i < (defineTwice ? 2 : 1); i++)
-                buffer.vertex(matrix, (float) actualV.x, (float) actualV.y, (float) actualV.z).color(cc.getRed() / 255f, cc.getRed() / 255f, cc.getBlue() / 255f, cc.getAlpha() / 255f).next();
-            defineTwice = true;
-        }
-
-        buffer.end();
-
-        BufferRenderer.draw(buffer);
-        GL11.glDepthFunc(GL11.GL_LEQUAL);
-        RenderSystem.disableBlend();
-    }
-
-    public static void DEBUG_fill3d(MatrixStack matrices, Color color, Vec3d start, Vec3d end) {
-        float red = color.getRed() / 255f;
-        float green = color.getGreen() / 255f;
-        float blue = color.getBlue() / 255f;
-        float alpha = color.getAlpha() / 255f;
-        Camera c = Atomic.client.gameRenderer.getCamera();
-        Vec3d camPos = c.getPos();
-        start = start.subtract(camPos);
-        end = end.subtract(camPos);
-        Matrix4f matrix = matrices.peek().getModel();
-        float x1 = (float) start.x;
-        float y1 = (float) start.y;
-        float z1 = (float) start.z;
-        float x2 = (float) end.x;
-        float y2 = (float) end.y;
-        float z2 = (float) end.z;
-        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-        RenderSystem.setShader(GameRenderer::getPositionShader);
-        GL11.glDepthFunc(GL11.GL_ALWAYS);
-        RenderSystem.setShaderColor(red, green, blue, alpha);
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.enableBlend();
-        buffer.begin(VertexFormat.DrawMode.QUADS,
-                VertexFormats.POSITION);
-
-        buffer.vertex(matrix, x1, y1, z1).next();
-        buffer.vertex(matrix, x2, y1, z2).next();
-        buffer.vertex(matrix, x2, y2, z2).next();
-        buffer.vertex(matrix, x1, y2, z1).next();
-
-        buffer.end();
-
-        BufferRenderer.draw(buffer);
-        GL11.glDepthFunc(GL11.GL_LEQUAL);
-        RenderSystem.disableBlend();
-    }
-
     public static void fill(MatrixStack matrices, Color c, double x1, double y1, double x2, double y2) {
         int color = c.getRGB();
         double j;
@@ -459,32 +388,6 @@ public class Renderer {
     }
 
 
-    public static void lineScreen(Color c, Point... coords) {
-        float g = c.getRed() / 255f;
-        float h = c.getGreen() / 255f;
-        float k = c.getBlue() / 255f;
-        float f = c.getAlpha() / 255f;
-        MatrixStack stack = new MatrixStack();
-        Matrix4f matrix = stack.peek().getModel();
-
-        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.enableBlend();
-        RenderSystem.disableTexture();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
-        boolean shouldDefineTwice = false;
-        for (Point coord : coords) {
-            for (int i = 0; i < (shouldDefineTwice ? 2 : 1); i++)
-                bufferBuilder.vertex(matrix, (float) coord.x, (float) coord.y, 0.0F).color(g, h, k, f).next();
-            shouldDefineTwice = true;
-        }
-        bufferBuilder.end();
-        BufferRenderer.draw(bufferBuilder);
-        RenderSystem.enableTexture();
-        RenderSystem.disableBlend();
-    }
-
     public static int lerp(int o, int i, double p) {
         return (int) Math.floor(i + (o - i) * MathHelper.clamp(p, 0, 1));
     }
@@ -498,10 +401,6 @@ public class Renderer {
                 lerp(a.getGreen(), b.getGreen(), c),
                 lerp(a.getBlue(), b.getBlue(), c),
                 lerp(a.getAlpha(), b.getAlpha(), c));
-    }
-
-    public static void renderLineScreen(Vec3d start, Vec3d end, Color color, int width) {
-        lineScreen(color, new Point((int) Math.floor(start.x), (int) Math.floor(start.y)), new Point((int) Math.floor(end.x), (int) Math.floor(end.y)));
     }
 
     public static void renderBackgroundTexture() {

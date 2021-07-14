@@ -4,7 +4,10 @@ import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.gui.clickgui.ClickGUI;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleType;
-import me.zeroX150.atomic.feature.module.config.*;
+import me.zeroX150.atomic.feature.module.config.BooleanValue;
+import me.zeroX150.atomic.feature.module.config.DynamicValue;
+import me.zeroX150.atomic.feature.module.config.MultiValue;
+import me.zeroX150.atomic.feature.module.config.SliderValue;
 import me.zeroX150.atomic.helper.Client;
 import me.zeroX150.atomic.helper.Renderer;
 import net.minecraft.client.MinecraftClient;
@@ -27,8 +30,8 @@ import java.util.*;
 
 public class OreSim extends Module {
 
-    List<Ore> oreConfig;
     private final HashMap<Long, HashMap<Ore.Type, HashSet<Vec3d>>> chunkRenderers = new HashMap<>();
+    List<Ore> oreConfig;
     SliderValue chunkRange;
     DynamicValue<String> seedInput;
     MultiValue airCheck;

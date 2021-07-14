@@ -4,6 +4,7 @@ import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.feature.module.config.SliderValue;
+import me.zeroX150.atomic.helper.keybind.Keybind;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.BlockItem;
@@ -44,7 +45,7 @@ public class Scaffold extends Module {
 
     @Override
     public void onWorldRender(MatrixStack matrices) {
-
+        Atomic.client.options.keySneak.setPressed(false);
     }
 
     @Override
@@ -67,9 +68,12 @@ public class Scaffold extends Module {
                 }
             }
         if (Atomic.client.player.getInventory().getStack(selIndex).getItem() != Items.AIR) {
+            boolean sneaking = new Keybind(Atomic.client.options.keySneak.getDefaultKey().getCode()).isHeld();
+            if (sneaking) bp = bp.down();
             // fucking multithreading moment
             int finalSelIndex = selIndex;
-            Atomic.client.execute(() -> placeBlockWithSlot(finalSelIndex, bp));
+            BlockPos finalBp = bp;
+            Atomic.client.execute(() -> placeBlockWithSlot(finalSelIndex, finalBp));
             if (extend.getValue() != 0) {
                 Vec3d dir1 = Atomic.client.player.getRotationVector();
                 Vec3d dir = new Vec3d(dir1.x, 0, dir1.z);
@@ -78,6 +82,7 @@ public class Scaffold extends Module {
                     v = v.add(dir);
                     if (v.distanceTo(Atomic.client.player.getPos()) >= Atomic.client.interactionManager.getReachDistance())
                         break;
+                    if (sneaking) v = v.add(0, -1, 0);
                     BlockPos bp1 = new BlockPos(v);
                     Atomic.client.execute(() -> placeBlockWithSlot(finalSelIndex, bp1));
                 }
