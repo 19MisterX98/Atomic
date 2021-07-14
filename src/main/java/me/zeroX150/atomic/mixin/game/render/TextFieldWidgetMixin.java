@@ -46,7 +46,7 @@ public abstract class TextFieldWidgetMixin extends ClickableWidget {
 
     @Inject(method = "<init>(Lnet/minecraft/client/font/TextRenderer;IIIILnet/minecraft/text/Text;)V", at = @At("TAIL"))
     public void init(TextRenderer textRenderer, int x, int y, int width, int height, Text text, CallbackInfo ci) {
-        if (text.asString().startsWith("SPECIAL:")) {
+        if (text != null && text.asString().startsWith("SPECIAL:")) {
             this.setMessage(Text.of(text.asString().substring("SPECIAL:".length())));
             isSpecial = true;
             this.setDrawsBackground(false);

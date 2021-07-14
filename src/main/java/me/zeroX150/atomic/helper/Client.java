@@ -13,6 +13,8 @@ import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.util.Session;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import org.apache.logging.log4j.Level;
 
 import java.awt.*;
@@ -164,5 +166,16 @@ public class Client {
         void callback(boolean isOutdated);
 
         void log(String message);
+    }
+
+    public static void lookAt(Vec3d target1) {
+        double vec = 57.2957763671875;
+        Vec3d target = target1.subtract(Atomic.client.player.getEyePos());
+        double square = Math.sqrt(target.x * target.x + target.z * target.z);
+        float pitch = MathHelper.wrapDegrees((float) (-(MathHelper.atan2(target.y, square) * vec)));
+        float yaw = MathHelper.wrapDegrees((float) (MathHelper.atan2(target.z, target.x) * vec) - 90.0F);
+
+        Atomic.client.player.setYaw(yaw);
+        Atomic.client.player.setPitch(pitch);
     }
 }
