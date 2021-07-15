@@ -1,13 +1,11 @@
 package me.zeroX150.atomic.mixin.chat;
 
-import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.command.Command;
 import me.zeroX150.atomic.feature.command.CommandRegistry;
 import me.zeroX150.atomic.feature.module.impl.external.ClientConfig;
 import me.zeroX150.atomic.helper.Client;
 import me.zeroX150.atomic.helper.Renderer;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.CreditsScreen;
 import net.minecraft.client.gui.screen.Screen;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;

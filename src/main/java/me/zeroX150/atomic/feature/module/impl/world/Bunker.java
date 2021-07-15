@@ -4,6 +4,7 @@ import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.helper.Renderer;
+import me.zeroX150.atomic.helper.Rotations;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Hand;
@@ -48,6 +49,7 @@ public class Bunker extends Module {
         current = new Vec3d(cp1.getX(), cp1.getY(), cp1.getZ());
         BlockHitResult bhr = new BlockHitResult(current, Direction.DOWN, cp1, false);
         Atomic.client.interactionManager.interactBlock(Atomic.client.player, Atomic.client.world, Hand.MAIN_HAND, bhr);
+        Rotations.lookAtV3(current.add(0.5, 0.5, 0.5));
     }
 
     @Override

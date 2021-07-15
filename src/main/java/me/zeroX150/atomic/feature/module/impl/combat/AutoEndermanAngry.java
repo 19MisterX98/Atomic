@@ -5,6 +5,7 @@ import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.helper.Packets;
 import me.zeroX150.atomic.helper.Renderer;
+import me.zeroX150.atomic.helper.Rotations;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -40,6 +41,7 @@ public class AutoEndermanAngry extends Module {
         if (e.size() > 0) {
             this.e = e.get(0);
             Packets.sendServerSideLook(this.e.getEyePos());
+            Rotations.lookAtV3(this.e.getEyePos());
         }
     }
 

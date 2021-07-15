@@ -69,6 +69,7 @@ public class WaterClutch extends Module {
         if (Atomic.client.player.getInventory().getStack(selIndex).getItem() != Items.AIR) {
             // fucking multithreading moment
             int finalSelIndex = selIndex;
+            //Rotations.lookAtV3(new Vec3d(bp.getX()+.5,bp.getY()+.5, bp.getZ()+.5));
             Atomic.client.execute(() -> {
                 int c = Atomic.client.player.getInventory().selectedSlot;
                 Atomic.client.player.getInventory().selectedSlot = finalSelIndex;

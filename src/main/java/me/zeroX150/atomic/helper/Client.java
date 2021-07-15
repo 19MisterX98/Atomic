@@ -162,12 +162,6 @@ public class Client {
         return Atomic.client.mouse.getY() / Atomic.client.getWindow().getScaleFactor();
     }
 
-    public interface OutdatedCheckCallback {
-        void callback(boolean isOutdated);
-
-        void log(String message);
-    }
-
     public static void lookAt(Vec3d target1) {
         double vec = 57.2957763671875;
         Vec3d target = target1.subtract(Atomic.client.player.getEyePos());
@@ -177,5 +171,11 @@ public class Client {
 
         Atomic.client.player.setYaw(yaw);
         Atomic.client.player.setPitch(pitch);
+    }
+
+    public interface OutdatedCheckCallback {
+        void callback(boolean isOutdated);
+
+        void log(String message);
     }
 }

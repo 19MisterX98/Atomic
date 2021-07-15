@@ -25,6 +25,7 @@
     "game.render.GameRendererMixin",
     "game.render.InGameHudMixin",
     "game.render.ISliderWidgetAccessor",
+    "game.render.LivingEntityRendererMixin",
     "game.render.TextFieldWidgetMixin",
     "game.render.WorldRendererMixin",
     "game.screen.ConnectScreenMixin",

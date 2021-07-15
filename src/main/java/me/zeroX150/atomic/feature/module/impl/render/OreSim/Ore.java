@@ -33,6 +33,7 @@ public class Ore {
     public int size;
     public BooleanValue enabled;
     public Color color;
+
     Ore(Type type, String dimension, HashMap<String, Integer> index, int step, IntProvider count, boolean depthAverage, int minY, int maxY, Generator generator, int size, BooleanValue enabled, Color color) {
         this.type = type;
         this.dimension = dimension;
@@ -47,6 +48,7 @@ public class Ore {
         this.enabled = enabled;
         this.color = color;
     }
+
     Ore(Type type, String dimension, int index, int step, IntProvider count, boolean depthAverage, int minY, int maxY, Generator generator, int size, BooleanValue enabled, Color color) {
         this(type, dimension, indexToMap(index), step, count, depthAverage, minY, maxY, generator, size, enabled, color);
     }

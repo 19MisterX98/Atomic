@@ -8,6 +8,7 @@ import me.zeroX150.atomic.feature.module.config.BooleanValue;
 import me.zeroX150.atomic.feature.module.config.MultiValue;
 import me.zeroX150.atomic.feature.module.config.SliderValue;
 import me.zeroX150.atomic.helper.Packets;
+import me.zeroX150.atomic.helper.Rotations;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
@@ -16,7 +17,6 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket;
 import net.minecraft.util.Hand;
 
 import java.util.ArrayList;
@@ -86,8 +86,8 @@ public class Killaura extends Module {
         for (Entity attack : attacks) {
             Packets.sendServerSideLook(attack.getEyePos());
             Atomic.client.interactionManager.attackEntity(Atomic.client.player, attack);
-            HandSwingC2SPacket p = new HandSwingC2SPacket(Hand.MAIN_HAND);
-            Atomic.client.getNetworkHandler().sendPacket(p);
+            Atomic.client.player.swingHand(Hand.MAIN_HAND);
+            Rotations.lookAtV3(attack.getPos().add(0, attack.getHeight() / 2, 0));
             if (mode.getValue().equalsIgnoreCase("single")) break;
         }
     }

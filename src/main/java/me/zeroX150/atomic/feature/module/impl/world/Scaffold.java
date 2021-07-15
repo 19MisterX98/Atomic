@@ -4,6 +4,7 @@ import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.feature.module.config.SliderValue;
+import me.zeroX150.atomic.helper.Rotations;
 import me.zeroX150.atomic.helper.keybind.Keybind;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.math.MatrixStack;
@@ -73,6 +74,7 @@ public class Scaffold extends Module {
             // fucking multithreading moment
             int finalSelIndex = selIndex;
             BlockPos finalBp = bp;
+            Rotations.lookAtV3(new Vec3d(bp.getX() + .5, bp.getY() + 0.5, bp.getZ() + .5));
             Atomic.client.execute(() -> placeBlockWithSlot(finalSelIndex, finalBp));
             if (extend.getValue() != 0) {
                 Vec3d dir1 = Atomic.client.player.getRotationVector();
