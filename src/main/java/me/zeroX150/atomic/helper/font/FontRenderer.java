@@ -39,13 +39,12 @@ public class FontRenderer {
     private FontMetrics metrics;
     private BufferedImage bufferedImage;
     private Identifier resourceLocation;
-    String fontName;
 
-    public FontRenderer(Object font, String name) {
-        this(font, 18F, name);
+    public FontRenderer(Object font) {
+        this(font, 18F);
     }
 
-    public FontRenderer(Object font, float size, String name) {
+    public FontRenderer(Object font, float size) {
         this.fontSize = size;
         this.startChar = 32;
         this.endChar = 255;
@@ -53,7 +52,6 @@ public class FontRenderer {
         this.yPos = new float[this.endChar - this.startChar];
         setupGraphics2D();
         createFont(font, size);
-        this.fontName = name;
     }
 
     private static NativeImage readTexture(String textureBase64) {
@@ -144,7 +142,8 @@ public class FontRenderer {
         }
 
         image.close();
-        this.resourceLocation = new Identifier("atomic", "font" + fontName + size);
+        System.out.println(getFont().getFontName());
+        this.resourceLocation = new Identifier("atomic", "font" + getFont().getFontName().toLowerCase().replace(" ", "-") + size);
         applyTexture(resourceLocation, imgNew);
     }
 
