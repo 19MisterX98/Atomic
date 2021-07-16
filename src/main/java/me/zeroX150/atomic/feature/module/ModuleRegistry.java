@@ -95,6 +95,7 @@ public class ModuleRegistry {
         modules.add(new NoRender());
         modules.add(new VanillaSpoof());
         modules.add(new Scaffold());
+        modules.add(new AntiVoid());
 
         modules = modules.stream().sorted(Comparator.comparingDouble(value -> -Atomic.fontRenderer.getStringWidth(value.getName()))).collect(Collectors.toList());
     }
