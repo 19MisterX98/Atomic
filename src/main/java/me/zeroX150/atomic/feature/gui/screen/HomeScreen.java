@@ -16,6 +16,8 @@ import net.minecraft.client.realms.gui.screen.RealmsMainScreen;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL46;
 
 public class HomeScreen extends Screen {
     static boolean shownWelcome = false;
@@ -62,7 +64,7 @@ public class HomeScreen extends Screen {
         RenderSystem.blendEquation(32774);
         RenderSystem.blendFunc(770, 1);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1F, 1F);
+        RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
         drawTexture(matrices, (int) (width / 2 - (504 * logoSize / 2)), 10, 0, 0, 0, (int) (504 * logoSize), (int) (130 * logoSize), (int) (130 * logoSize), (int) (504 * logoSize));
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();
