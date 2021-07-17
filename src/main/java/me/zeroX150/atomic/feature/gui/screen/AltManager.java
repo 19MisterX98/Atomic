@@ -223,6 +223,9 @@ public class AltManager extends Screen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         username.mouseClicked(0, 0, 0);
         password.mouseClicked(0, 0, 0);
+        if (mouseX < width-250) {
+            mouseY += renderScroll;
+        }
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
@@ -272,7 +275,7 @@ public class AltManager extends Screen {
         RenderSystem.blendFunc(770, 1);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1F, 1F);
-        drawTexture(matrices, (int) ((width - 240 / 2 - 2.5) + 87), 87, 16, 16, 0, 0, 32, 32, 32, 32);
+        drawTexture(new MatrixStack(), (int) ((width - 240 / 2 - 2.5) + 87), 87, 16, 16, 0, 0, 32, 32, 32, 32);
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();
 
