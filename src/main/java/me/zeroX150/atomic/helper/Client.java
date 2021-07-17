@@ -18,7 +18,9 @@ import net.minecraft.util.math.Vec3d;
 import org.apache.logging.log4j.Level;
 
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;
@@ -34,8 +36,8 @@ public class Client {
             this.movementForward = 0f;
         }
     };
-    private static Input INPUT_NORMAL = null;
     public static ServerInfo latestServerInfo;
+    private static Input INPUT_NORMAL = null;
 
     public static void drop(int index) {
         int translatedSlotId;

@@ -1,6 +1,8 @@
 package me.zeroX150.atomic.feature.gui.notifications;
 
 import me.zeroX150.atomic.Atomic;
+import me.zeroX150.atomic.feature.module.ModuleRegistry;
+import me.zeroX150.atomic.feature.module.impl.render.Hud;
 import me.zeroX150.atomic.helper.Client;
 import me.zeroX150.atomic.helper.Renderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -19,6 +21,7 @@ public class NotificationRenderer {
         MatrixStack ms = new MatrixStack();
         double m = System.currentTimeMillis() - lastRender;
         if (m > 1) lastRender = System.currentTimeMillis();
+        if (!ModuleRegistry.getByClass(Hud.class).isEnabled()) return;
         m /= 12;
         int currentYOffset = -20;
         int baseX = Atomic.client.getWindow().getScaledWidth() - 150;
@@ -42,7 +45,7 @@ public class NotificationRenderer {
                 }
             }
             if (notification.renderPosY == 0) notification.renderPosY = notification.posY;
-            if (notification.renderPosX == 0) notification.renderPosX = baseX + 151;
+            if (notification.renderPosX == 0) notification.renderPosX = baseX + 150;
             float xDiff = (float) (notification.renderPosX - notification.posX);
             float yDiff = (float) (notification.renderPosY - notification.posY);
             double nxDiff = (xDiff / me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue()) * m;

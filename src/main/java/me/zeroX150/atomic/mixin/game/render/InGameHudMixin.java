@@ -1,6 +1,7 @@
 package me.zeroX150.atomic.mixin.game.render;
 
 import me.zeroX150.atomic.Atomic;
+import me.zeroX150.atomic.feature.gui.notifications.NotificationRenderer;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.feature.module.impl.external.BetterCrosshair;
@@ -32,6 +33,7 @@ public abstract class InGameHudMixin extends DrawableHelper {
         for (Module module : ModuleRegistry.getModules()) {
             if (module.isEnabled()) module.onHudRender();
         }
+        NotificationRenderer.render();
     }
 
     @Redirect(method = "renderCrosshair", at = @At(

@@ -223,7 +223,7 @@ public class AltManager extends Screen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         username.mouseClicked(0, 0, 0);
         password.mouseClicked(0, 0, 0);
-        if (mouseX < width-250) {
+        if (mouseX < width - 250) {
             mouseY += renderScroll;
         }
         return super.mouseClicked(mouseX, mouseY, button);

@@ -18,6 +18,7 @@ public class CommandRegistry {
         commands.add(new Help());
         commands.add(new ForEach());
         commands.add(new Drop());
+        commands.add(new Panic());
     }
 
     public static List<Command> getCommands() {

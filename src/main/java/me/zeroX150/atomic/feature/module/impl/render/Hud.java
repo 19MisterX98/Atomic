@@ -1,7 +1,6 @@
 package me.zeroX150.atomic.feature.module.impl.render;
 
 import me.zeroX150.atomic.Atomic;
-import me.zeroX150.atomic.feature.gui.notifications.NotificationRenderer;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.feature.module.ModuleType;
@@ -65,12 +64,10 @@ public class Hud extends Module {
 
     @Override
     public void enable() {
-
     }
 
     @Override
     public void disable() {
-
     }
 
     @Override
@@ -165,7 +162,6 @@ public class Hud extends Module {
                 moduleOffset += 10;
             }
         }
-        NotificationRenderer.render();
     }
 
     static class HudEntry {
