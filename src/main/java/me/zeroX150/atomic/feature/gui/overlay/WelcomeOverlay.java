@@ -46,24 +46,29 @@ public class WelcomeOverlay extends Overlay {
                 }
                 Thread.sleep(1000);
                 log("Checking for updates...");
-                Client.isClientOutdated(new Client.OutdatedCheckCallback() {
-                    @Override
-                    public void callback(boolean isOutdated) {
-                        log("Checked for updates!");
-                        log(isOutdated ? "§cClient build is desynced!" : "§aClient is up to date!");
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                try {
+                    Client.isClientOutdated(new Client.OutdatedCheckCallback() {
+                        @Override
+                        public void callback(boolean isOutdated) {
+                            log("Checked for updates!");
+                            log(isOutdated ? "§cClient build is desynced!" : "§aClient is up to date!");
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            finishedLoading = true;
                         }
-                        finishedLoading = true;
-                    }
 
-                    @Override
-                    public void log(String message) {
-                        WelcomeOverlay.this.log(message);
-                    }
-                });
+                        @Override
+                        public void log(String message) {
+                            WelcomeOverlay.this.log(message);
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    WelcomeOverlay.this.log("Failed to download! This is not good.");
+                }
             } catch (Exception ignored) {
 
             }

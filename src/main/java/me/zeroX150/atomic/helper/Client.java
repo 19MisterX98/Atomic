@@ -18,9 +18,8 @@ import net.minecraft.util.math.Vec3d;
 import org.apache.logging.log4j.Level;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;
 import java.nio.channels.Channels;
@@ -35,8 +34,8 @@ public class Client {
             this.movementForward = 0f;
         }
     };
-    public static ServerInfo latestServerInfo;
     private static Input INPUT_NORMAL = null;
+    public static ServerInfo latestServerInfo;
 
     public static void drop(int index) {
         int translatedSlotId;
@@ -60,8 +59,12 @@ public class Client {
 
     public static void downloadFile(String urlStr, String file) throws IOException {
         URL url = new URL(urlStr);
-        ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+        HttpURLConnection huc = (HttpURLConnection) url.openConnection();
+        huc.setConnectTimeout(3000); // 3 sec connect,
+        huc.setReadTimeout(20000); // 20 sec read
         FileOutputStream fos = new FileOutputStream(file);
+
+        ReadableByteChannel rbc = Channels.newChannel(huc.getInputStream());
         fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
         fos.close();
         rbc.close();
