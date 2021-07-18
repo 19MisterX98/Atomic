@@ -7,6 +7,7 @@ import me.zeroX150.atomic.feature.module.impl.combat.Criticals;
 import me.zeroX150.atomic.feature.module.impl.combat.Killaura;
 import me.zeroX150.atomic.feature.module.impl.exploit.*;
 import me.zeroX150.atomic.feature.module.impl.external.*;
+import me.zeroX150.atomic.feature.module.impl.misc.AntiParticleCrash;
 import me.zeroX150.atomic.feature.module.impl.misc.AutoFish;
 import me.zeroX150.atomic.feature.module.impl.misc.InventoryCleaner;
 import me.zeroX150.atomic.feature.module.impl.movement.*;
@@ -97,6 +98,7 @@ public class ModuleRegistry {
         modules.add(new Scaffold());
         modules.add(new AntiVoid());
         modules.add(new Phase());
+        modules.add(new AntiParticleCrash());
 
         modules = modules.stream().sorted(Comparator.comparingDouble(value -> -Atomic.fontRenderer.getStringWidth(value.getName()))).collect(Collectors.toList());
     }
