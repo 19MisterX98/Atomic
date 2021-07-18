@@ -11,6 +11,7 @@ import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.feature.module.config.DynamicValue;
 import me.zeroX150.atomic.helper.keybind.KeybindManager;
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.Level;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,10 +32,10 @@ public class ConfigManager {
 
     public static void saveState() {
         if (!loaded || !enabled) {
-            System.out.println("Not saving config because we didnt load it yet");
+            Atomic.log(Level.INFO, "Not saving config because we didnt load it yet");
             return;
         }
-        System.out.println("Saving config");
+        Atomic.log(Level.INFO, "Saving config");
         JsonObject base = new JsonObject();
         JsonArray enabled = new JsonArray();
         JsonArray config = new JsonArray();
@@ -58,7 +59,7 @@ public class ConfigManager {
             FileUtils.writeStringToFile(CONFIG_FILE, base.toString(), Charsets.UTF_8, false);
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Failed to save config!");
+            Atomic.log(Level.ERROR, "Failed to save config!");
         }
     }
 
@@ -105,7 +106,7 @@ public class ConfigManager {
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Failed to load config!");
+            Atomic.log(Level.ERROR, "Failed to load config!");
         } finally {
             KeybindManager.reload();
         }
@@ -116,7 +117,7 @@ public class ConfigManager {
         enabled = true;
         for (Module module : toBeEnabled) {
             module.setEnabled(true);
-            System.out.println("Enabling " + module.getName() + " because config says so");
+            Atomic.log(Level.INFO, "Enabling " + module.getName() + " because config says so");
         }
     }
 }

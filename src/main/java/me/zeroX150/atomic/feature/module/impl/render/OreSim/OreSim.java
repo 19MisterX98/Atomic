@@ -24,6 +24,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.ChunkRandom;
+import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
@@ -285,7 +286,7 @@ public class OreSim extends Module {
                             ores.add(new Vec3d(x, y, z));
                     }
                     case NO_SURFACE -> ores.addAll(generateHidden(world, random, new BlockPos(x, y, z), ore.size));
-                    default -> System.out.println(ore.type + " has some unknown generator. Fix it!");
+                    default -> Atomic.log(Level.ERROR, ore.type + " has some unknown generator. Fix it!");
                 }
             }
             if (!ores.isEmpty())

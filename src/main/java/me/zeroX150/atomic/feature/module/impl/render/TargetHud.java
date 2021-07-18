@@ -75,7 +75,6 @@ public class TargetHud extends Module {
     @Override
     public void onHudRender() {
         renderWX = Transitions.transition(renderWX, wX, 20);
-        //System.out.println(renderWX);
         int w = Atomic.client.getWindow().getScaledWidth();
         int h = Atomic.client.getWindow().getHeight();
         double modalHeight = 55;

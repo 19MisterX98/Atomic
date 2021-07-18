@@ -20,6 +20,7 @@ import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.apache.logging.log4j.Level;
 
 import java.awt.*;
 import java.net.Proxy;
@@ -85,7 +86,7 @@ public class AltEntryWidget extends ClickableWidget implements Drawable, Element
     }
 
     public static void getSkinTexture(UUID uuid, String uname, SkinAvailabilityCallback callback) {
-        System.out.println("Requesting skin for " + uuid.toString() + " - " + uname);
+        Atomic.log(Level.INFO, "Requesting skin for " + uuid.toString() + " - " + uname);
         if (skins.containsKey(uuid)) {
             callback.run(skins.get(uuid));
         } else {

@@ -45,7 +45,6 @@ public class Killaura extends Module {
         if (Atomic.client.player == null) return 0;
         if (!automaticalDelay.getValue()) return (int) (delay.getValue() + 0);
         else {
-            //System.out.println(Atomic.client.player.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_SPEED));
             ItemStack hand = Atomic.client.player.getMainHandStack();
             if (hand == null) hand = Atomic.client.player.getOffHandStack();
             if (hand == null) return 10;

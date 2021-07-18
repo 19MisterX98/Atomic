@@ -142,7 +142,6 @@ public class FontRenderer {
         }
 
         image.close();
-        System.out.println(getFont().getFontName());
         this.resourceLocation = new Identifier("atomic", "font" + getFont().getFontName().toLowerCase().replace(" ", "-").hashCode() + size);
         applyTexture(resourceLocation, imgNew);
     }
