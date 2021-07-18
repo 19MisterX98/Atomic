@@ -16,8 +16,6 @@ import net.minecraft.client.realms.gui.screen.RealmsMainScreen;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL46;
 
 public class HomeScreen extends Screen {
     static boolean shownWelcome = false;
