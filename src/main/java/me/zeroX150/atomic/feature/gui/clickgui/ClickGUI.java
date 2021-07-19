@@ -195,7 +195,12 @@ public class ClickGUI extends Screen {
             return;
         }
         Themes.Palette cTheme = currentActiveTheme;
-        Themes.Theme aTheme = me.zeroX150.atomic.feature.module.impl.render.ClickGUI.theme.getValue().equalsIgnoreCase("walmart sigma") ? Themes.Theme.SIGMA : Themes.Theme.ATOMIC;
+        Themes.Theme aTheme = switch(me.zeroX150.atomic.feature.module.impl.render.ClickGUI.theme.getValue().toLowerCase()) {
+            case "walmart sigma" -> Themes.Theme.SIGMA;
+            case "atomic" -> Themes.Theme.ATOMIC;
+            case "dark" -> Themes.Theme.DARK;
+            default -> throw new IllegalStateException("Unexpected value: " + me.zeroX150.atomic.feature.module.impl.render.ClickGUI.theme.getValue().toLowerCase());
+        };
         Color newInactive = Transitions.transition(cTheme.inactive(), aTheme.p.inactive(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
         Color newActive = Transitions.transition(cTheme.active(), aTheme.p.active(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());
         Color newHiglight = Transitions.transition(cTheme.l_highlight(), aTheme.p.l_highlight(), me.zeroX150.atomic.feature.module.impl.render.ClickGUI.smooth.getValue());

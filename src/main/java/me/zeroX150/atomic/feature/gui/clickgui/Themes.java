@@ -21,7 +21,22 @@ public class Themes {
                         new Color(0xf2f2f2),
                         new Color(10, 10, 10),
                         new Color(0x7d7d7d),
-                        4, 0, false, 14));
+                        4, 0, false, 14)),
+        DARK(
+                new Palette(
+                        new Color(17, 17, 17, 255),
+                        new Color(25, 42, 57, 255),
+                        new Color(255, 255, 255, 255),
+                        new Color(0, 36, 28, 255),
+                        new Color(0, 52, 40, 255),
+                        Color.WHITE,
+                        Color.WHITE,
+                        4,
+                        0,
+                        true,
+                        9
+                )
+        );
         Palette p;
 
         Theme(Palette palette) {

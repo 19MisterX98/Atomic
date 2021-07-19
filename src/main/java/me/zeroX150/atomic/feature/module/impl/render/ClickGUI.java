@@ -24,7 +24,7 @@ public class ClickGUI extends Module {
         dragFactor = (SliderValue) this.config.create("Drag factor", 0.5, 0, 3, 1).description("The factor to rotate the tab by when you move it (0 to disable)");
         enableTails = (BooleanValue) this.config.create("Enable tails", false).description("Whether or not to enable tails");
         tailSize = (SliderValue) this.config.create("Tail size", 30, 10, 200, 0).description("The length of the tails");
-        theme = (MultiValue) this.config.create("Theme", "Atomic", "Atomic", "Walmart Sigma").description("The theme of the clickgui");
+        theme = (MultiValue) this.config.create("Theme", "Atomic", "Atomic", "Dark", "Walmart Sigma").description("The theme of the clickgui");
         tailSize.showOnlyIf(() -> enableTails.getValue());
         this.config.get("Keybind").setValue(344);
     }
