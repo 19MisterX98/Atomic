@@ -99,6 +99,7 @@ public class ModuleRegistry {
         modules.add(new AntiVoid());
         modules.add(new Phase());
         modules.add(new AntiParticleCrash());
+        modules.add(new NameProtect());
 
         modules = modules.stream().sorted(Comparator.comparingDouble(value -> -Atomic.fontRenderer.getStringWidth(value.getName()))).collect(Collectors.toList());
     }

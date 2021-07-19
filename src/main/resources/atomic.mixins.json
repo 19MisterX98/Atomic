@@ -28,6 +28,7 @@
     "game.render.ISliderWidgetAccessor",
     "game.render.LivingEntityRendererMixin",
     "game.render.TextFieldWidgetMixin",
+    "game.render.TextVisitFactoryMixin",
     "game.render.WorldRendererMixin",
     "game.screen.ConnectScreenMixin",
     "game.screen.CreativeInventoryScreenMixin",
