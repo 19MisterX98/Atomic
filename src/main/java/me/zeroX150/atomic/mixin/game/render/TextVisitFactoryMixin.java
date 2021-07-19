@@ -14,8 +14,7 @@ public class TextVisitFactoryMixin {
             method = {
                     "visitFormatted(Ljava/lang/String;ILnet/minecraft/text/Style;Lnet/minecraft/text/CharacterVisitor;)Z"},
             index = 0)
-    private static String protect(String text)
-    {
+    private static String protect(String text) {
         return ((NameProtect) ModuleRegistry.getByClass(NameProtect.class)).protect(text);
     }
 }

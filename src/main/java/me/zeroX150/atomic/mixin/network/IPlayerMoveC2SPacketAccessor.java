@@ -31,4 +31,18 @@ public interface IPlayerMoveC2SPacketAccessor {
     @Mutable
     @Accessor("z")
     void setZ(double z);
+
+    @Accessor("yaw")
+    float getYaw();
+
+    @Mutable
+    @Accessor("yaw")
+    void setYaw(float yaw);
+
+    @Accessor("pitch")
+    float getPitch();
+
+    @Mutable
+    @Accessor("pitch")
+    void setPitch(float pitch);
 }

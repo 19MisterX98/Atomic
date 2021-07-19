@@ -195,7 +195,7 @@ public class ClickGUI extends Screen {
             return;
         }
         Themes.Palette cTheme = currentActiveTheme;
-        Themes.Theme aTheme = switch(me.zeroX150.atomic.feature.module.impl.render.ClickGUI.theme.getValue().toLowerCase()) {
+        Themes.Theme aTheme = switch (me.zeroX150.atomic.feature.module.impl.render.ClickGUI.theme.getValue().toLowerCase()) {
             case "walmart sigma" -> Themes.Theme.SIGMA;
             case "atomic" -> Themes.Theme.ATOMIC;
             case "dark" -> Themes.Theme.DARK;

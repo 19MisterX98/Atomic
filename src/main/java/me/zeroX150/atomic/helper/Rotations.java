@@ -1,6 +1,10 @@
 package me.zeroX150.atomic.helper;
 
 import me.zeroX150.atomic.Atomic;
+import me.zeroX150.atomic.helper.event.Events;
+import me.zeroX150.atomic.helper.event.PacketEvents;
+import me.zeroX150.atomic.mixin.network.IPlayerMoveC2SPacketAccessor;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
@@ -9,8 +13,17 @@ public class Rotations {
     private static float clientPitch;
     private static float clientYaw;
     private static long lastModificationTime = System.currentTimeMillis();
-
     private static Vec3d targetV3;
+
+    static {
+        Events.Packets.registerEventHandler(PacketEvents.PACKET_SEND, event -> {
+            if (isEnabled() && event.getPacket() instanceof PlayerMoveC2SPacket packet) {
+                IPlayerMoveC2SPacketAccessor accessor = (IPlayerMoveC2SPacketAccessor) packet;
+                accessor.setPitch(getClientPitch());
+                accessor.setYaw(getClientYaw());
+            }
+        });
+    }
 
     static void timeoutCheck() {
         if (System.currentTimeMillis() - lastModificationTime > 1000) disable();

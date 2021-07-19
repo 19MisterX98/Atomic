@@ -15,6 +15,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 public class Scaffold extends Module {
@@ -77,8 +78,8 @@ public class Scaffold extends Module {
             Rotations.lookAtV3(new Vec3d(bp.getX() + .5, bp.getY() + 0.5, bp.getZ() + .5));
             Atomic.client.execute(() -> placeBlockWithSlot(finalSelIndex, finalBp));
             if (extend.getValue() != 0) {
-                Vec3d dir1 = Atomic.client.player.getRotationVector();
-                Vec3d dir = new Vec3d(dir1.x, 0, dir1.z);
+                Vec3d dir1 = Atomic.client.player.getVelocity().multiply(3);
+                Vec3d dir = new Vec3d(MathHelper.clamp(dir1.getX(), -1, 1), 0, MathHelper.clamp(dir1.getZ(), -1, 1));
                 Vec3d v = ppos;
                 for (double i = 0; i < extend.getValue(); i += 0.5) {
                     v = v.add(dir);

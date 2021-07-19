@@ -11,17 +11,18 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.s2c.play.ParticleS2CPacket;
 
 public class AntiParticleCrash extends Module {
-    SliderValue limit = (SliderValue) this.config.create("Particle limit",100_000,10_000,5_000_000,0).description("Max amount of particles a single packet can have");
-    BooleanValue notify = (BooleanValue) this.config.create("Notify",true).description("Notify you when a packet was terminated");
+    SliderValue limit = (SliderValue) this.config.create("Particle limit", 100_000, 10_000, 5_000_000, 0).description("Max amount of particles a single packet can have");
+    BooleanValue notify = (BooleanValue) this.config.create("Notify", true).description("Notify you when a packet was terminated");
     int attempts = 0;
+
     public AntiParticleCrash() {
         super("AntiParticleCrash", "prevents you from getting crashed by a ton of particles", ModuleType.MISC);
-        Events.Packets.registerEventHandler(PacketEvents.PACKET_RECEIVE,event -> {
+        Events.Packets.registerEventHandler(PacketEvents.PACKET_RECEIVE, event -> {
             if (!this.isEnabled()) return;
             if (event.getPacket() instanceof ParticleS2CPacket pack) {
                 if (pack.getCount() > limit.getValue()) {
                     if (notify.getValue()) {
-                        Notification.create(7000,"AntiParticleCrash","You just received a packet with "+pack.getCount()+" particles. Blocking...");
+                        Notification.create(7000, "AntiParticleCrash", "You just received a packet with " + pack.getCount() + " particles. Blocking...");
                     }
                     event.setCancelled(true);
                     attempts++;
@@ -47,7 +48,7 @@ public class AntiParticleCrash extends Module {
 
     @Override
     public String getContext() {
-        return attempts+" PD";
+        return attempts + " PD";
     }
 
     @Override
