@@ -1,3 +1,5 @@
+import java.nio.file.Files
+
 plugins {
 	id 'fabric-loom' version '0.8-SNAPSHOT'
 	id 'maven-publish'
@@ -47,7 +49,16 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 
 task execBuild(dependsOn: build) {
 	doLast {
+		String v = new File("./VERSION").text;
+		Integer verNum = v as Integer
+		System.out.println("Current version: b"+v)
 		file("./build/libs/atomic-1.0.0.jar").renameTo(file("./builds/latest.jar"))
+		java.nio.file.Path p = java.nio.file.Path.of("./builds/latest.jar")
+		java.nio.file.Path p1 = java.nio.file.Path.of("./builds/atomic-b"+verNum+".jar")
+		Files.copy(p,p1)
+		verNum++
+		File f = new File("./VERSION")
+		f.write(Integer.toString(verNum))
 	}
 }
 
