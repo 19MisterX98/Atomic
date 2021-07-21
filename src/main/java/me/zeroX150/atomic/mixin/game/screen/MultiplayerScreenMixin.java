@@ -6,6 +6,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.network.MultiplayerServerListPinger;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,9 +16,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MultiplayerScreen.class)
-public class MultiplayerScreenMixin extends Screen {
+public abstract class MultiplayerScreenMixin extends Screen {
     @Shadow
     protected MultiplayerServerListWidget serverListWidget;
+
+    @Shadow public abstract MultiplayerServerListPinger getServerListPinger();
+
     ButtonWidget editMotd;
 
     public MultiplayerScreenMixin() {
@@ -26,7 +30,7 @@ public class MultiplayerScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("HEAD"))
     public void init(CallbackInfo ci) {
-        editMotd = new ButtonWidget(8, height - 28, 100, 20, Text.of("Edit MOTD"), button -> {
+        editMotd = new ButtonWidget(8, height - 28, 100, 20, Text.of("Edit Server"), button -> {
             MultiplayerServerListWidget.ServerEntry se = (MultiplayerServerListWidget.ServerEntry) this.serverListWidget.getSelectedOrNull();
             Atomic.client.openScreen(new EditServerInfoScreen(se.getServer(), this));
         });

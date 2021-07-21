@@ -24,7 +24,6 @@
     "game.render.EntryListWidgetMixin",
     "game.render.GameRendererMixin",
     "game.render.InGameHudMixin",
-    "game.render.IRenderSystemAccessor",
     "game.render.ISliderWidgetAccessor",
     "game.render.LivingEntityRendererMixin",
     "game.render.TextFieldWidgetMixin",
@@ -41,7 +40,8 @@
     "network.ClientConnectionMixin",
     "network.ClientPlayNetworkHandlerMixin",
     "network.ICustomPayloadC2SPacketAccessor",
-    "network.IPlayerMoveC2SPacketAccessor"
+    "network.IPlayerMoveC2SPacketAccessor",
+    "network.MultiplayerServerListPingerAccessor"
   ],
   "client": [],
   "server": [],
