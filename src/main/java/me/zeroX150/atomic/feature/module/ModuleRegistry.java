@@ -100,6 +100,7 @@ public class ModuleRegistry {
         modules.add(new Phase());
         modules.add(new AntiParticleCrash());
         modules.add(new NameProtect());
+        modules.add(new LeverAura());
 
         modules = modules.stream().sorted(Comparator.comparingDouble(value -> -Atomic.fontRenderer.getStringWidth(value.getName()))).collect(Collectors.toList());
     }

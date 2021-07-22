@@ -10,7 +10,9 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(DimensionType.class)
 public class DimensionTypeMixin implements OreSim.DimensionTypeCaller {
 
-    @Shadow @Final private Identifier infiniburn;
+    @Shadow
+    @Final
+    private Identifier infiniburn;
 
     @Override
     public Identifier getInfiniburn() {

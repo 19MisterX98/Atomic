@@ -19,14 +19,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MultiplayerScreenMixin extends Screen {
     @Shadow
     protected MultiplayerServerListWidget serverListWidget;
-
-    @Shadow public abstract MultiplayerServerListPinger getServerListPinger();
-
     ButtonWidget editMotd;
 
     public MultiplayerScreenMixin() {
         super(Text.of(""));
     }
+
+    @Shadow
+    public abstract MultiplayerServerListPinger getServerListPinger();
 
     @Inject(method = "init", at = @At("HEAD"))
     public void init(CallbackInfo ci) {

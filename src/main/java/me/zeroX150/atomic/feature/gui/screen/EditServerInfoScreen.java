@@ -6,10 +6,8 @@ import me.zeroX150.atomic.mixin.network.MultiplayerServerListPingerAccessor;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.network.MultiplayerServerListPinger;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.network.ClientConnection;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
@@ -34,20 +32,20 @@ public class EditServerInfoScreen extends Screen {
         motd = new TextFieldWidget(textRenderer, width / 2 - fw / 2, height / 2 - 25, fw, 20, Text.of("SPECIAL:Server MOTD"));
         motd.setMaxLength(65535);
         motd.setText(si.label.asString().replaceAll("§", "&").replaceAll("\n", "\\\\n"));
-        pcount = new TextFieldWidget(textRenderer,width/2-fw/2,height/2+6,fw,20,Text.of("SPECIAL:Player count"));
+        pcount = new TextFieldWidget(textRenderer, width / 2 - fw / 2, height / 2 + 6, fw, 20, Text.of("SPECIAL:Player count"));
         pcount.setMaxLength(65535);
         pcount.setText(si.playerCountLabel.getString());
         fw = 100;
-        ButtonWidget cancel = new ButtonWidget(width / 2 - fw - 3, height-25, fw, 20, Text.of("Cancel"), button -> {
+        ButtonWidget cancel = new ButtonWidget(width / 2 - fw - 3, height - 25, fw, 20, Text.of("Cancel"), button -> {
             Atomic.client.openScreen(parent);
         });
-        ButtonWidget save = new ButtonWidget(width / 2 + 3, height-25, fw, 20, Text.of("Save"), button -> {
+        ButtonWidget save = new ButtonWidget(width / 2 + 3, height - 25, fw, 20, Text.of("Save"), button -> {
             if (pcount.getText().split("/").length == 2) {
                 String[] v = pcount.getText().split("/");
                 String v1 = v[0];
                 String v2 = v[1];
-                int i1 = Client.tryParseInt(v1,-1);
-                int i2 = Client.tryParseInt(v2,-1);
+                int i1 = Client.tryParseInt(v1, -1);
+                int i2 = Client.tryParseInt(v2, -1);
                 if (i1 < 0 || i2 < 0) {
                     pcount.setEditableColor(0xFF5555);
                     return;
@@ -84,7 +82,7 @@ public class EditServerInfoScreen extends Screen {
             yOff += 10;
         }
         Atomic.fontRenderer.drawString(matrices, motd.getText().isEmpty() ? "" : "Server MOTD", width / 2f - 100, height / 2f - 35, 0xFFFFFF);
-        Atomic.fontRenderer.drawString(matrices, pcount.getText().isEmpty()?"":"Player count",width/2f-100,height/2f-4,0xFFFFFF);
+        Atomic.fontRenderer.drawString(matrices, pcount.getText().isEmpty() ? "" : "Player count", width / 2f - 100, height / 2f - 4, 0xFFFFFF);
         super.render(matrices, mouseX, mouseY, delta);
     }
 }

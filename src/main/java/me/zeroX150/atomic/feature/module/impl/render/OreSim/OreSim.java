@@ -240,7 +240,7 @@ public class OreSim extends Module {
             return;
         }
         String biomeName = id.getPath();
-        String dimensionName = ((DimensionTypeCaller)world.getDimension()).getInfiniburn().getPath();
+        String dimensionName = ((DimensionTypeCaller) world.getDimension()).getInfiniburn().getPath();
 
         for (Ore ore : oreConfig) {
 
