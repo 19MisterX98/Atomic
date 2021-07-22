@@ -6,7 +6,7 @@ A 1.17 fabric mod with useful features for enforcing the [Minecraft commercial u
 This is the sequel to [cornos](https://cornos.cf), but ported to 1.17, with a new look and functionality. Cornos became a bit stale, so I decided to start this.
 
 ## Support
-[discord](https://discord.gg/rvC7F798xQ)
+[discor](https://discord.gg/rvC7F798xQ)
 
 ## Downloading
 You can download this from the `builds` folder. The latest jarfile will always be called "latest.jar". Download and drag into your 1.17+ mods folder to use.
