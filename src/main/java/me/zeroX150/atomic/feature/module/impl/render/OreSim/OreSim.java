@@ -240,11 +240,11 @@ public class OreSim extends Module {
             return;
         }
         String biomeName = id.getPath();
-        String dimensionName = world.getRegistryKey().getValue().getPath();
+        String dimensionName = ((DimensionTypeCaller)world.getDimension()).getInfiniburn().getPath();
 
         for (Ore ore : oreConfig) {
 
-            if (!dimensionName.equalsIgnoreCase(ore.dimension)) continue;
+            if (!dimensionName.endsWith(ore.dimension)) continue;
 
             HashSet<Vec3d> ores = new HashSet<>();
 
@@ -435,5 +435,9 @@ public class OreSim extends Module {
 
     private int randomCoord(Random random, int size) {
         return Math.round((random.nextFloat() - random.nextFloat()) * (float) size);
+    }
+
+    public interface DimensionTypeCaller {
+        Identifier getInfiniburn();
     }
 }
