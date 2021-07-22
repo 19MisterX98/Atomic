@@ -88,10 +88,10 @@ public class Ore {
         ores.add(new Ore(Type.COPPER, "overworld", 13, 6, ConstantIntProvider.create(6), true, 49, 49, Generator.DEFAULT, 10, copper, new Color(239, 151, 0)));
         ores.add(new Ore(Type.GOLD_EXTRA, "overworld", extraGoldIndexes, 6, ConstantIntProvider.create(20), false, 32, 80, Generator.DEFAULT, 9, gold, new Color(247, 229, 30)));
         ores.add(new Ore(Type.EMERALD, "overworld", emeraldIndexes, 6, UniformIntProvider.create(6, 8), false, 4, 32, Generator.EMERALD, 1, emerald, new Color(27, 209, 45)));
-        ores.add(new Ore(Type.GOLD_NETHER, "the_nether", 13, 7, ConstantIntProvider.create(10), false, 10, 118, Generator.DEFAULT, 10, gold, new Color(247, 229, 30)));
-        ores.add(new Ore(Type.QUARTZ, "the_nether", 14, 7, ConstantIntProvider.create(16), false, 10, 118, Generator.DEFAULT, 14, quartz, new Color(205, 205, 205)));
-        ores.add(new Ore(Type.LDEBRIS, "the_nether", LDebrisIndexes, 7, ConstantIntProvider.create(1), true, 17, 9, Generator.NO_SURFACE, 3, debris, new Color(209, 27, 245)));
-        ores.add(new Ore(Type.SDEBRIS, "the_nether", SDebrisIndexes, 7, ConstantIntProvider.create(1), false, 8, 120, Generator.NO_SURFACE, 2, debris, new Color(209, 27, 245)));
+        ores.add(new Ore(Type.GOLD_NETHER, "nether", 13, 7, ConstantIntProvider.create(10), false, 10, 118, Generator.DEFAULT, 10, gold, new Color(247, 229, 30)));
+        ores.add(new Ore(Type.QUARTZ, "nether", 14, 7, ConstantIntProvider.create(16), false, 10, 118, Generator.DEFAULT, 14, quartz, new Color(205, 205, 205)));
+        ores.add(new Ore(Type.LDEBRIS, "nether", LDebrisIndexes, 7, ConstantIntProvider.create(1), true, 17, 9, Generator.NO_SURFACE, 3, debris, new Color(209, 27, 245)));
+        ores.add(new Ore(Type.SDEBRIS, "nether", SDebrisIndexes, 7, ConstantIntProvider.create(1), false, 8, 120, Generator.NO_SURFACE, 2, debris, new Color(209, 27, 245)));
         return ores;
     }
 

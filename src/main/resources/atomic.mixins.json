@@ -6,6 +6,7 @@
     "chat.ScreenMixin",
     "game.BlockHitResultMixin",
     "game.ClientPlayerEntityMixin",
+    "game.DimensionTypeMixin",
     "game.IdentifierMixin",
     "game.IMinecraftClientAccessor",
     "game.KeyboardMixin",
