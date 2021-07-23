@@ -69,9 +69,10 @@ public class Killaura extends Module {
     public void tick() {
         if (Atomic.client.world == null || Atomic.client.player == null || Atomic.client.interactionManager == null)
             return;
+        boolean delayHasPassed = true;
         if (delayPassed < getDelay()) {
             delayPassed++;
-            return;
+            delayHasPassed = false;
         } else delayPassed = 0;
         List<Entity> attacks = new ArrayList<>();
         for (Entity entity : Atomic.client.world.getEntities()) {
@@ -84,9 +85,11 @@ public class Killaura extends Module {
         }
         for (Entity attack : attacks) {
             Packets.sendServerSideLook(attack.getEyePos());
-            Atomic.client.interactionManager.attackEntity(Atomic.client.player, attack);
-            Atomic.client.player.swingHand(Hand.MAIN_HAND);
             Rotations.lookAtV3(attack.getPos().add(0, attack.getHeight() / 2, 0));
+            if (delayHasPassed) {
+                Atomic.client.player.swingHand(Hand.MAIN_HAND);
+                Atomic.client.interactionManager.attackEntity(Atomic.client.player, attack);
+            }
             if (mode.getValue().equalsIgnoreCase("single")) break;
         }
     }

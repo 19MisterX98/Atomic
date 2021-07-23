@@ -34,8 +34,8 @@ public class LeverAura extends Module {
                     if (bs.getBlock() == Blocks.LEVER) {
                         for (int i = 0; i < amount.getValue(); i++) {
                             BlockHitResult bhr = new BlockHitResult(a, Direction.DOWN, bb, false);
-                            Atomic.client.interactionManager.interactBlock(Atomic.client.player, Atomic.client.world, Hand.MAIN_HAND, bhr);
                             Atomic.client.player.swingHand(Hand.MAIN_HAND);
+                            Atomic.client.interactionManager.interactBlock(Atomic.client.player, Atomic.client.world, Hand.MAIN_HAND, bhr);
                         }
                     }
                 }
