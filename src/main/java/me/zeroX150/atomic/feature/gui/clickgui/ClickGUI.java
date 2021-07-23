@@ -33,7 +33,7 @@ public class ClickGUI extends Screen {
     public static Identifier LOGO = new Identifier("atomic", "logo.png");
     public String searchTerm = "";
     public ConfigWidget currentConfig = null;
-    double aProg = 2.0;
+    double aProg = 1.0;
     int clicks = 0;
     int p = 0;
     double trackedScroll = 0;
@@ -72,7 +72,7 @@ public class ClickGUI extends Screen {
     }
 
     public void onFastTick() {
-        double a = 0.011;
+        double a = me.zeroX150.atomic.feature.module.impl.render.ClickGUI.instant.getValue()?1:0.011;
         aProg += closed ? a : -a;
         aProg = MathHelper.clamp(aProg, 0, 1);
         for (Draggable container : containers) {
