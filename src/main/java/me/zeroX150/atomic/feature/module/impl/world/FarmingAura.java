@@ -4,9 +4,7 @@ import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleType;
 import me.zeroX150.atomic.feature.module.config.SliderValue;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CropBlock;
+import net.minecraft.block.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -16,13 +14,21 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FarmingAura extends Module {
     SliderValue max = this.config.create("Blocks per tick", 3, 1, 20, 0);
 
     public FarmingAura() {
         super("FarmingAura", "farms", ModuleType.WORLD);
+    }
+
+    boolean blockValid(BlockState b, BlockPos bp) {
+        if (b.getBlock() instanceof CropBlock e && e.isMature(b)) return true;
+        else if (b.getBlock() instanceof NetherWartBlock && b.get(NetherWartBlock.AGE) == 3) return true;
+        else
+            return b.getBlock() == Blocks.SUGAR_CANE && !Atomic.client.world.getBlockState(bp.down()).getMaterial().blocksMovement();
     }
 
     @Override
@@ -43,11 +49,9 @@ public class FarmingAura extends Module {
                     if (poff.distanceTo(ppos1) >= Atomic.client.interactionManager.getReachDistance()) continue;
                     BlockPos c = ppos.add(x, y, z);
                     BlockState s = Atomic.client.world.getBlockState(c);
-                    if (s.getBlock() instanceof CropBlock p) {
-                        if (p.isMature(s)) {
-                            i++;
-                            Atomic.client.interactionManager.attackBlock(c, Direction.DOWN);
-                        }
+                    if (blockValid(s, c)) {
+                        i++;
+                        Atomic.client.interactionManager.attackBlock(c, Direction.DOWN);
                     }
                 }
             }
@@ -57,9 +61,20 @@ public class FarmingAura extends Module {
                 Items.BEETROOT_SEEDS,
                 Items.MELON_SEEDS,
                 Items.PUMPKIN_SEEDS,
-                Items.CARROT, Items.POTATO
+                Items.CARROT, Items.POTATO,
+                Items.NETHER_WART,
+                Items.SUGAR_CANE
         };
-        if (Arrays.stream(V).toList().contains(Atomic.client.player.getInventory().getMainHandStack().getItem())) {
+        Map<Item, Block> blockMap = new HashMap<>();
+        blockMap.put(Items.WHEAT_SEEDS, Blocks.FARMLAND);
+        blockMap.put(Items.BEETROOT_SEEDS, Blocks.FARMLAND);
+        blockMap.put(Items.MELON_SEEDS, Blocks.FARMLAND);
+        blockMap.put(Items.PUMPKIN_SEEDS, Blocks.FARMLAND);
+        blockMap.put(Items.CARROT, Blocks.FARMLAND);
+        blockMap.put(Items.POTATO, Blocks.FARMLAND);
+        blockMap.put(Items.NETHER_WART, Blocks.SOUL_SAND);
+        blockMap.put(Items.SUGAR_CANE, Blocks.SAND);
+        if (blockMap.containsKey(Atomic.client.player.getInventory().getMainHandStack().getItem())) {
             i = 0;
             for (int x = -r; x < r + 1; x++) {
                 if (i > max) break;
@@ -72,7 +87,7 @@ public class FarmingAura extends Module {
                         if (poff.distanceTo(ppos1) >= Atomic.client.interactionManager.getReachDistance()) continue;
                         BlockPos c = ppos.add(x, y, z);
                         BlockState s = Atomic.client.world.getBlockState(c);
-                        if (s.getBlock() == Blocks.FARMLAND) {
+                        if (s.getBlock() == blockMap.get(Atomic.client.player.getInventory().getMainHandStack().getItem())) {
                             if (!Atomic.client.world.getBlockState(c.up()).isAir()) continue;
                             i++;
                             BlockHitResult bhr = new BlockHitResult(poff.add(0, 1, 0), Direction.DOWN, c.add(0, 1, 0), false);
