@@ -13,10 +13,10 @@ public class ChatSequence extends Module {
     public static List<String> messages = new ArrayList<>();
     public static long delay = 30;
     public static volatile boolean shouldRun = false;
-    Thread runner=null;
+    Thread runner = null;
 
     public ChatSequence() {
-        super("ChatSequence","Follows a script and sends every message in chat", ModuleType.MISC);
+        super("ChatSequence", "Follows a script and sends every message in chat", ModuleType.MISC);
     }
 
     @Override
@@ -27,18 +27,19 @@ public class ChatSequence extends Module {
     public void enable() {
         if (!shouldRun) {
             this.setEnabled(false);
-            Notification.create(6000,"ChatSequence warning","Please only use this module via the .chatSequence command!");
+            Notification.create(6000, "ChatSequence warning", "Please only use this module via the .chatSequence command!");
             return;
         }
         if (messages.isEmpty()) {
             this.setEnabled(false);
-            Notification.create(6000,"CharSequence error","You gotta configure some messages for me to send dude. .chatSequence command");
+            Notification.create(6000, "CharSequence error", "You gotta configure some messages for me to send dude. .chatSequence command");
             return;
         }
-        runner = new Thread(()->{
+        runner = new Thread(() -> {
             for (String s : messages) {
                 if (!shouldRun) break;
-                if (Atomic.client.player == null || Atomic.client.world == null || Atomic.client.getNetworkHandler() == null) break;
+                if (Atomic.client.player == null || Atomic.client.world == null || Atomic.client.getNetworkHandler() == null)
+                    break;
                 Atomic.client.player.sendChatMessage(s);
                 try {
                     Thread.sleep(delay);
@@ -46,7 +47,7 @@ public class ChatSequence extends Module {
                     e.printStackTrace();
                 }
             }
-            Notification.create(5000,"ChatSequence","Done sending messages.");
+            Notification.create(5000, "ChatSequence", "Done sending messages.");
             this.setEnabled(false);
             messages.clear();
         });
@@ -56,7 +57,7 @@ public class ChatSequence extends Module {
     @Override
     public void disable() {
         shouldRun = false;
-        Notification.create(5000,"ChatSequence","Waiting for sender thread cleanup...");
+        Notification.create(5000, "ChatSequence", "Waiting for sender thread cleanup...");
     }
 
     @Override

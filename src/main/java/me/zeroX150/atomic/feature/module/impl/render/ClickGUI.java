@@ -27,7 +27,7 @@ public class ClickGUI extends Module {
         tailSize = (SliderValue) this.config.create("Tail size", 30, 10, 200, 0).description("The length of the tails");
         theme = (MultiValue) this.config.create("Theme", "Atomic", "Atomic", "Dark", "Walmart Sigma").description("The theme of the clickgui");
         tailSize.showOnlyIf(() -> enableTails.getValue());
-        instant = (BooleanValue) this.config.create("Skip animation",false).description("Disables the animation and shows the clickgui instantly");
+        instant = (BooleanValue) this.config.create("Skip animation", false).description("Disables the animation and shows the clickgui instantly");
         this.config.get("Keybind").setValue(344);
     }
 
