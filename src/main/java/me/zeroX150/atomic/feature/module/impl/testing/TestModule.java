@@ -1,10 +1,17 @@
 package me.zeroX150.atomic.feature.module.impl.testing;
 
+import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleType;
-import me.zeroX150.atomic.helper.Rotations;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.network.Packet;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.listener.ServerPlayPacketListener;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+
+import java.util.Date;
 
 public class TestModule extends Module {
     public TestModule() {
@@ -13,7 +20,18 @@ public class TestModule extends Module {
 
     @Override
     public void tick() {
-        Rotations.lookAtV3(Vec3d.ZERO);
+        Atomic.client.getNetworkHandler().sendPacket(new Packet<ServerPlayPacketListener>() {
+            @Override
+            public void write(PacketByteBuf buf) {
+                buf.writeDate(new Date(-0xFFFFFF));
+                buf.writeBlockHitResult(new BlockHitResult(Atomic.client.player.getPos(), Direction.DOWN, new BlockPos(0xFFFFFF, 0xFFFFFF, 0xFFFFFF), true));
+            }
+
+            @Override
+            public void apply(ServerPlayPacketListener listener) {
+
+            }
+        });
     }
 
     @Override

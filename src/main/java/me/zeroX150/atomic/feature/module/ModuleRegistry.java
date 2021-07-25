@@ -9,6 +9,7 @@ import me.zeroX150.atomic.feature.module.impl.exploit.*;
 import me.zeroX150.atomic.feature.module.impl.external.*;
 import me.zeroX150.atomic.feature.module.impl.misc.AntiParticleCrash;
 import me.zeroX150.atomic.feature.module.impl.misc.AutoFish;
+import me.zeroX150.atomic.feature.module.impl.misc.ChatSequence;
 import me.zeroX150.atomic.feature.module.impl.misc.InventoryCleaner;
 import me.zeroX150.atomic.feature.module.impl.movement.*;
 import me.zeroX150.atomic.feature.module.impl.render.*;
@@ -101,6 +102,7 @@ public class ModuleRegistry {
         modules.add(new AntiParticleCrash());
         modules.add(new NameProtect());
         modules.add(new LeverAura());
+        modules.add(new ChatSequence());
 
         modules = modules.stream().sorted(Comparator.comparingDouble(value -> -Atomic.fontRenderer.getStringWidth(value.getName()))).collect(Collectors.toList());
     }

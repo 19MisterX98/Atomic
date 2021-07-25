@@ -21,6 +21,7 @@ public class CommandRegistry {
         commands.add(new Panic());
         commands.add(new Rename());
         commands.add(new ViewNbt());
+        commands.add(new ChatSequence());
     }
 
     public static List<Command> getCommands() {
