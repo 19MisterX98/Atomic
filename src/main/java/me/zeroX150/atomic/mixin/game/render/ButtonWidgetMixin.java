@@ -2,6 +2,7 @@ package me.zeroX150.atomic.mixin.game.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.zeroX150.atomic.Atomic;
+import me.zeroX150.atomic.feature.module.impl.external.ClientConfig;
 import me.zeroX150.atomic.helper.Renderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -45,6 +46,7 @@ public abstract class ButtonWidgetMixin {
 
     @Inject(method = "renderButton", at = @At("HEAD"), cancellable = true)
     public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        if (!ClientConfig.customButtons.getValue()) return;
         int dxStart, dyStart, dWidth, dHeight;
 
         if ((((Object) this) instanceof ButtonWidget) || (((Object) this) instanceof CyclingButtonWidget<?>)) {
