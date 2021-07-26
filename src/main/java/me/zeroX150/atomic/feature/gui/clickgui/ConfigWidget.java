@@ -250,7 +250,8 @@ public class ConfigWidget {
         boolean v = false;
         for (List<ClickableWidget> children : this.children.values()) {
             for (ClickableWidget child : children) {
-                if (child instanceof KeyListenerBtn b && (System.currentTimeMillis()-b.stoppedScanning) < 50) v = true;
+                if (child instanceof KeyListenerBtn b && (System.currentTimeMillis() - b.stoppedScanning) < 50)
+                    v = true;
                 if (child instanceof SimpleCustomTextFieldWidget) {
                     if (child.charTyped(c, mod)) v = true;
                 }
@@ -271,7 +272,8 @@ public class ConfigWidget {
         boolean v = false;
         for (List<ClickableWidget> children : this.children.values()) {
             for (ClickableWidget child : children) {
-                if (child instanceof SimpleCustomTextFieldWidget || child instanceof KeyListenerBtn) if (child.keyPressed(kc, sc, m)) v = true;
+                if (child instanceof SimpleCustomTextFieldWidget || child instanceof KeyListenerBtn)
+                    if (child.keyPressed(kc, sc, m)) v = true;
             }
         }
         return v;

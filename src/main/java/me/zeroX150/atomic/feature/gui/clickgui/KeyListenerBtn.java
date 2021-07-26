@@ -3,21 +3,16 @@ package me.zeroX150.atomic.feature.gui.clickgui;
 import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.helper.keybind.KeybindManager;
-import net.minecraft.SharedConstants;
-import net.minecraft.client.gui.screen.option.ControlsOptionsScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import org.lwjgl.glfw.GLFW;
 
 public class KeyListenerBtn extends ButtonWidget {
-    Module parent;
     public boolean listening = false;
+    public long stoppedScanning = 0;
+    Module parent;
     int kc;
     int sc;
-    public long stoppedScanning = 0;
 
     public KeyListenerBtn(int x, int y, int width, Module parent) {
         super(x, y, width, 12, Text.of(String.valueOf((char) Integer.parseInt(parent.config.get("Keybind").getValue() + "")).toUpperCase()), button -> {

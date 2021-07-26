@@ -6,6 +6,7 @@ import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.module.Module;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.feature.module.ModuleType;
+import me.zeroX150.atomic.feature.module.impl.external.ClientConfig;
 import me.zeroX150.atomic.helper.Transitions;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.Element;
@@ -147,9 +148,17 @@ public class ClickGUI extends Screen {
                 container.expanded = false;
             }
         });
-        this.addDrawableChild(sort);
+        ButtonWidget opt = new ButtonWidget(width - offY - 42 - 1 - 100, height - off, 100, 20, Text.of("Options"), button -> {
+            showModuleConfig(ModuleRegistry.getByClass(ClientConfig.class));
+        });
+        ButtonWidget opt1 = new ButtonWidget(width - offY - 42 - 1 - 100 - 1 - 100, height - off, 100, 20, Text.of("ClickGUI options"), button -> {
+            showModuleConfig(ModuleRegistry.getByClass(me.zeroX150.atomic.feature.module.impl.render.ClickGUI.class));
+        });
+        addDrawableChild(sort);
         addDrawableChild(expand);
         addDrawableChild(retract);
+        addDrawableChild(opt);
+        addDrawableChild(opt1);
         super.init();
     }
 
