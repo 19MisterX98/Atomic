@@ -13,6 +13,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.shape.VoxelShape;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -146,6 +147,41 @@ public class Renderer {
         buffer.begin(VertexFormat.DrawMode.DEBUG_LINES,
                 VertexFormats.POSITION);
         return buffer;
+    }
+
+    public static void renderVoxOutline(Vec3d start, Color color, MatrixStack matrices, VoxelShape voxelShape) {
+        RenderSystem.enableBlend();
+        BufferBuilder buffer = renderPrepare(color);
+
+        Camera c = Atomic.client.gameRenderer.getCamera();
+        Vec3d camPos = c.getPos();
+        start = start.subtract(camPos);
+
+        double d = start.x;
+        double e = start.y;
+        double f = start.z;
+        float g = color.getRed() / 255f;
+        float h = color.getGreen() / 255f;
+        float i = color.getBlue() / 255f;
+        float j = color.getAlpha() / 255f;
+
+        MatrixStack.Entry entry = matrices.peek();
+        voxelShape.forEachEdge((k, l, m, n, o, p) -> {
+            float q = (float) (n - k);
+            float r = (float) (o - l);
+            float s = (float) (p - m);
+            float t = MathHelper.sqrt(q * q + r * r + s * s);
+            q /= t;
+            r /= t;
+            s /= t;
+            buffer.vertex(entry.getModel(), (float) (k + d), (float) (l + e), (float) (m + f)).color(g, h, i, j).normal(entry.getNormal(), q, r, s).next();
+            buffer.vertex(entry.getModel(), (float) (n + d), (float) (o + e), (float) (p + f)).color(g, h, i, j).normal(entry.getNormal(), q, r, s).next();
+        });
+
+        buffer.end();
+        BufferRenderer.draw(buffer);
+        GL11.glDepthFunc(GL11.GL_LEQUAL);
+        RenderSystem.disableBlend();
     }
 
     public static void renderFilled(Vec3d start, Vec3d dimensions, Color color, MatrixStack stack) {
