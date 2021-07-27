@@ -18,7 +18,6 @@ public class NoRender extends Module {
     public static BooleanValue hurtAnimation;
     BooleanValue items = (BooleanValue) this.config.create("Items", false).description("Doesnt render items");
     BooleanValue trapdoors = (BooleanValue) this.config.create("Trapdoors", false).description("Doesnt render trapdoors");
-    BooleanValue observers = (BooleanValue) this.config.create("Observers", false).description("Doesnt render observers");
 
     public NoRender() {
         super("NoRender", "doesnt render shit", ModuleType.RENDER);
@@ -42,7 +41,6 @@ public class NoRender extends Module {
             if (Arrays.stream(trapdoors).anyMatch(block -> block == event.getState().getBlock()) && this.trapdoors.getValue() && this.isEnabled()) {
                 event.setCancelled(true);
             }
-            if (observers.getValue() && event.getState().getBlock() == Blocks.OBSERVER) event.setCancelled(true);
         });
         weather = (BooleanValue) this.config.create("Weather", true).description("Doesnt render weather");
         hurtAnimation = (BooleanValue) this.config.create("Hurt animation", true).description("Doesnt render the hurt animation");
