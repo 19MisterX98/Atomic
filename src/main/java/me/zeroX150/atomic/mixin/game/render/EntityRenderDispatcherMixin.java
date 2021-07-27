@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class EntityRenderDispatcherMixin {
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     public <E extends Entity> void render(E entity, double x, double y, double z, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        if (Events.Rendering.fireEvent(RenderingEvents.ENTITY_RENDER, new RenderingEvent(entity, null, matrices)))
+        if (Events.Rendering.fireEvent(RenderingEvents.ENTITY_RENDER, new RenderingEvent(entity, null, null, null, matrices)))
             ci.cancel();
     }
 }

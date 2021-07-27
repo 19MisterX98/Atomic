@@ -19,6 +19,7 @@
     "game.render.AbstractBlockStateMixin",
     "game.render.BlockEntityRenderDispatcherMixin",
     "game.render.BlockMixin",
+    "game.render.BlockRenderManagerMixin",
     "game.render.ButtonWidgetMixin",
     "game.render.EntityRenderDispatcherMixin",
     "game.render.EntityRendererMixin",
