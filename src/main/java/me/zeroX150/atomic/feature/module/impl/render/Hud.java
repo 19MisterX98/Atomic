@@ -8,6 +8,7 @@ import me.zeroX150.atomic.feature.module.config.BooleanValue;
 import me.zeroX150.atomic.feature.module.config.SliderValue;
 import me.zeroX150.atomic.helper.Client;
 import me.zeroX150.atomic.helper.Renderer;
+import me.zeroX150.atomic.helper.Transitions;
 import me.zeroX150.atomic.helper.event.Events;
 import me.zeroX150.atomic.helper.event.PacketEvents;
 import net.minecraft.client.network.PlayerListEntry;
@@ -38,7 +39,11 @@ public class Hud extends Module {
     long lastTimePacketReceived;
     double currentTps = 0;
 
+    double rNoConnectionPosY = -10d;
+
     DateFormat df = new SimpleDateFormat("h:mm aa");
+
+    DateFormat minSec = new SimpleDateFormat("mm:ss");
 
     public Hud() {
         super("Hud", "shows info about shit", ModuleType.RENDER);
@@ -48,7 +53,6 @@ public class Hud extends Module {
             if (event.getPacket() instanceof WorldTimeUpdateS2CPacket) {
                 currentTps = Client.roundToN(calcTps(System.currentTimeMillis() - lastTimePacketReceived), 2);
                 lastTimePacketReceived = System.currentTimeMillis();
-
             }
         });
     }
@@ -80,11 +84,18 @@ public class Hud extends Module {
 
     }
 
+    boolean shouldNoConnectionDropDown() {
+        return System.currentTimeMillis()-lastTimePacketReceived>2000;
+    }
+
     @Override
     public void onHudRender() {
         if (Atomic.client.getNetworkHandler() == null) return;
         if (Atomic.client.player == null) return;
         MatrixStack ms = new MatrixStack();
+
+        Atomic.fontRenderer.drawCenteredString(ms,"Server not responding! "+minSec.format(System.currentTimeMillis()-lastTimePacketReceived),Atomic.client.getWindow().getScaledWidth()/2d,rNoConnectionPosY,0xFF7777);
+
         List<HudEntry> entries = new ArrayList<>();
         if (coords.getValue()) {
             BlockPos bp = Atomic.client.player.getBlockPos();
@@ -162,6 +173,11 @@ public class Hud extends Module {
                 moduleOffset += 10;
             }
         }
+    }
+
+    @Override
+    public void onFastTick() {
+        rNoConnectionPosY = Transitions.transition(rNoConnectionPosY,shouldNoConnectionDropDown()?10:-10,10);
     }
 
     static class HudEntry {
