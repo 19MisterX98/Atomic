@@ -99,6 +99,7 @@ public class ChestESP extends Module {
 
     @Override
     public void tick() {
+
     }
 
     @Override

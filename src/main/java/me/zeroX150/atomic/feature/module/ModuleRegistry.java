@@ -104,6 +104,7 @@ public class ModuleRegistry {
         modules.add(new LeverAura());
         modules.add(new ChatSequence());
         modules.add(new GodBridge());
+        modules.add(new AntiReducedDebugInfo());
 
         modules = modules.stream().sorted(Comparator.comparingDouble(value -> -Atomic.fontRenderer.getStringWidth(value.getName()))).collect(Collectors.toList());
     }

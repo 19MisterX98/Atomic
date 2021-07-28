@@ -76,7 +76,7 @@ public class ClickGUI extends Screen {
         double a = me.zeroX150.atomic.feature.module.impl.render.ClickGUI.instant.getValue() ? 1 : 0.011;
         aProg += closed ? a : -a;
         aProg = MathHelper.clamp(aProg, 0, 1);
-        for (Draggable container : containers) {
+        for (Draggable container : containers.toArray(new Draggable[0])) {
             container.tick();
         }
         if (currentConfig != null) currentConfig.tick();

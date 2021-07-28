@@ -85,7 +85,7 @@ public class Hud extends Module {
     }
 
     boolean shouldNoConnectionDropDown() {
-        return System.currentTimeMillis()-lastTimePacketReceived>2000;
+        return System.currentTimeMillis() - lastTimePacketReceived > 2000;
     }
 
     @Override
@@ -94,7 +94,7 @@ public class Hud extends Module {
         if (Atomic.client.player == null) return;
         MatrixStack ms = new MatrixStack();
 
-        Atomic.fontRenderer.drawCenteredString(ms,"Server not responding! "+minSec.format(System.currentTimeMillis()-lastTimePacketReceived),Atomic.client.getWindow().getScaledWidth()/2d,rNoConnectionPosY,0xFF7777);
+        Atomic.fontRenderer.drawCenteredString(ms, "Server not responding! " + minSec.format(System.currentTimeMillis() - lastTimePacketReceived), Atomic.client.getWindow().getScaledWidth() / 2d, rNoConnectionPosY, 0xFF7777);
 
         List<HudEntry> entries = new ArrayList<>();
         if (coords.getValue()) {
@@ -177,7 +177,7 @@ public class Hud extends Module {
 
     @Override
     public void onFastTick() {
-        rNoConnectionPosY = Transitions.transition(rNoConnectionPosY,shouldNoConnectionDropDown()?10:-10,10);
+        rNoConnectionPosY = Transitions.transition(rNoConnectionPosY, shouldNoConnectionDropDown() ? 10 : -10, 10);
     }
 
     static class HudEntry {
