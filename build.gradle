@@ -15,6 +15,12 @@ group = project.maven_group
 minecraft {
 }
 
+repositories {
+	flatDir {
+		dirs 'libs'
+	}
+}
+
 dependencies {
 	//to change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -22,6 +28,15 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	modImplementation(include("net.fabricmc.fabric-api:fabric-resource-loader-v0:0.4.7+b7ab6121d5"))
+
+	//files from: https://github.com/cabaletta/baritone/actions/runs/1044190429
+	//baritone api
+	implementation name: 'baritone-api-fabric-1.7.0'
+	include name: 'baritone-api-fabric-1.7.0'
+
+	//baritone itself (only works outside of dev; just put the jar in run/mods and comment this out; uncomment when building releases)
+	modImplementation name: 'baritone-standalone-fabric-1.7.0'
+	include name: 'baritone-standalone-fabric-1.7.0'
 }
 
 processResources {
