@@ -20,6 +20,7 @@ public class NoFall extends Module {
 
     public NoFall() {
         super("NoFall", "no fall damage", ModuleType.MOVEMENT);
+
         mode = this.config.create("Mode", "OnGround", "OnGround", "Packet", "BreakFall");
         mode.description("The mode of the module");
         this.fallDist.showOnlyIf(() -> !mode.getValue().equalsIgnoreCase("onground"));
