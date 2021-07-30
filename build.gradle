@@ -29,13 +29,15 @@ dependencies {
 
 	modImplementation(include("net.fabricmc.fabric-api:fabric-resource-loader-v0:0.4.7+b7ab6121d5"))
 
-	//baritone for releases/builds (breaks in dev environment)
-	implementation name: 'baritone-api-fabric-1.7.0'
-	include name: 'baritone-api-fabric-1.7.0'
-
-	//baritone-api for dev. Put the "baritone for dev.jar" in the run/mods folder.
-	//implementation name: 'baritone-api-1.7.0'
-	//include name: 'baritone-api-1.7.0'
+	if (false) {
+		//baritone for releases/builds (breaks in dev environment)
+		modImplementation name: 'baritone-api-fabric-1.7.0'
+		include name: 'baritone-api-fabric-1.7.0'
+	} else {
+		//baritone-api for dev. Put the "baritone for dev.jar" in the run/mods folder.
+		implementation name: 'baritone-api-1.7.0'
+		include name: 'baritone-api-1.7.0'
+	}
 }
 
 processResources {
