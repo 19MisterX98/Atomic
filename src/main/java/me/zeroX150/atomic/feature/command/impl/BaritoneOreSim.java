@@ -1,5 +1,9 @@
 package me.zeroX150.atomic.feature.command.impl;
 
+import baritone.BaritoneProvider;
+import baritone.api.BaritoneAPI;
+import baritone.api.Settings;
+import baritone.api.utils.SettingsUtil;
 import me.zeroX150.atomic.feature.command.Command;
 import me.zeroX150.atomic.feature.module.ModuleRegistry;
 import me.zeroX150.atomic.feature.module.impl.render.OreSim.OreSim;
@@ -27,9 +31,11 @@ public class BaritoneOreSim extends Command {
             String command = args[0].toLowerCase();
             if (command.equals("start")) {
                 System.out.println("starting");
+                oreSim.automine = true;
                 return;
             } else if (command.equals("stop")) {
                 System.out.println("stopping");
+                oreSim.automine = false;
                 return;
             }
         }

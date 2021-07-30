@@ -29,14 +29,13 @@ dependencies {
 
 	modImplementation(include("net.fabricmc.fabric-api:fabric-resource-loader-v0:0.4.7+b7ab6121d5"))
 
-	//files from: https://github.com/cabaletta/baritone/actions/runs/1044190429
-	//baritone api
+	//baritone for releases/builds (breaks in dev environment)
 	implementation name: 'baritone-api-fabric-1.7.0'
 	include name: 'baritone-api-fabric-1.7.0'
 
-	//baritone itself (only works outside of dev; just put the jar in run/mods and comment this out; uncomment when building releases)
-	//modImplementation name: 'baritone-standalone-fabric-1.7.0'
-	//include name: 'baritone-standalone-fabric-1.7.0'
+	//baritone-api for dev. Put the "baritone for dev.jar" in the run/mods folder.
+	//implementation name: 'baritone-api-1.7.0'
+	//include name: 'baritone-api-1.7.0'
 }
 
 processResources {

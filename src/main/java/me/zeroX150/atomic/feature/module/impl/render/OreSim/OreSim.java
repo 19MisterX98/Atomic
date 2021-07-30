@@ -1,5 +1,7 @@
 package me.zeroX150.atomic.feature.module.impl.render.OreSim;
 
+import baritone.api.BaritoneAPI;
+import baritone.api.pathing.goals.GoalTwoBlocks;
 import me.zeroX150.atomic.Atomic;
 import me.zeroX150.atomic.feature.gui.clickgui.ClickGUI;
 import me.zeroX150.atomic.feature.module.Module;
@@ -40,6 +42,8 @@ public class OreSim extends Module {
     String versionString;
     private Long worldSeed = null;
     private ChunkPos prevOffset = new ChunkPos(0, 0);
+    private final HashSet<Vec3d> blackList = new HashSet<>();
+    public boolean automine = false;
 
     public OreSim() {
         super("OreSim", "xray on crack", ModuleType.RENDER);
@@ -138,12 +142,42 @@ public class OreSim extends Module {
                 prevOffset = new ChunkPos(-renderdistance, -renderdistance);
             }
         }
+        if (!automine) return;
+        if (BaritoneAPI.getProvider().getPrimaryBaritone().getCustomGoalProcess().isActive()) return;
 
-        chunkRenderers.forEach((chunkKey, ores) -> {
-            oreConfig.stream().filter(config -> config.enabled.getValue()).forEach(ore -> {
-                ores.get(ore.type).forEach();
-            });
+        ArrayList<Vec3d> oreGoals = new ArrayList<>();
+        int chunkX = Atomic.client.player.getChunkPos().x;
+        int chunkZ = Atomic.client.player.getChunkPos().z;
+        int rangeVal = 3;
+        for (int range = 0; range <= rangeVal; range++) {
+            for (int x = -range + chunkX; x <= range + chunkX; x++) {
+                oreGoals.addAll(addToBaritone(x, chunkZ + range - rangeVal));
+            }
+            for (int x = (-range) + 1 + chunkX; x < range + chunkX; x++) {
+                oreGoals.addAll(addToBaritone(x, chunkZ - range + rangeVal + 1));
+            }
+        }
+
+        Vec3d playerPos = Atomic.client.player.getPos();
+
+        Optional<Vec3d> optGoal = oreGoals.stream().filter(pos -> pos.getY() > 4 && !blackList.contains(pos)).min(Comparator.comparingDouble(pos -> pos.squaredDistanceTo(playerPos)));
+
+        if (optGoal.isPresent()) {
+            BlockPos goal = new BlockPos(optGoal.get());
+            blackList.add(optGoal.get());
+            BaritoneAPI.getProvider().getPrimaryBaritone().getCustomGoalProcess().setGoalAndPath(new GoalTwoBlocks(goal.getX(), goal.getY(), goal.getZ()));
+        }
+    }
+
+    private ArrayList<Vec3d> addToBaritone(int chunkX, int chunkZ) {
+        ArrayList<Vec3d> baritoneGoals = new ArrayList<>();
+        long chunkKey = (long) chunkX + ((long) chunkZ << 32);
+        if (!chunkRenderers.containsKey(chunkKey)) return baritoneGoals;
+
+        oreConfig.stream().filter(config -> config.enabled.getValue()).forEach(ore -> {
+            baritoneGoals.addAll(chunkRenderers.get(chunkKey).getOrDefault(ore.type, new HashSet<>()));
         });
+        return baritoneGoals;
     }
 
     @Override
