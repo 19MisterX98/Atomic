@@ -35,8 +35,8 @@ dependencies {
 	include name: 'baritone-api-fabric-1.7.0'
 
 	//baritone itself (only works outside of dev; just put the jar in run/mods and comment this out; uncomment when building releases)
-	modImplementation name: 'baritone-standalone-fabric-1.7.0'
-	include name: 'baritone-standalone-fabric-1.7.0'
+	//modImplementation name: 'baritone-standalone-fabric-1.7.0'
+	//include name: 'baritone-standalone-fabric-1.7.0'
 }
 
 processResources {

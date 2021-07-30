@@ -115,12 +115,13 @@ public class OreSim extends Module {
             //maybe another config option? But its already crowded
             int chunkCounter = 5;
 
+            loop:
             while (true) {
                 for (long offsetX = prevOffset.x; offsetX <= renderdistance; offsetX++) {
                     for (long offsetZ = prevOffset.z; offsetZ <= renderdistance; offsetZ++) {
                         prevOffset = new ChunkPos((int) offsetX, (int) offsetZ);
                         if (chunkCounter <= 0) {
-                            return;
+                            break loop;
                         }
                         long chunkKey = (chunkX + offsetX) + ((chunkZ + offsetZ) << 32);
 
@@ -137,6 +138,12 @@ public class OreSim extends Module {
                 prevOffset = new ChunkPos(-renderdistance, -renderdistance);
             }
         }
+
+        chunkRenderers.forEach((chunkKey, ores) -> {
+            oreConfig.stream().filter(config -> config.enabled.getValue()).forEach(ore -> {
+                ores.get(ore.type).forEach();
+            });
+        });
     }
 
     @Override
