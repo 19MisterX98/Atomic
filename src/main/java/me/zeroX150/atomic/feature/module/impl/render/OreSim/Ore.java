@@ -118,6 +118,9 @@ public class Ore {
                 ore.index.keySet().forEach(key -> ore.index.put(key, ore.index.get(key) - 3));
             } else if (ore.dimension.equals("overworld")) {
                 ore.index.keySet().forEach(key -> ore.index.put(key, ore.index.get(key) - 2));
+            } else if (ore.type == Type.LDEBRIS) {
+                ore.minY = 16;
+                ore.maxY = 8;
             }
         }
         return ores;
